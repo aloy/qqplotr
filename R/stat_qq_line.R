@@ -4,7 +4,9 @@
 #'
 #' @import ggplot2
 #'
+#' @include stat_qq_det.R
 #'
+#' @inheritParams stat_qq_det
 #'
 #' @param qtype Type of quantile computation used in `quantile`.
 #' @param probs Numeric vector of length two, representing the quantiles used
@@ -55,6 +57,7 @@ stat_qq_line <- function(data = NULL,
 #' @export
 StatQqLine <- ggproto(
 	`_class` = "StatQqLine",
+	`_inherit` = StatQqDet,
 
 	default_aes = aes(x = ..xline.., y = ..yline..),
 
