@@ -1,24 +1,3 @@
-#' Quantile-quantile confidence bands
-#'
-#' Draws quantile-quantile confidence bands.
-#'
-#' @import ggplot2
-#'
-#' @include stat_qq_det.R stat_qq_line.R
-#'
-#' @inheritParams stat_qq_det
-#'
-#' @param conf Confidence level for the point-wise confidence envelope.
-#'
-#' @examples
-#' require(ggplot2)
-#'
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'   stat_qq_band(mapping = aes(x = mpg), fill = rgb(.7, .7, .7, .5)) +
-#'   stat_qq()
-#'   gg + labs(x = "theoretical", y = "sample")
-#'
-#' @export
 stat_qq_band <- function(data = NULL,
 												 mapping = NULL,
 												 geom = "ribbon",
@@ -28,7 +7,6 @@ stat_qq_band <- function(data = NULL,
 												 distribution = "norm",
 												 dparams = list(),
 												 conf = .95,
-												 detrend = FALSE,
 												 ...) {
 	layer(
 		data = data,
@@ -42,15 +20,11 @@ stat_qq_band <- function(data = NULL,
 			distribution = distribution,
 			dparams = dparams,
 			conf = conf,
-			detrend = detrend,
 			...
 		)
 	)
 }
 
-#' @format NULL
-#' @usage NULL
-#' @export
 StatQqBand <- ggproto(
 	`_class` = "StatQqBand",
 	`_inherit` = StatQqLine,
@@ -65,8 +39,8 @@ StatQqBand <- ggproto(
 						 scales,
 						 distribution = "norm",
 						 dparams = list(),
-						 conf = .95,
-						 detrend = FALSE) {
+						 conf = .95) {
+
 			# distributional functions
 			qFunc <- eval(parse(text = paste0("q", distribution)))
 			dFunc <- eval(parse(text = paste0("d", distribution)))
@@ -77,6 +51,8 @@ StatQqBand <- ggproto(
 																												dparams = dparams)$theoretical
 			quantiles <- do.call(dFunc, c(list(x = theoretical), dparams))
 			n <- length(quantiles)
+
+			print(self$super()$compute_group(data = data))
 
 			# inherit from StatQqLine
 			xline <- self$super()$compute_group(data = data,
@@ -93,10 +69,6 @@ StatQqBand <- ggproto(
 			stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
 			fittedValues <- (slope * theoretical) + intercept
 
-			if (detrend) {
-				fittedValues <- rep(0, length(fittedValues))
-			}
-
 			out <- data.frame(
 				x = theoretical,
 				upper = fittedValues + (zCrit * stdErr),
@@ -107,3 +79,11 @@ StatQqBand <- ggproto(
 		}
 	}
 )
+
+gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
+	stat_qq_band(mapping = aes(x = mpg), fill = rgb(.7, .7, .7, .5))
+	# stat_qq_line(detrend = F, size = .8, color = rgb(.3, .3, .3)) +
+	# stat_qq_rot(detrend = F)
+	gg + labs(x = "theoretical", y = "sample")
+
+# ggplot_build(gg)
