@@ -7,8 +7,9 @@
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_point
 #'
-#' @param distribution Distribution function to use, if x not specified.
-#' @param dparams Additional parameters passed on to `distribution` function.
+#' @param distribution Character. Distribution function to use, if x not specified.
+#' @param dparams List of additional parameters passed on to `distribution` function.
+#' @param detrend Logical. Should the points be detrended?
 #'
 #' @examples
 #' require(ggplot2)

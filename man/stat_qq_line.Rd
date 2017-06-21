@@ -43,14 +43,16 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
-\item{distribution}{Distribution function to use, if x not specified.}
+\item{distribution}{Character. Distribution function to use, if x not specified.}
 
-\item{dparams}{Additional parameters passed on to `distribution` function.}
+\item{dparams}{List of additional parameters passed on to `distribution` function.}
 
 \item{qtype}{Type of quantile computation used in `quantile`.}
 
 \item{probs}{Numeric vector of length two, representing the quantiles used
 to compute the Q-Q line.}
+
+\item{detrend}{Logical. Should the line be detrended?}
 
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like

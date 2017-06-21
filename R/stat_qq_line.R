@@ -11,6 +11,7 @@
 #' @param qtype Type of quantile computation used in `quantile`.
 #' @param probs Numeric vector of length two, representing the quantiles used
 #'   to compute the Q-Q line.
+#' @param detrend Logical. Should the line be detrended?
 #'
 #' @examples
 #' require(ggplot2)

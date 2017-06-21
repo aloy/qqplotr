@@ -8,7 +8,8 @@
 #'
 #' @inheritParams stat_qq_det
 #'
-#' @param conf Confidence level for the point-wise confidence envelope.
+#' @param conf Numerical. Confidence level for the point-wise confidence envelope.
+#' @param detrend Logical. Should the confidence bands be detrended?
 #'
 #' @examples
 #' require(ggplot2)
@@ -30,6 +31,12 @@ stat_qq_band <- function(data = NULL,
 												 conf = .95,
 												 detrend = FALSE,
 												 ...) {
+	discreteDist <- c(
+		"binom", "geom", "hyper", "multinom", "nbinom", "pois"
+	)
+
+	if (distribution %in% discreteDist) geom <- "errorbar"
+
 	layer(
 		data = data,
 		mapping = mapping,
