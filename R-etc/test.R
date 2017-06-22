@@ -3,22 +3,25 @@ require(devtools)
 # including new packages into DESCRIPTION
 devtools::use_package("ggplot2")
 
-# testing exports .Rds
-stat_qq_rot
+# testing the .Rds
+stat_qq_points
 stat_qq_line
 stat_qq_band
 
 # examples
 require(ggplot2)
 
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-	stat_qq_band(detrend = F, mapping = aes(x = mpg), fill = rgb(.7, .7, .7, .5), geom = "errorbar") +
-  stat_qq_line(detrend = F, size = .8, color = rgb(.3, .3, .3)) +
-  stat_qq_det(detrend = F)
-  gg + labs(x = "theoretical", y = "sample")
+detrend <- F
+d <- "exp"
+dp <- list(rate = 5)
 
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-	stat_qq_band(detrend = F, mapping = aes(x = mpg), fill = rgb(.7, .7, .7, .5), distribution = "pois", dparam = list(lambda = 3)) +
-	stat_qq_line(detrend = F, size = .8, color = rgb(.3, .3, .3), distribution = "pois", dparam = list(lambda = 3)) +
-	stat_qq_det(detrend = F, distribution = "pois", dparam = list(lambda = 3))
-	gg + labs(x = "theoretical", y = "sample")
+	stat_qq_band(mapping = aes(x = mpg), distribution = d, dparams = dp, detrend = detrend) +
+	stat_qq_line(distribution = d, dparams = dp, detrend = detrend) +
+	stat_qq_points(distribution = d, dparams = dp, detrend = detrend)
+  gg + labs(x = "theoretical", y = "sample")
+
+# debugging
+ggplot_build(gg)$data[[1]] # stat_qq_points
+ggplot_build(gg)$data[[2]] # stat_qq_line
+ggplot_build(gg)$data[[3]] # stat_qq_band
