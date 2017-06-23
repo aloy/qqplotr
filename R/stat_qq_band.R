@@ -9,7 +9,6 @@
 #' @inheritParams stat_qq_points
 #'
 #' @param conf Numerical. Confidence level for the point-wise confidence envelope.
-#' @param detrend Logical. Should the confidence band be detrended?
 #'
 #' @examples
 #' require(ggplot2)

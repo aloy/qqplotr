@@ -7,8 +7,14 @@
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_point
 #'
-#' @param distribution Character. Distribution function to use, if x not specified.
-#' @param dparams List of additional parameters passed on to `distribution` function.
+#' @param distribution Character. Distribution function to use, if \code{x} not
+#'   specified. Do not provide the full distribution function name (e.g.,
+#'   \code{"dnorm"}), instead, just use the shortened distribution name (e.g.,
+#'   \code{"norm"}). If you wish to provide a custom distribution, you may do so
+#'   by first creating the density and quantile functions following the standard
+#'   nomenclature from the \code{stats} package (e.g., for \code{"custom"},
+#'   create the \code{"dcustom"} and \code{"qcustom"} functions).
+#' @param dparams List of additional parameters passed on to \code{distribution} function.
 #' @param detrend Logical. Should the plot of the points be detrended?
 #'
 #' @examples

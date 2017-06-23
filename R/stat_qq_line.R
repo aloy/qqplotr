@@ -8,10 +8,9 @@
 #'
 #' @inheritParams stat_qq_points
 #'
-#' @param qtype Type of quantile computation used in `quantile`.
+#' @param qtype Type of quantile computation used in \code{quantile}.
 #' @param probs Numeric vector of length two, representing the quantiles used
 #'   to compute the Q-Q line.
-#' @param detrend Logical. Should the line be detrended?
 #'
 #' @examples
 #' require(ggplot2)

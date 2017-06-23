@@ -43,16 +43,22 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
-\item{distribution}{Character. Distribution function to use, if x not specified.}
+\item{distribution}{Character. Distribution function to use, if \code{x} not
+specified. Do not provide the full distribution function name (e.g.,
+\code{"dnorm"}), instead, just use the shortened distribution name (e.g.,
+\code{"norm"}). If you wish to provide a custom distribution, you may do so
+by first creating the density and quantile functions following the standard
+nomenclature from the \code{stats} package (e.g., for \code{"custom"},
+create the \code{"dcustom"} and \code{"qcustom"} functions).}
 
-\item{dparams}{List of additional parameters passed on to `distribution` function.}
+\item{dparams}{List of additional parameters passed on to \code{distribution} function.}
 
-\item{qtype}{Type of quantile computation used in `quantile`.}
+\item{qtype}{Type of quantile computation used in \code{quantile}.}
 
 \item{probs}{Numeric vector of length two, representing the quantiles used
 to compute the Q-Q line.}
 
-\item{detrend}{Logical. Should the line be detrended?}
+\item{detrend}{Logical. Should the plot of the points be detrended?}
 
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
