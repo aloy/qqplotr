@@ -56,6 +56,8 @@ stat_qq_band <- function(data = NULL,
 												 inherit.aes = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
+												 bandType = "normal",
+												 B = 1000,
 												 conf = .95,
 												 detrend = FALSE,
 												 ...) {
@@ -74,6 +76,8 @@ stat_qq_band <- function(data = NULL,
 		params = list(
 			distribution = distribution,
 			dparams = dparams,
+			bandType = bandType,
+			B = B,
 			conf = conf,
 			detrend = detrend,
 			discrete = distribution %in% discreteDist,
@@ -103,12 +107,15 @@ StatQqBand <- ggproto(
 						 scales,
 						 distribution = "norm",
 						 dparams = list(),
+						 bandType = "normal",
+						 B = 1000,
 						 conf = .95,
 						 detrend = FALSE,
 						 discrete) {
 			# distributional functions
 			qFunc <- eval(parse(text = paste0("q", distribution)))
 			dFunc <- eval(parse(text = paste0("d", distribution)))
+			rFunc <- eval(parse(text = paste0("r", distribution)))
 
 			# inherit from StatQq
 			theoretical <- self$super()$super()$compute_group(data = data,
@@ -128,17 +135,38 @@ StatQqBand <- ggproto(
 			slope <- diff(yline) / diff(xline)
 			intercept <- yline[1L] - slope * xline[1L]
 
-			zCrit <- stats::qnorm(p = (1 - (1 - conf) / 2))
-			stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
 			fittedValues <- (slope * theoretical) + intercept
 
-			if (detrend) fittedValues <- rep(0, length(fittedValues))
+			# confidende bands based on normal confidence intervals
+			if(bandType == "normal") {
+				zCrit <- stats::qnorm(p = (1 - (1 - conf) / 2))
+				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
+
+				if (detrend) fittedValues <- rep(0, length(fittedValues))
+
+				upper <- fittedValues + (zCrit * stdErr)
+				lower <- fittedValues - (zCrit * stdErr)
+			}
+
+			# parametric bootstrap pointwise confidence intervals
+			if(bandType == "bootstrap") {
+				bs <- apply(
+					X = matrix(do.call(rFunc, c(list(n = n * B), dparams)), n, B),
+					MARGIN = 2,
+					FUN = function(x) {
+						sort(fittedValues + x)
+					}
+				)
+
+				upper <- apply(X = bs, MARGIN = 1, FUN = quantile, prob = (1 + conf) / 2)
+				lower <- apply(X = bs, MARGIN = 1, FUN = quantile, prob = (1 - conf) / 2)
+			}
 
 			out <- data.frame(
 				x = theoretical,
-				upper = fittedValues + (zCrit * stdErr),
-				lower = fittedValues - (zCrit * stdErr),
-				fill = rgb(.6, .6, .6, .5)
+				upper = upper,
+				lower = lower,
+				fill = fill <- rgb(.6, .6, .6, .5)
 			)
 
 			if (discrete) out$colour <- rgb(.5, .5, .5)

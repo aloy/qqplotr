@@ -6,8 +6,8 @@
 \usage{
 stat_qq_band(data = NULL, mapping = NULL, geom = "ribbon",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
-  distribution = "norm", dparams = list(), conf = 0.95, detrend = FALSE,
-  ...)
+  distribution = "norm", dparams = list(), bandType = "normal",
+  B = 1000, conf = 0.95, detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
