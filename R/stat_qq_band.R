@@ -3,6 +3,7 @@
 #' Draws quantile-quantile confidence bands.
 #'
 #' @import ggplot2
+#' @import MASS
 #'
 #' @include stat_qq_points.R stat_qq_line.R
 #'
@@ -150,12 +151,12 @@ StatQqBand <- ggproto(
 
 			# parametric bootstrap pointwise confidence intervals
 			if(bandType == "bootstrap") {
+				mle <- fitdistr(x = data$x, densfun = "normal")
+
 				bs <- apply(
-					X = matrix(do.call(rFunc, c(list(n = n * B), dparams)), n, B),
+					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(mle$estimate))), n, B),
 					MARGIN = 2,
-					FUN = function(x) {
-						sort(fittedValues + x)
-					}
+					FUN = sort
 				)
 
 				upper <- apply(X = bs, MARGIN = 1, FUN = quantile, prob = (1 + conf) / 2)

@@ -11,13 +11,14 @@ stat_qq_band
 # examples
 require(qqplotr)
 require(ggplot2)
+require(MASS)
 
 detrend <- F
 d <- "norm"
 dp <- list()
 
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-	stat_qq_band(mapping = aes(x = mpg), distribution = d, dparams = dp, detrend = detrend, bandType = "bootstrap") +
+	stat_qq_band(mapping = aes(x = mpg), distribution = d, dparams = dp, detrend = detrend, bandType = "normal", B = 10000) +
 	stat_qq_line(distribution = d, dparams = dp, detrend = detrend) +
 	stat_qq_points(distribution = d, dparams = dp, detrend = detrend)
   gg + labs(x = "theoretical", y = "sample")
@@ -29,7 +30,7 @@ ggplot_build(gg)$data[[3]] # stat_qq_band
 
 # manual test below ----
 
-# stat_qq_band <- function(data = NULL,
+# stat_qq_band2 <- function(data = NULL,
 # 												 mapping = NULL,
 # 												 geom = "ribbon",
 # 												 position = "identity",
@@ -49,7 +50,7 @@ ggplot_build(gg)$data[[3]] # stat_qq_band
 # 	layer(
 # 		data = data,
 # 		mapping = mapping,
-# 		stat = StatQqBand,
+# 		stat = StatQqBand2,
 # 		geom = geom,
 # 		position = position,
 # 		show.legend = show.legend,
@@ -67,7 +68,7 @@ ggplot_build(gg)$data[[3]] # stat_qq_band
 # 	)
 # }
 #
-# StatQqBand <- ggproto(
+# StatQqBand2 <- ggproto(
 # 	`_class` = "StatQqBand",
 # 	`_inherit` = StatQqLine,
 #
@@ -102,21 +103,21 @@ ggplot_build(gg)$data[[3]] # stat_qq_band
 # 			quantiles <- do.call(dFunc, c(list(x = theoretical), dparams))
 # 			n <- length(quantiles)
 #
-# 			# inherit from StatQqLine
-# 			xline <- self$super()$compute_group(data = data,
-# 																					distribution = distribution,
-# 																					dparams = dparams)$xline
-# 			yline <- self$super()$compute_group(data = data,
-# 																					distribution = distribution,
-# 																					dparams = dparams)$yline
-#
-# 			slope <- diff(yline) / diff(xline)
-# 			intercept <- yline[1L] - slope * xline[1L]
-#
-# 			fittedValues <- (slope * theoretical) + intercept
-#
 # 			# confidende bands based on normal confidence intervals
 # 			if(bandType == "normal") {
+# 				# inherit from StatQqLine
+# 				xline <- self$super()$compute_group(data = data,
+# 																						distribution = distribution,
+# 																						dparams = dparams)$xline
+# 				yline <- self$super()$compute_group(data = data,
+# 																						distribution = distribution,
+# 																						dparams = dparams)$yline
+#
+# 				slope <- diff(yline) / diff(xline)
+# 				intercept <- yline[1L] - slope * xline[1L]
+#
+# 				fittedValues <- (slope * theoretical) + intercept
+#
 # 				zCrit <- stats::qnorm(p = (1 - (1 - conf) / 2))
 # 				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
 #
@@ -128,12 +129,12 @@ ggplot_build(gg)$data[[3]] # stat_qq_band
 #
 # 			# parametric bootstrap pointwise confidence intervals
 # 			if(bandType == "bootstrap") {
+# 				mle <- fitdistr(x = data$x, densfun = "normal")
+#
 # 				bs <- apply(
-# 					X = matrix(do.call(rFunc, c(list(n = n * B), dparams)), n, B),
+# 					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(mle$estimate))), n, B),
 # 					MARGIN = 2,
-# 					FUN = function(x) {
-# 						sort(fittedValues + x)
-# 					}
+# 					FUN = sort
 # 				)
 #
 # 				upper <- apply(X = bs, MARGIN = 1, FUN = quantile, prob = (1 + conf) / 2)
@@ -156,10 +157,10 @@ ggplot_build(gg)$data[[3]] # stat_qq_band
 #
 # detrend <- F
 # d <- "norm"
-# dp <- list(mean = 0, sd = 5)
+# dp <- list()
 #
 # gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-# 	stat_qq_band2(mapping = aes(x = mpg), distribution = d, dparams = dp, detrend = detrend, bandType = "bootstrap") +
+# 	stat_qq_band2(mapping = aes(x = mpg), distribution = d, dparams = dp, detrend = detrend, bandType = "normal") +
 # 	stat_qq_line(distribution = d, dparams = dp, detrend = detrend) +
 # 	stat_qq_points(distribution = d, dparams = dp, detrend = detrend)
 # 	gg + labs(x = "theoretical", y = "sample")
