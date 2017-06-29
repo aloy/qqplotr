@@ -3,22 +3,20 @@
 #' Draws quantile-quantile confidence bands.
 #'
 #' @import ggplot2
-#' @import MASS
+#' @importFrom MASS fitdistr
 #'
-#' @include stat_qq_points.R stat_qq_line.R
+#' @include stat_qq_point.R stat_qq_line.R
 #'
-#' @inheritParams stat_qq_points
+#' @inheritParams stat_qq_point
 #'
 #' @param conf Numerical. Confidence level for the point-wise confidence envelope.
 #'
 #' @examples
-#' require(ggplot2)
-#'
 #' # defaults to standard normal distribution, not detrended
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 #'  stat_qq_band(mapping = aes(x = mpg)) +
 #'	stat_qq_line() +
-#' 	stat_qq_points()
+#' 	stat_qq_point()
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # detrending the line and points
@@ -26,7 +24,7 @@
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 #'  stat_qq_band(mapping = aes(x = mpg), detrend = detrend) +
 #'	stat_qq_line(detrend = detrend) +
-#' 	stat_qq_points(detrend = detrend)
+#' 	stat_qq_point(detrend = detrend)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # deterended exponential distribution with rate = 1
@@ -35,7 +33,7 @@
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 #'  stat_qq_band(mapping = aes(x = mpg), detrend = detrend, distribution = distribution) +
 #'	stat_qq_line(detrend = detrend, distribution = distribution) +
-#' 	stat_qq_points(detrend = detrend, distribution = distribution)
+#' 	stat_qq_point(detrend = detrend, distribution = distribution)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # deterended poisson distribution with lambda = 7
@@ -45,7 +43,7 @@
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 #'  stat_qq_band(mapping = aes(x = mpg), detrend = detrend, distribution = distribution, dparams = dparams) +
 #'	stat_qq_line(detrend = detrend, distribution = distribution, dparams = dparams) +
-#' 	stat_qq_points(detrend = detrend, distribution = distribution, dparams = dparams)
+#' 	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' @export
@@ -66,7 +64,7 @@ stat_qq_band <- function(data = NULL,
 
 	if (distribution %in% discreteDist) geom <- "errorbar"
 
-	layer(
+	ggplot2::layer(
 		data = data,
 		mapping = mapping,
 		stat = StatQqBand,
@@ -90,11 +88,11 @@ stat_qq_band <- function(data = NULL,
 #' @format NULL
 #' @usage NULL
 #' @export
-StatQqBand <- ggproto(
+StatQqBand <- ggplot2::ggproto(
 	`_class` = "StatQqBand",
 	`_inherit` = StatQqLine,
 
-	default_aes = aes(
+	default_aes = ggplot2::aes(
 		x = ..x..,
 		ymin = ..lower..,
 		ymax = ..upper..
@@ -151,7 +149,7 @@ StatQqBand <- ggproto(
 
 			# parametric bootstrap pointwise confidence intervals
 			if(bandType == "bootstrap") {
-				mle <- fitdistr(x = data$x, densfun = "normal")
+				mle <- MASS::fitdistr(x = data$x, densfun = "normal")
 
 				bs <- apply(
 					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(mle$estimate))), n, B),

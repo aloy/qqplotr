@@ -18,24 +18,22 @@
 #' @param detrend Logical. Should the plot of the points be detrended?
 #'
 #' @examples
-#' require(ggplot2)
-#'
 #' # defaults to standard normal distribution, not detrended
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#' 	stat_qq_points()
+#' 	stat_qq_point()
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # detrending the line and points
 #' detrend <- TRUE
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#' 	stat_qq_points(detrend = detrend)
+#' 	stat_qq_point(detrend = detrend)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # deterended exponential distribution with rate = 1
 #' detrend <- TRUE
 #' distribution <- "exp"
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#' 	stat_qq_points(detrend = detrend, distribution = distribution)
+#' 	stat_qq_point(detrend = detrend, distribution = distribution)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # deterended poisson distribution with lambda = 7
@@ -43,26 +41,26 @@
 #' distribution <- "pois"
 #' dparams <- list(lambda = 7)
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#' 	stat_qq_points(detrend = detrend, distribution = distribution, dparams = dparams)
+#' 	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' @export
-stat_qq_points <- function(data = NULL,
-												mapping = NULL,
-												geom = "point",
-												position = "identity",
-												show.legend = NA,
-												inherit.aes = T,
-												distribution = "norm",
-												dparams = list(),
-												qtype = 7,
-												probs = c(.25, .75),
-												quantiles = NULL,
-												detrend = FALSE,
-												...) {
-	layer(
+stat_qq_point <- function(data = NULL,
+													mapping = NULL,
+													geom = "point",
+													position = "identity",
+													show.legend = NA,
+													inherit.aes = T,
+													distribution = "norm",
+													dparams = list(),
+													qtype = 7,
+													probs = c(.25, .75),
+													quantiles = NULL,
+													detrend = FALSE,
+													...) {
+	ggplot2::layer(
 		mapping = mapping,
-		stat = StatQqPoints,
+		stat = StatQqPoint,
 		geom = geom,
 		position = position,
 		show.legend = show.legend,
@@ -82,11 +80,11 @@ stat_qq_points <- function(data = NULL,
 #' @format NULL
 #' @usage NULL
 #' @export
-StatQqPoints <- ggproto(
-	`_class` = "StatQqPoints",
+StatQqPoint <- ggplot2::ggproto(
+	`_class` = "StatQqPoint",
 	`_inherit` = Stat,
 
-	default_aes = aes(x = ..theoretical.., y = ..sample..),
+	default_aes = ggplot2::aes(x = ..theoretical.., y = ..sample..),
 
 	required_aes = c("sample"),
 
@@ -107,7 +105,7 @@ StatQqPoints <- ggproto(
 
 		# compute theoretical quantiles
 		if (is.null(quantiles)) {
-			quantiles <- stats::ppoints(n)
+			quantiles <- ppoints(n)
 		} else {
 			stopifnot(length(quantiles) == n)
 		}

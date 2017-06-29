@@ -4,28 +4,26 @@
 #'
 #' @import ggplot2
 #'
-#' @include stat_qq_points.R
+#' @include stat_qq_point.R
 #'
-#' @inheritParams stat_qq_points
+#' @inheritParams stat_qq_point
 #'
 #' @param qtype Type of quantile computation used in \code{quantile}.
 #' @param probs Numeric vector of length two, representing the quantiles used
 #'   to compute the Q-Q line.
 #'
 #' @examples
-#' require(ggplot2)
-#'
 #' # defaults to standard normal distribution, not detrended
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 #'	stat_qq_line() +
-#' 	stat_qq_points()
+#' 	stat_qq_point()
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # detrending the line and points
 #' detrend <- TRUE
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 #'	stat_qq_line(detrend = detrend) +
-#' 	stat_qq_points(detrend = detrend)
+#' 	stat_qq_point(detrend = detrend)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # deterended exponential distribution with rate = 1
@@ -33,7 +31,7 @@
 #' distribution <- "exp"
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 #'	stat_qq_line(detrend = detrend, distribution = distribution) +
-#' 	stat_qq_points(detrend = detrend, distribution = distribution)
+#' 	stat_qq_point(detrend = detrend, distribution = distribution)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' # deterended poisson distribution with lambda = 7
@@ -42,7 +40,7 @@
 #' dparams <- list(lambda = 7)
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 #'	stat_qq_line(detrend = detrend, distribution = distribution, dparams = dparams) +
-#' 	stat_qq_points(detrend = detrend, distribution = distribution, dparams = dparams)
+#' 	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
 #' @export
@@ -58,7 +56,7 @@ stat_qq_line <- function(data = NULL,
 												 probs = c(.25, .75),
 												 detrend = FALSE,
 												 ...) {
-	layer(
+	ggplot2::layer(
 		data = data,
 		mapping = mapping,
 		stat = StatQqLine,
@@ -80,11 +78,11 @@ stat_qq_line <- function(data = NULL,
 #' @format NULL
 #' @usage NULL
 #' @export
-StatQqLine <- ggproto(
+StatQqLine <- ggplot2::ggproto(
 	`_class` = "StatQqLine",
-	`_inherit` = StatQqPoints,
+	`_inherit` = StatQqPoint,
 
-	default_aes = aes(x = ..xline.., y = ..yline..),
+	default_aes = ggplot2::aes(x = ..xline.., y = ..yline..),
 
 	required_aes = c("sample"),
 
