@@ -2,9 +2,9 @@
 
 export(StatQqBand)
 export(StatQqLine)
-export(StatQqPoints)
+export(StatQqPoint)
 export(stat_qq_band)
 export(stat_qq_line)
-export(stat_qq_points)
-import(MASS)
+export(stat_qq_point)
 import(ggplot2)
+importFrom(MASS,fitdistr)

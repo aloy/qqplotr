@@ -66,13 +66,11 @@ to the paired geom/stat.}
 Draws quantile-quantile confidence bands.
 }
 \examples{
-require(ggplot2)
-
 # defaults to standard normal distribution, not detrended
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
  stat_qq_band(mapping = aes(x = mpg)) +
 stat_qq_line() +
-	stat_qq_points()
+	stat_qq_point()
 gg + labs(x = "theoretical", y = "sample")
 
 # detrending the line and points
@@ -80,7 +78,7 @@ detrend <- TRUE
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
  stat_qq_band(mapping = aes(x = mpg), detrend = detrend) +
 stat_qq_line(detrend = detrend) +
-	stat_qq_points(detrend = detrend)
+	stat_qq_point(detrend = detrend)
 gg + labs(x = "theoretical", y = "sample")
 
 # deterended exponential distribution with rate = 1
@@ -89,7 +87,7 @@ distribution <- "exp"
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
  stat_qq_band(mapping = aes(x = mpg), detrend = detrend, distribution = distribution) +
 stat_qq_line(detrend = detrend, distribution = distribution) +
-	stat_qq_points(detrend = detrend, distribution = distribution)
+	stat_qq_point(detrend = detrend, distribution = distribution)
 gg + labs(x = "theoretical", y = "sample")
 
 # deterended poisson distribution with lambda = 7
@@ -99,7 +97,7 @@ dparams <- list(lambda = 7)
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
  stat_qq_band(mapping = aes(x = mpg), detrend = detrend, distribution = distribution, dparams = dparams) +
 stat_qq_line(detrend = detrend, distribution = distribution, dparams = dparams) +
-	stat_qq_points(detrend = detrend, distribution = distribution, dparams = dparams)
+	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
 gg + labs(x = "theoretical", y = "sample")
 
 }
