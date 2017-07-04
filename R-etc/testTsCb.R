@@ -66,8 +66,8 @@ tsCb <- function(x,
 			upperNorm,
 			type = "l",
 			col = "red",
-			# ylim = c(-3, 3),
-			ylim = c(min(x), max(x)),
+			# ylim = c(-3, 3), # OLD
+			ylim = c(min(x), max(x)), # MODIFIED
 			xlim = c(-3, 3),
 			ylab = "Sample Quantile",
 			xlab = "Sample Quantile"
