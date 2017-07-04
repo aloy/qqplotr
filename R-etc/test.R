@@ -34,17 +34,3 @@ gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 ggplot_build(gg)$data[[1]] # stat_qq_band
 ggplot_build(gg)$data[[2]] # stat_qq_line
 ggplot_build(gg)$data[[3]] # stat_qq_point
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -7,28 +7,20 @@
 
 # required libraries
 # library(mvtnorm)    # for the multivariate normal distribution
-# library(robustbase) # for robust estimates for the mean and sd
+library(robustbase) # for robust estimates for the mean and sd
 
 
 ###################################
 # a few functions that are useful #
 ###################################
 
-Qn.scale<-function(x){
-Qn(x,finite.corr=FALSE)
+Qn.scale <- function(x) {
+	Qn(x, finite.corr = FALSE)
 }
 
-Qn.location<-function(x){
-s_Qn(x,mu.too=TRUE)[[1]]
+Qn.location <- function(x) {
+	s_Qn(x, mu.too = TRUE)[[1]]
 }
-
-
-out<-function(curve,upper,lower){
-k<-length(which(curve>upper | curve<lower))
-return(k>0)
-}
-
-
 
 ###############################################################
 # The confidence band function                                #
@@ -144,8 +136,8 @@ return(list(lower=norm.lower,upper=norm.upper))
 # x<-rnorm(100)
 # par(mfrow=c(2,1),mar=c(2,2,2,2))
 # system.time(QQ.cb(x))
-# 
-# 
+#
+#
 # x<-rt(100,df=100)
 # par(mfrow=c(2,1),mar=c(2,2,2,2))
 # QQ.cb(x,sigma=sqrt(100/(100-2)))
