@@ -53,7 +53,18 @@ create the \code{"dcustom"} and \code{"qcustom"} functions).}
 
 \item{dparams}{List of additional parameters passed on to \code{distribution} function.}
 
-\item{conf}{Numerical. Confidence level for the point-wise confidence envelope.}
+\item{bandType}{Character. Either \code{"normal"}, \code{"bootstrap"} or
+\code{"tail-sensitive"}. \code{"normal"} constructs simultaneous confidence
+bands based on Normal confidence intervals. \code{"bootstrap"} creates
+pointwise confidence bands based on a parametric bootstrap. Finally,
+\code{"tail-sensitive"} constructs tail-sensitive confidence bands, as
+described in Aldor-Noiman et al. (2013).}
+
+\item{B}{Integer. Number of bootstrap replicates. Only useful when
+\code{bandType = "bootstrap"}}
+
+\item{conf}{Numerical. Confidence level when constructing the confidence
+bands.}
 
 \item{detrend}{Logical. Should the plot of the points be detrended?}
 
@@ -100,4 +111,11 @@ stat_qq_line(detrend = detrend, distribution = distribution, dparams = dparams) 
 	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
 gg + labs(x = "theoretical", y = "sample")
 
+}
+\references{
+\itemize{
+\item{\href{http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
+S. et al. 2013. The Power to See: A New Graphical Test of Normality. The
+American Statistician.}}
+}
 }

@@ -9,7 +9,25 @@
 #'
 #' @inheritParams stat_qq_point
 #'
-#' @param conf Numerical. Confidence level for the point-wise confidence envelope.
+#' @param bandType Character. Either \code{"normal"}, \code{"bootstrap"} or
+#'   \code{"tail-sensitive"}. \code{"normal"} constructs simultaneous confidence
+#'   bands based on Normal confidence intervals. \code{"bootstrap"} creates
+#'   pointwise confidence bands based on a parametric bootstrap. Finally,
+#'   \code{"tail-sensitive"} constructs tail-sensitive confidence bands, as
+#'   described in Aldor-Noiman et al. (2013).
+#'
+#' @param conf Numerical. Confidence level when constructing the confidence
+#'   bands.
+#'
+#' @param B Integer. Number of bootstrap replicates. Only useful when
+#'   \code{bandType = "bootstrap"}
+#'
+#' @references
+#' \itemize{
+#' \item{\href{http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
+#' S. et al. 2013. The Power to See: A New Graphical Test of Normality. The
+#' American Statistician.}}
+#' }
 #'
 #' @examples
 #' # defaults to standard normal distribution, not detrended
@@ -137,12 +155,10 @@ StatQqBand <- ggplot2::ggproto(
 
 			fittedValues <- (slope * theoretical) + intercept
 
-			# confidende bands based on normal confidence intervals
+			# confidence bands based on normal confidence intervals
 			if (bandType == "normal") {
 				zCrit <- stats::qnorm(p = (1 - (1 - conf) / 2))
 				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
-
-				if (detrend) fittedValues <- rep(0, length(fittedValues))
 
 				upper <- fittedValues + (zCrit * stdErr)
 				lower <- fittedValues - (zCrit * stdErr)
@@ -166,7 +182,7 @@ StatQqBand <- ggplot2::ggproto(
 						nbinom = "negative binomial",
 						norm = "normal",
 						pois = "poisson",
-						t = "t",
+						t = dt,
 						weibull = "weibull"
 					)
 				}
@@ -175,13 +191,7 @@ StatQqBand <- ggplot2::ggproto(
 				if (distribution %in% c("exp", "geom", "lnorm", "norm", "pois")) {
 					mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution))
 				} else {
-					# TODO consider the central t dist for now (m = 0, s = 1)
-					if (distribution == "t") {
-						mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = c(dparams, list(m = 0, s = 1)))
-						mle$estimate <- mle$estimate[1]
-					} else {
-						mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = dparams)
-					}
+					mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = dparams)
 				}
 
 				bs <- apply(
@@ -210,6 +220,14 @@ StatQqBand <- ggplot2::ggproto(
 								lower = min(lower)
 							 )
 				out <- as.data.frame(out)
+			}
+
+			# detrend the confidence bands by keeping the same distance from the
+			# stat_qq_line, which now should be a line centered on y = 0
+			if (detrend) {
+				aux <- c(max(out$upper), min(out$lower))
+				out$upper <- out$upper - fittedValues
+				out$lower <- out$lower - fittedValues
 			}
 
 			out

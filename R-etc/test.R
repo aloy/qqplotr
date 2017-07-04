@@ -22,9 +22,10 @@ require(qqplotr)
 detrend <- F
 d <- "norm"
 dp <- list()
+bandType <- "bootstrap"
 
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-	stat_qq_band(mapping = aes(x = mpg), distribution = d, dparams = dp, detrend = detrend, bandType = "bootstrap") +
+	stat_qq_band(mapping = aes(x = mpg), distribution = d, dparams = dp, detrend = detrend, bandType = bandType) +
 	stat_qq_line(distribution = d, dparams = dp, detrend = detrend) +
 	stat_qq_point(distribution = d, dparams = dp, detrend = detrend)
   gg + labs(x = "theoretical", y = "sample")
@@ -33,12 +34,6 @@ gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 ggplot_build(gg)$data[[1]] # stat_qq_band
 ggplot_build(gg)$data[[2]] # stat_qq_line
 ggplot_build(gg)$data[[3]] # stat_qq_point
-
-
-
-
-
-
 
 
 
