@@ -18,4 +18,5 @@ Collate:
     'stat_qq_line.R'
     'stat_qq_band.R'
 Depends: ggplot2
-Imports: MASS
+Imports: MASS,
+    dplyr

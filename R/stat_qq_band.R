@@ -60,6 +60,7 @@ stat_qq_band <- function(data = NULL,
 												 conf = .95,
 												 detrend = FALSE,
 												 ...) {
+	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "hyper", "multinom", "nbinom", "pois")
 
 	if (distribution %in% discreteDist) geom <- "errorbar"
@@ -137,7 +138,7 @@ StatQqBand <- ggplot2::ggproto(
 			fittedValues <- (slope * theoretical) + intercept
 
 			# confidende bands based on normal confidence intervals
-			if(bandType == "normal") {
+			if (bandType == "normal") {
 				zCrit <- stats::qnorm(p = (1 - (1 - conf) / 2))
 				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
 
@@ -148,8 +149,40 @@ StatQqBand <- ggplot2::ggproto(
 			}
 
 			# parametric bootstrap pointwise confidence intervals
-			if(bandType == "bootstrap") {
-				mle <- MASS::fitdistr(x = data$x, densfun = "normal")
+			if (bandType == "bootstrap") {
+				# correspondence between stats and MASS distributions names
+				getDist <- function(distName) {
+					switch (
+						distName,
+						beta = "beta",
+						cauchy = "cauchy",
+						chisq = "chi-squared",
+						exp = "exponential",
+						f = "f",
+						gamma = "gamma",
+						geom = "geometric",
+						lnorm = "lognormal",
+						logis = "logistic",
+						nbinom = "negative binomial",
+						norm = "normal",
+						pois = "poisson",
+						t = "t",
+						weibull = "weibull"
+					)
+				}
+
+				# TODO supplying pars to the following dists in MASS::fitdistr is not supported
+				if (distribution %in% c("exp", "geom", "lnorm", "norm", "pois")) {
+					mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution))
+				} else {
+					# TODO consider the central t dist for now (m = 0, s = 1)
+					if (distribution == "t") {
+						mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = c(dparams, list(m = 0, s = 1)))
+						mle$estimate <- mle$estimate[1]
+					} else {
+						mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = dparams)
+					}
+				}
 
 				bs <- apply(
 					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(mle$estimate))), n, B),
@@ -165,10 +198,19 @@ StatQqBand <- ggplot2::ggproto(
 				x = theoretical,
 				upper = upper,
 				lower = lower,
-				fill = fill <- rgb(.6, .6, .6, .5)
+				fill = rgb(.6, .6, .6, .5)
 			)
 
-			if (discrete) out$colour <- rgb(.5, .5, .5)
+			if (discrete) {
+				out$colour <- rgb(.5, .5, .5)
+				# create a data.frame with unique rows
+				out <- dplyr::summarize(
+								group_by(out, x, fill, colour),
+								upper = max(upper),
+								lower = min(lower)
+							 )
+				out <- as.data.frame(out)
+			}
 
 			out
 		}
