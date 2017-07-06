@@ -56,8 +56,8 @@ tsCb <- function(x,
 	# now translate back to sample quantiles
 	# upperNorm <- qnorm(upperCi) # OLD
 	# lowerNorm <- qnorm(lowerCi) # OLD
-	upperNorm <- quantile(x, prob = upperCi) # MODIFIED
-	lowerNorm <- quantile(x, prob = lowerCi) # MODIFIED
+	upperNorm <- qnorm(upperCi) * scaleFunc(x) + centerFunc(x) # MODIFIED
+	lowerNorm <- qnorm(lowerCi) * scaleFunc(x) + centerFunc(x) # MODIFIED
 
 	if (plot == TRUE) {
 		q.prob <- qnorm((1:n) / (n + 1))
@@ -70,7 +70,7 @@ tsCb <- function(x,
 			ylim = c(min(x), max(x)), # MODIFIED
 			xlim = c(-3, 3),
 			ylab = "Sample Quantile",
-			xlab = "Sample Quantile"
+			xlab = "Theoretical Quantile"
 		)
 		lines(q.prob, lowerNorm, col = "red")
 		if (unknown) {

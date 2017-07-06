@@ -20,8 +20,8 @@ stat_qq_band
 require(qqplotr)
 
 detrend <- F
-d <- "norm"
-dp <- list()
+d <- "f"
+dp <- list(df1 = 30, df2 = 30)
 bandType <- "bootstrap"
 
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +

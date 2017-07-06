@@ -10,11 +10,13 @@
 #' @inheritParams stat_qq_point
 #'
 #' @param bandType Character. Either \code{"normal"}, \code{"bootstrap"} or
-#'   \code{"tail-sensitive"}. \code{"normal"} constructs simultaneous confidence
-#'   bands based on Normal confidence intervals. \code{"bootstrap"} creates
-#'   pointwise confidence bands based on a parametric bootstrap. Finally,
-#'   \code{"tail-sensitive"} constructs tail-sensitive confidence bands, as
-#'   described in Aldor-Noiman et al. (2013).
+#'   \code{"tail-sensitive"}. \code{"normal"} constructs simultaneous
+#'   confidence bands based on Normal confidence intervals.
+#'   \code{"bootstrap"} creates pointwise confidence bands based on a
+#'   parametric bootstrap. Note that distributional parameters supplied via
+#'   \code{dparams} will only be used as an starting point for the MLEs.
+#'   Finally, \code{"tail-sensitive"} constructs tail-sensitive confidence
+#'   bands, as described in Aldor-Noiman et al. (2013).
 #'
 #' @param conf Numerical. Confidence level when constructing the confidence
 #'   bands.
@@ -191,7 +193,12 @@ StatQqBand <- ggplot2::ggproto(
 				if (distribution %in% c("exp", "geom", "lnorm", "norm", "pois")) {
 					mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution))
 				} else {
-					mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = dparams)
+					# supply the additional npc parameter for the t and f distributions
+					if (distribution %in% c("t", "f")) {
+						mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = c(dparams, list(ncp = mean(data$x))))
+					} else {
+						mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = dparams)
+					}
 				}
 
 				bs <- apply(
@@ -234,3 +241,7 @@ StatQqBand <- ggplot2::ggproto(
 		}
 	}
 )
+
+optimize
+
+MASS::fitdistr()
