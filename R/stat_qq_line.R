@@ -26,7 +26,7 @@
 #' 	stat_qq_point(detrend = detrend)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
-#' # deterended exponential distribution with rate = 1
+#' # detrended exponential distribution with rate = 1
 #' detrend <- TRUE
 #' distribution <- "exp"
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
@@ -34,7 +34,7 @@
 #' 	stat_qq_point(detrend = detrend, distribution = distribution)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
-#' # deterended poisson distribution with lambda = 7
+#' # detrended poisson distribution with lambda = 7
 #' detrend <- TRUE
 #' distribution <- "pois"
 #' dparams <- list(lambda = 7)

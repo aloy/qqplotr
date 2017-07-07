@@ -4,23 +4,26 @@
 #'
 #' @import ggplot2
 #' @importFrom MASS fitdistr
+#' @importFrom dplyr summarize
+#' @importFrom robustbase s_Qn
+#' @importFrom robustbase Qn
 #'
 #' @include stat_qq_point.R stat_qq_line.R
 #'
 #' @inheritParams stat_qq_point
 #'
-#' @param bandType Character. Either \code{"normal"}, \code{"bootstrap"} or
-#'   \code{"tail-sensitive"}. \code{"normal"} constructs simultaneous confidence
-#'   bands based on Normal confidence intervals. \code{"bootstrap"} creates
+#' @param bandType Character. Either \code{"normal"}, \code{"bs"} or
+#'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence
+#'   bands based on Normal confidence intervals. \code{"bs"} creates
 #'   pointwise confidence bands based on a parametric bootstrap. Finally,
-#'   \code{"tail-sensitive"} constructs tail-sensitive confidence bands, as
+#'   \code{"ts"} constructs tail-sensitive confidence bands, as
 #'   described in Aldor-Noiman et al. (2013).
 #'
 #' @param conf Numerical. Confidence level when constructing the confidence
 #'   bands.
 #'
 #' @param B Integer. Number of bootstrap replicates. Only useful when
-#'   \code{bandType = "bootstrap"}
+#'   \code{bandType = "bs"}
 #'
 #' @references
 #' \itemize{
@@ -45,7 +48,7 @@
 #' 	stat_qq_point(detrend = detrend)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
-#' # deterended exponential distribution with rate = 1
+#' # detrended exponential distribution with rate = 1
 #' detrend <- TRUE
 #' distribution <- "exp"
 #' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
@@ -54,7 +57,7 @@
 #' 	stat_qq_point(detrend = detrend, distribution = distribution)
 #' gg + labs(x = "theoretical", y = "sample")
 #'
-#' # deterended poisson distribution with lambda = 7
+#' # detrended poisson distribution with lambda = 7
 #' detrend <- TRUE
 #' distribution <- "pois"
 #' dparams <- list(lambda = 7)
@@ -76,6 +79,8 @@ stat_qq_band <- function(data = NULL,
 												 bandType = "normal",
 												 B = 1000,
 												 conf = .95,
+												 mu = NULL,
+												 sigma = NULL,
 												 detrend = FALSE,
 												 ...) {
 	# vector with common discrete distributions
@@ -97,6 +102,8 @@ stat_qq_band <- function(data = NULL,
 			bandType = bandType,
 			B = B,
 			conf = conf,
+			mu = mu,
+			sigma = sigma,
 			detrend = detrend,
 			discrete = distribution %in% discreteDist,
 			...
@@ -128,6 +135,8 @@ StatQqBand <- ggplot2::ggproto(
 						 bandType = "normal",
 						 B = 1000,
 						 conf = .95,
+						 mu = NULL,
+						 sigma = NULL,
 						 detrend = FALSE,
 						 discrete) {
 			# distributional functions
@@ -157,7 +166,7 @@ StatQqBand <- ggplot2::ggproto(
 
 			# confidence bands based on normal confidence intervals
 			if (bandType == "normal") {
-				zCrit <- stats::qnorm(p = (1 - (1 - conf) / 2))
+				zCrit <- qnorm(p = (1 - (1 - conf) / 2))
 				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
 
 				upper <- fittedValues + (zCrit * stdErr)
@@ -165,7 +174,7 @@ StatQqBand <- ggplot2::ggproto(
 			}
 
 			# parametric bootstrap pointwise confidence intervals
-			if (bandType == "bootstrap") {
+			if (bandType == "bs") {
 				# correspondence between stats and MASS distributions names
 				getDist <- function(distName) {
 					switch (
@@ -202,6 +211,53 @@ StatQqBand <- ggplot2::ggproto(
 
 				upper <- apply(X = bs, MARGIN = 1, FUN = quantile, prob = (1 + conf) / 2)
 				lower <- apply(X = bs, MARGIN = 1, FUN = quantile, prob = (1 - conf) / 2)
+			}
+
+			# tail-sensitive confidence bands
+			if (bandType == "ts") {
+				centerFunc <- function(x) robustbase::s_Qn(x, mu.too = TRUE)[[1]]
+				scaleFunc <- function(x) robustbase::Qn(x, finite.corr = FALSE)
+
+				upperCi <- rep(NA, n)
+				lowerCi <- rep(NA, n)
+				pValue <- matrix(NA, nrow = n, ncol = B)
+
+				# simulate data
+				sim <- NULL
+				if (is.null(mu) | is.null(sigma)) {
+					for (i in 1:B) sim <- cbind(sim, sort(rnorm(n)))
+
+					# center and scale simulated data
+					center <- apply(sim, 2, centerFunc)
+					scale <- apply(sim, 2, scaleFunc)
+					sim <- sweep(sweep(sim, 2, center, FUN = "-"), 2, scale, FUN = "/")
+
+					# convert simulated values to probabilities
+					sim <- t(apply(sim, 1, pnorm))
+				} else {
+					for (i in 1:B) sim <- cbind(sim, sort(runif(n)))
+				}
+
+				# widen the CIs to get simultanoues (100 * conf)% CIs
+				for (i in 1:n) {
+					tmp <- pbeta(sim[i, ], shape1 = i, shape2 = n + 1 - i)
+					pValue[i, ] <- apply(cbind(tmp, 1 - tmp), 1, min)
+				}
+
+				critical <- apply(pValue, 2, min)
+				criticalC <- quantile(critical, prob = 1 - conf)
+
+				upperCi <- qbeta(1 - criticalC, shape1 = 1:n, shape2 = n + 1 - (1:n))
+				lowerCi <- qbeta(criticalC, shape1 = 1:n, shape2 = n + 1 - (1:n))
+
+				# translate back to sample quantiles
+				if (is.null(mu) | is.null(sigma)) {
+					upper <- qnorm(upperCi) * scaleFunc(data$x) + centerFunc(data$x)
+					lower <- qnorm(lowerCi) * scaleFunc(data$x) + centerFunc(data$x)
+				} else {
+					upper <- qnorm(upperCi) * sigma + mu
+					lower <- qnorm(lowerCi) * sigma + mu
+				}
 			}
 
 			out <- data.frame(

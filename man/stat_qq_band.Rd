@@ -7,7 +7,8 @@
 stat_qq_band(data = NULL, mapping = NULL, geom = "ribbon",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
   distribution = "norm", dparams = list(), bandType = "normal",
-  B = 1000, conf = 0.95, detrend = FALSE, ...)
+  B = 1000, conf = 0.95, mu = NULL, sigma = NULL, detrend = FALSE,
+  ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -53,15 +54,15 @@ create the \code{"dcustom"} and \code{"qcustom"} functions).}
 
 \item{dparams}{List of additional parameters passed on to \code{distribution} function.}
 
-\item{bandType}{Character. Either \code{"normal"}, \code{"bootstrap"} or
-\code{"tail-sensitive"}. \code{"normal"} constructs simultaneous confidence
-bands based on Normal confidence intervals. \code{"bootstrap"} creates
+\item{bandType}{Character. Either \code{"normal"}, \code{"bs"} or
+\code{"ts"}. \code{"normal"} constructs simultaneous confidence
+bands based on Normal confidence intervals. \code{"bs"} creates
 pointwise confidence bands based on a parametric bootstrap. Finally,
-\code{"tail-sensitive"} constructs tail-sensitive confidence bands, as
+\code{"ts"} constructs tail-sensitive confidence bands, as
 described in Aldor-Noiman et al. (2013).}
 
 \item{B}{Integer. Number of bootstrap replicates. Only useful when
-\code{bandType = "bootstrap"}}
+\code{bandType = "bs"}}
 
 \item{conf}{Numerical. Confidence level when constructing the confidence
 bands.}
