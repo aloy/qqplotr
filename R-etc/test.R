@@ -20,16 +20,19 @@ stat_qq_band
 
 require(qqplotr)
 
-detrend <- F
-d <- "f"
-dp <- list(df1 = 30, df2 = 30)
-bandType <- "bootstrap"
+detrend <- T
+d <- "norm"
+dp <- list()
+bandType <- "ts"
 
 gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
 	stat_qq_band(mapping = aes(x = mpg), distribution = d, dparams = dp, detrend = detrend, bandType = bandType) +
 	stat_qq_line(distribution = d, dparams = dp, detrend = detrend) +
 	stat_qq_point(distribution = d, dparams = dp, detrend = detrend)
-  gg + labs(x = "theoretical", y = "sample")
+  gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+
+# adjusting y-axis limits of the detrended plot version
+gg + scale_y_continuous(limits = c(-1,1) * diff(range(mtcars$mpg)))
 
 # debugging
 ggplot_build(gg)$data[[1]] # stat_qq_band
