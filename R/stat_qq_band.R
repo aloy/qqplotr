@@ -1,6 +1,6 @@
 #' Quantile-quantile confidence bands
 #'
-#' Draws quantile-quantile confidence bands.
+#' Draws quantile-quantile confidence bands, with an additional detrend option.
 #'
 #' @import ggplot2
 #' @importFrom MASS fitdistr
@@ -18,12 +18,20 @@
 #'   pointwise confidence bands based on a parametric bootstrap. Finally,
 #'   \code{"ts"} constructs tail-sensitive confidence bands, as
 #'   described in Aldor-Noiman et al. (2013).
-#'
-#' @param conf Numerical. Confidence level when constructing the confidence
-#'   bands.
-#'
-#' @param B Integer. Number of bootstrap replicates. Only useful when
-#'   \code{bandType = "bs"}
+#' @param B Integer. If \code{bandType = "bs"}, then \code{B} is the number of
+#'   bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
+#'   number of simulated samples.
+#' @param conf Numerical. Confidence level of the bands.
+#' @param mu Numerical. Only used if \code{bandType = "ts"}. Center
+#'   distributional parameter used to construct the simulated tail-sensitive
+#'   confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
+#'   those parameters are estimated using \code{\link[robustbase]{Qn}} and
+#'   \code{\link[robustbase]{s_Qn}}, respectively.
+#' @param sigma Numerical. Only used if \code{bandType = "ts"}. Scale
+#'   distributional parameter used to construct the simulated tail-sensitive
+#'   confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
+#'   those parameters are estimated using \code{\link[robustbase]{Qn}} and
+#'   \code{\link[robustbase]{s_Qn}}, respectively.
 #'
 #' @references
 #' \itemize{
@@ -33,39 +41,49 @@
 #' }
 #'
 #' @examples
-#' # defaults to standard normal distribution, not detrended
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'  stat_qq_band(mapping = aes(x = mpg)) +
-#'	stat_qq_line() +
-#' 	stat_qq_point()
-#' gg + labs(x = "theoretical", y = "sample")
+#' # generate random Normal data
+#' set.seed(0)
+#' df <- data.frame(norm = rnorm(100))
 #'
-#' # detrending the line and points
-#' detrend <- TRUE
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'  stat_qq_band(mapping = aes(x = mpg), detrend = detrend) +
-#'	stat_qq_line(detrend = detrend) +
-#' 	stat_qq_point(detrend = detrend)
-#' gg + labs(x = "theoretical", y = "sample")
+#' # Normal Q-Q plot of Normal data
+#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#'  stat_qq_band() +
+#'  stat_qq_line() +
+#'  stat_qq_point()
+#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #'
-#' # detrended exponential distribution with rate = 1
-#' detrend <- TRUE
-#' distribution <- "exp"
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'  stat_qq_band(mapping = aes(x = mpg), detrend = detrend, distribution = distribution) +
-#'	stat_qq_line(detrend = detrend, distribution = distribution) +
-#' 	stat_qq_point(detrend = detrend, distribution = distribution)
-#' gg + labs(x = "theoretical", y = "sample")
+#' # Exponential Q-Q plot of Normal data
+#' di <- "exp"
+#' dp <- list(rate = 1)
+#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#'  stat_qq_band(distribution = di, dparams = dp) +
+#'  stat_qq_line(distribution = di, dparams = dp) +
+#'  stat_qq_point(distribution = di, dparams = dp)
+#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #'
-#' # detrended poisson distribution with lambda = 7
-#' detrend <- TRUE
-#' distribution <- "pois"
-#' dparams <- list(lambda = 7)
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'  stat_qq_band(mapping = aes(x = mpg), detrend = detrend, distribution = distribution, dparams = dparams) +
-#'	stat_qq_line(detrend = detrend, distribution = distribution, dparams = dparams) +
-#' 	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
-#' gg + labs(x = "theoretical", y = "sample")
+#' # Detrended Normal Q-Q plot of Normal data
+#' de <- TRUE
+#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#'  stat_qq_band(detrend = de) +
+#'  stat_qq_line(detrend = de) +
+#'  stat_qq_point(detrend = de)
+#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'
+#' # Normal Q-Q plot of Normal data with boostrap confidence bands
+#' bt <- "bs"
+#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#'  stat_qq_band(bandType = bt) +
+#'  stat_qq_line() +
+#'  stat_qq_point()
+#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'
+#' # Normal Q-Q plot of Normal data with tail-sensitive confidence bands
+#' bt <- "ts"
+#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#'  stat_qq_band(bandType = bt) +
+#'  stat_qq_line() +
+#'  stat_qq_point()
+#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #'
 #' @export
 stat_qq_band <- function(data = NULL,
@@ -111,7 +129,9 @@ stat_qq_band <- function(data = NULL,
 	)
 }
 
-#' @format NULL
+#' StatQqBand
+#'
+#' @keywords internal
 #' @usage NULL
 #' @export
 StatQqBand <- ggplot2::ggproto(
@@ -124,7 +144,7 @@ StatQqBand <- ggplot2::ggproto(
 		ymax = ..upper..
 	),
 
-	required_aes = c("sample", "x"),
+	required_aes = c("sample"),
 
 	compute_group = {
 		function(data,
@@ -198,9 +218,9 @@ StatQqBand <- ggplot2::ggproto(
 
 				# TODO supplying pars to the following dists in MASS::fitdistr is not supported
 				if (distribution %in% c("exp", "geom", "lnorm", "norm", "pois")) {
-					mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution))
+					mle <- MASS::fitdistr(x = theoretical, densfun = getDist(distribution))
 				} else {
-					mle <- MASS::fitdistr(x = data$x, densfun = getDist(distribution), start = dparams)
+					mle <- MASS::fitdistr(x = theoretical, densfun = getDist(distribution), start = dparams)
 				}
 
 				bs <- apply(
@@ -252,8 +272,8 @@ StatQqBand <- ggplot2::ggproto(
 
 				# translate back to sample quantiles
 				if (is.null(mu) | is.null(sigma)) {
-					upper <- qnorm(upperCi) * scaleFunc(data$x) + centerFunc(data$x)
-					lower <- qnorm(lowerCi) * scaleFunc(data$x) + centerFunc(data$x)
+					upper <- qnorm(upperCi) * scaleFunc(theoretical) + centerFunc(theoretical)
+					lower <- qnorm(lowerCi) * scaleFunc(theoretical) + centerFunc(theoretical)
 				} else {
 					upper <- qnorm(upperCi) * sigma + mu
 					lower <- qnorm(lowerCi) * sigma + mu

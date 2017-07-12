@@ -44,15 +44,17 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
-\item{distribution}{Character. Distribution function to use, if \code{x} not
-specified. Do not provide the full distribution function name (e.g.,
-\code{"dnorm"}), instead, just use the shortened distribution name (e.g.,
+\item{distribution}{Character. Theoretical probability distribution function
+to use. Do not provide the full distribution function name (e.g.,
+\code{"dnorm"}). Instead, just provide its shortened name (e.g.,
 \code{"norm"}). If you wish to provide a custom distribution, you may do so
-by first creating the density and quantile functions following the standard
-nomenclature from the \code{stats} package (e.g., for \code{"custom"},
-create the \code{"dcustom"} and \code{"qcustom"} functions).}
+by first creating the density, quantile, and random functions following the
+standard nomenclature from the \code{stats} package (i.e., for
+\code{"custom"}, create the \code{"dcustom"}, \code{"qcustom"}, and
+\code{"rcustom"} functions).}
 
-\item{dparams}{List of additional parameters passed on to \code{distribution} function.}
+\item{dparams}{List of additional parameters passed on to the previously
+chosen \code{distribution} function.}
 
 \item{bandType}{Character. Either \code{"normal"}, \code{"bs"} or
 \code{"ts"}. \code{"normal"} constructs simultaneous confidence
@@ -61,13 +63,26 @@ pointwise confidence bands based on a parametric bootstrap. Finally,
 \code{"ts"} constructs tail-sensitive confidence bands, as
 described in Aldor-Noiman et al. (2013).}
 
-\item{B}{Integer. Number of bootstrap replicates. Only useful when
-\code{bandType = "bs"}}
+\item{B}{Integer. If \code{bandType = "bs"}, then \code{B} is the number of
+bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
+number of simulated samples.}
 
-\item{conf}{Numerical. Confidence level when constructing the confidence
-bands.}
+\item{conf}{Numerical. Confidence level of the bands.}
 
-\item{detrend}{Logical. Should the plot of the points be detrended?}
+\item{mu}{Numerical. Only used if \code{bandType = "ts"}. Center
+distributional parameter used to construct the simulated tail-sensitive
+confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
+those parameters are estimated using \code{\link[robustbase]{Qn}} and
+\code{\link[robustbase]{s_Qn}}, respectively.}
+
+\item{sigma}{Numerical. Only used if \code{bandType = "ts"}. Scale
+distributional parameter used to construct the simulated tail-sensitive
+confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
+those parameters are estimated using \code{\link[robustbase]{Qn}} and
+\code{\link[robustbase]{s_Qn}}, respectively.}
+
+\item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
+the objects will be detrended according to the reference Q-Q line.}
 
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
@@ -75,42 +90,52 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.}
 }
 \description{
-Draws quantile-quantile confidence bands.
+Draws quantile-quantile confidence bands, with an additional detrend option.
 }
 \examples{
-# defaults to standard normal distribution, not detrended
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
- stat_qq_band(mapping = aes(x = mpg)) +
-stat_qq_line() +
-	stat_qq_point()
-gg + labs(x = "theoretical", y = "sample")
+# generate random Normal data
+set.seed(0)
+df <- data.frame(norm = rnorm(100))
 
-# detrending the line and points
-detrend <- TRUE
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
- stat_qq_band(mapping = aes(x = mpg), detrend = detrend) +
-stat_qq_line(detrend = detrend) +
-	stat_qq_point(detrend = detrend)
-gg + labs(x = "theoretical", y = "sample")
+# Normal Q-Q plot of Normal data
+gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+ stat_qq_band() +
+ stat_qq_line() +
+ stat_qq_point()
+gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 
-# deterended exponential distribution with rate = 1
-detrend <- TRUE
-distribution <- "exp"
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
- stat_qq_band(mapping = aes(x = mpg), detrend = detrend, distribution = distribution) +
-stat_qq_line(detrend = detrend, distribution = distribution) +
-	stat_qq_point(detrend = detrend, distribution = distribution)
-gg + labs(x = "theoretical", y = "sample")
+# Exponential Q-Q plot of Normal data
+di <- "exp"
+dp <- list(rate = 1)
+gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+ stat_qq_band(distribution = di, dparams = dp) +
+ stat_qq_line(distribution = di, dparams = dp) +
+ stat_qq_point(distribution = di, dparams = dp)
+gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 
-# deterended poisson distribution with lambda = 7
-detrend <- TRUE
-distribution <- "pois"
-dparams <- list(lambda = 7)
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
- stat_qq_band(mapping = aes(x = mpg), detrend = detrend, distribution = distribution, dparams = dparams) +
-stat_qq_line(detrend = detrend, distribution = distribution, dparams = dparams) +
-	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
-gg + labs(x = "theoretical", y = "sample")
+# Detrended Normal Q-Q plot of Normal data
+de <- TRUE
+gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+ stat_qq_band(detrend = de) +
+ stat_qq_line(detrend = de) +
+ stat_qq_point(detrend = de)
+gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+
+# Normal Q-Q plot of Normal data with boostrap confidence bands
+bt <- "bs"
+gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+ stat_qq_band(bandType = bt) +
+ stat_qq_line() +
+ stat_qq_point()
+gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+
+# Normal Q-Q plot of Normal data with tail-sensitive confidence bands
+bt <- "ts"
+gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+ stat_qq_band(bandType = bt) +
+ stat_qq_line() +
+ stat_qq_point()
+gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 
 }
 \references{

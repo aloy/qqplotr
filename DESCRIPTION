@@ -9,7 +9,7 @@ Authors@R: c(person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut", 
     person("Heike", "Hofmann", role = "aut"))
 URL: https://github.com/aloy/qqplotr
 BugReports: https://github.com/aloy/qqplotr/issues
-License: GPL-3
+License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1

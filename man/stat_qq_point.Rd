@@ -2,12 +2,12 @@
 % Please edit documentation in R/stat_qq_point.R
 \name{stat_qq_point}
 \alias{stat_qq_point}
-\title{Quantile-quantile plots with detrend option}
+\title{Quantile-quantile points}
 \usage{
 stat_qq_point(data = NULL, mapping = NULL, geom = "point",
-  position = "identity", show.legend = NA, inherit.aes = T,
-  distribution = "norm", dparams = list(), qtype = 7, probs = c(0.25,
-  0.75), quantiles = NULL, detrend = FALSE, ...)
+  position = "identity", show.legend = NA, inherit.aes = TRUE,
+  distribution = "norm", dparams = list(), quantiles = NULL, qtype = 7,
+  qprobs = c(0.25, 0.75), detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -43,17 +43,32 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
-\item{distribution}{Character. Distribution function to use, if \code{x} not
-specified. Do not provide the full distribution function name (e.g.,
-\code{"dnorm"}), instead, just use the shortened distribution name (e.g.,
+\item{distribution}{Character. Theoretical probability distribution function
+to use. Do not provide the full distribution function name (e.g.,
+\code{"dnorm"}). Instead, just provide its shortened name (e.g.,
 \code{"norm"}). If you wish to provide a custom distribution, you may do so
-by first creating the density and quantile functions following the standard
-nomenclature from the \code{stats} package (e.g., for \code{"custom"},
-create the \code{"dcustom"} and \code{"qcustom"} functions).}
+by first creating the density, quantile, and random functions following the
+standard nomenclature from the \code{stats} package (i.e., for
+\code{"custom"}, create the \code{"dcustom"}, \code{"qcustom"}, and
+\code{"rcustom"} functions).}
 
-\item{dparams}{List of additional parameters passed on to \code{distribution} function.}
+\item{dparams}{List of additional parameters passed on to the previously
+chosen \code{distribution} function.}
 
-\item{detrend}{Logical. Should the plot of the points be detrended?}
+\item{quantiles}{Numeric vector. Specify the quantiles to be used for the Q-Q
+plot. If \code{quantiles = NULL}, quantiles are automatically created using
+\code{\link[stats]{ppoints}}.}
+
+\item{qtype}{Integer between 1 and 9. Only used if \code{detrend = TRUE}.
+Type of the quantile algorithm to be used by the
+\code{\link[stats]{quantile}} function to construct the Q-Q line.}
+
+\item{qprobs}{Numeric vector of length two. Only used if \code{detrend =
+TRUE}. Represents the quantiles used by the \code{\link[stats]{quantile}}
+function to construct the Q-Q line.}
+
+\item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
+the objects will be detrended according to the reference Q-Q line.}
 
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
@@ -61,33 +76,23 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.}
 }
 \description{
-Draws a regular quantile-quantile plot with an additional detrend option.
+Draws quantile-quantile points, with an additional detrend option.
 }
 \examples{
-# defaults to standard normal distribution, not detrended
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-	stat_qq_point()
-gg + labs(x = "theoretical", y = "sample")
+# generate random Normal data
+set.seed(0)
+df <- data.frame(norm = rnorm(100))
 
-# detrending the line and points
-detrend <- TRUE
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-	stat_qq_point(detrend = detrend)
-gg + labs(x = "theoretical", y = "sample")
+# Normal Q-Q plot of Normal data
+gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+ stat_qq_point()
+gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 
-# deterended exponential distribution with rate = 1
-detrend <- TRUE
-distribution <- "exp"
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-	stat_qq_point(detrend = detrend, distribution = distribution)
-gg + labs(x = "theoretical", y = "sample")
-
-# deterended poisson distribution with lambda = 7
-detrend <- TRUE
-distribution <- "pois"
-dparams <- list(lambda = 7)
-gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
-gg + labs(x = "theoretical", y = "sample")
+# Exponential Q-Q plot of Normal data
+di <- "exp"
+dp <- list(rate = 1)
+gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+ stat_qq_point(distribution = di, dparams = dp)
+gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 
 }

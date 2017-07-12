@@ -1,6 +1,6 @@
-#' Quantile-quantile line
+#' Quantile-quantile lines
 #'
-#' Draws a quantile-quantile line.
+#' Draws a quantile-quantile line, with an additional detrend option.
 #'
 #' @import ggplot2
 #'
@@ -8,40 +8,37 @@
 #'
 #' @inheritParams stat_qq_point
 #'
-#' @param qtype Type of quantile computation used in \code{quantile}.
-#' @param probs Numeric vector of length two, representing the quantiles used
-#'   to compute the Q-Q line.
+#' @param qtype Integer between 1 and 9. Type of the quantile algorithm to be
+#'   used by the \code{\link[stats]{quantile}} function to construct the Q-Q
+#'   line.
+#' @param qprobs Numeric vector of length two. Represents the quantiles used by
+#'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
 #'
 #' @examples
-#' # defaults to standard normal distribution, not detrended
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'	stat_qq_line() +
-#' 	stat_qq_point()
-#' gg + labs(x = "theoretical", y = "sample")
+#' # generate random Normal data
+#' set.seed(0)
+#' df <- data.frame(norm = rnorm(100))
 #'
-#' # detrending the line and points
-#' detrend <- TRUE
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'	stat_qq_line(detrend = detrend) +
-#' 	stat_qq_point(detrend = detrend)
-#' gg + labs(x = "theoretical", y = "sample")
+#' # Normal Q-Q plot of Normal data
+#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#'  stat_qq_line() +
+#'  stat_qq_point()
+#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #'
-#' # detrended exponential distribution with rate = 1
-#' detrend <- TRUE
-#' distribution <- "exp"
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'	stat_qq_line(detrend = detrend, distribution = distribution) +
-#' 	stat_qq_point(detrend = detrend, distribution = distribution)
-#' gg + labs(x = "theoretical", y = "sample")
+#' # Exponential Q-Q plot of Normal data
+#' di <- "exp"
+#' dp <- list(rate = 1)
+#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#'  stat_qq_line(distribution = di, dparams = dp) +
+#'  stat_qq_point(distribution = di, dparams = dp)
+#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #'
-#' # detrended poisson distribution with lambda = 7
-#' detrend <- TRUE
-#' distribution <- "pois"
-#' dparams <- list(lambda = 7)
-#' gg <- ggplot(data = mtcars, mapping = aes(sample = mpg)) +
-#'	stat_qq_line(detrend = detrend, distribution = distribution, dparams = dparams) +
-#' 	stat_qq_point(detrend = detrend, distribution = distribution, dparams = dparams)
-#' gg + labs(x = "theoretical", y = "sample")
+#' # Detrended Normal Q-Q plot of Normal data
+#' de <- TRUE
+#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#'  stat_qq_line(detrend = de) +
+#'  stat_qq_point(detrend = de)
+#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #'
 #' @export
 stat_qq_line <- function(data = NULL,
@@ -53,7 +50,7 @@ stat_qq_line <- function(data = NULL,
 												 distribution = "norm",
 												 dparams = list(),
 												 qtype = 7,
-												 probs = c(.25, .75),
+												 qprobs = c(.25, .75),
 												 detrend = FALSE,
 												 ...) {
 	ggplot2::layer(
@@ -68,14 +65,16 @@ stat_qq_line <- function(data = NULL,
 			distribution = distribution,
 			dparams = dparams,
 			qtype = qtype,
-			probs = probs,
+			qprobs = qprobs,
 			detrend = detrend,
 			...
 		)
 	)
 }
 
-#' @format NULL
+#' StatQqLine
+#'
+#' @keywords internal
 #' @usage NULL
 #' @export
 StatQqLine <- ggplot2::ggproto(
@@ -93,12 +92,12 @@ StatQqLine <- ggplot2::ggproto(
 						 distribution = "norm",
 						 dparams = list(),
 						 qtype = 7,
-						 probs = c(.25, .75),
+						 qprobs = c(.25, .75),
 						 detrend = FALSE) {
-			if (length(probs) != 2) {
+			if (length(qprobs) != 2) {
 				stop("Cannot fit line quantiles (",
-					  paste0(probs, collapse = ", "),
-					  "). 'probs' must have length two.",
+					  paste0(qprobs, collapse = ", "),
+					  "). 'qprobs' must have length two.",
 					  call = FALSE)
 			}
 
@@ -117,9 +116,10 @@ StatQqLine <- ggplot2::ggproto(
 				out <- data.frame(xline = c(min(theoretical), max(theoretical)))
 				out$yline <- 0
 			} else {
-				xCoords <- do.call(qFunc, c(list(p = probs), dparams))
-				yCoords <- do.call(quantile, list(x = smp, probs = probs, type = qtype))
+				xCoords <- do.call(qFunc, c(list(p = qprobs), dparams))
+				yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
 
+				do.call(quantile, list(x = smp, qprobs = qprobs, type = qtype))
 				slope <- diff(yCoords) / diff(xCoords)
 				intercept <- yCoords[1L] - slope * xCoords[1L]
 
