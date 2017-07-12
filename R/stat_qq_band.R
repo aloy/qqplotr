@@ -164,7 +164,7 @@ StatQqBand <- ggplot2::ggproto(
 			dFunc <- eval(parse(text = paste0("d", distribution)))
 			rFunc <- eval(parse(text = paste0("r", distribution)))
 
-			# inherit from StatQq
+			# inherit from StatQqPoint
 			theoretical <- self$super()$super()$compute_group(data = data,
 																												distribution = distribution,
 																												dparams = dparams)$theoretical

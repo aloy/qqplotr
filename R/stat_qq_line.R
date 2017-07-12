@@ -104,7 +104,7 @@ StatQqLine <- ggplot2::ggproto(
 			# distributional function
 			qFunc <- eval(parse(text = paste0("q", distribution)))
 
-			# inherit j and theoretical from StatQqRot
+			# inherit smp and theoretical from StatQqPoint
 			smp <- self$super()$compute_group(data = data,
 																				distribution = distribution,
 																				dparams = dparams)$sample
