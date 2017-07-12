@@ -165,11 +165,14 @@ StatQqBand <- ggplot2::ggproto(
 			rFunc <- eval(parse(text = paste0("r", distribution)))
 
 			# inherit from StatQqPoint
+			smp <- self$super()$super()$compute_group(data = data,
+																												distribution = distribution,
+																												dparams = dparams)$sample
 			theoretical <- self$super()$super()$compute_group(data = data,
 																												distribution = distribution,
 																												dparams = dparams)$theoretical
-			quantiles <- do.call(dFunc, c(list(x = theoretical), dparams))
-			n <- length(quantiles)
+
+			n <- length(smp)
 
 			# inherit from StatQqLine
 			xline <- self$super()$compute_group(data = data,
@@ -186,6 +189,8 @@ StatQqBand <- ggplot2::ggproto(
 
 			# confidence bands based on normal confidence intervals
 			if (bandType == "normal") {
+				quantiles <- do.call(dFunc, c(list(x = theoretical), dparams))
+
 				zCrit <- qnorm(p = (1 - (1 - conf) / 2))
 				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
 
@@ -218,9 +223,9 @@ StatQqBand <- ggplot2::ggproto(
 
 				# TODO supplying pars to the following dists in MASS::fitdistr is not supported
 				if (distribution %in% c("exp", "geom", "lnorm", "norm", "pois")) {
-					mle <- MASS::fitdistr(x = theoretical, densfun = getDist(distribution))
+					mle <- MASS::fitdistr(x = smp, densfun = getDist(distribution))
 				} else {
-					mle <- MASS::fitdistr(x = theoretical, densfun = getDist(distribution), start = dparams)
+					mle <- MASS::fitdistr(x = smp, densfun = getDist(distribution), start = dparams)
 				}
 
 				bs <- apply(
@@ -272,8 +277,8 @@ StatQqBand <- ggplot2::ggproto(
 
 				# translate back to sample quantiles
 				if (is.null(mu) | is.null(sigma)) {
-					upper <- qnorm(upperCi) * scaleFunc(theoretical) + centerFunc(theoretical)
-					lower <- qnorm(lowerCi) * scaleFunc(theoretical) + centerFunc(theoretical)
+					upper <- qnorm(upperCi) * scaleFunc(smp) + centerFunc(smp)
+					lower <- qnorm(lowerCi) * scaleFunc(smp) + centerFunc(smp)
 				} else {
 					upper <- qnorm(upperCi) * sigma + mu
 					lower <- qnorm(lowerCi) * sigma + mu

@@ -1,6 +1,9 @@
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 qqplotr
 =======
+
+[![Build Status](https://travis-ci.org/aloy/qqplotr.svg?branch=master)](https://travis-ci.org/aloy/qqplotr)
 
 Overview
 --------
@@ -27,7 +30,7 @@ Three Stats are available:
 -   `stat_qq_line` Plots a reference line based on the first and third quartiles of the data (as in `stats::qqline`).
 -   `stat_qq_band` Plots confidence bands based on three methods: `"normal"`, `"bs"`, and `"ts"`. `"normal"` constructs simultaneous confidence bands based on Normal confidence intervals. `"bs"` creates pointwise confidence bands based on a parametric boostrap. Finally, `"ts"` constructs tail-sensitive confidence bands, as described in Aldor-Noiman et al. (2013).
 
-Reference
----------
+References
+----------
 
 -   [Aldor-Noiman, S. et al. 2013. The Power to See: A New Graphical Test of Normality. The American Statistician.](http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865)
