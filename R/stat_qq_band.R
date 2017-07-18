@@ -5,6 +5,7 @@
 #' @import ggplot2
 #' @importFrom MASS fitdistr
 #' @importFrom dplyr summarize
+#' @importFrom dplyr group_by
 #' @importFrom robustbase s_Qn
 #' @importFrom robustbase Qn
 #'
@@ -13,11 +14,12 @@
 #' @inheritParams stat_qq_point
 #'
 #' @param bandType Character. Either \code{"normal"}, \code{"bs"} or
-#'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence
-#'   bands based on Normal confidence intervals. \code{"bs"} creates
-#'   pointwise confidence bands based on a parametric bootstrap. Finally,
-#'   \code{"ts"} constructs tail-sensitive confidence bands, as
-#'   described in Aldor-Noiman et al. (2013).
+#'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
+#'   on Normal confidence intervals. \code{"bs"} creates pointwise confidence
+#'   bands based on a parametric bootstrap. Finally, \code{"ts"} constructs
+#'   tail-sensitive confidence bands, as described in Aldor-Noiman et al.
+#'   (2013). \emph{Note that tail-sensitive confidence bands are only
+#'   implemented for Normal Q-Q plots.}
 #' @param B Integer. If \code{bandType = "bs"}, then \code{B} is the number of
 #'   bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
 #'   number of simulated samples.
@@ -189,13 +191,12 @@ StatQqBand <- ggplot2::ggproto(
 
 			# confidence bands based on normal confidence intervals
 			if (bandType == "normal") {
-				quantiles <- do.call(dFunc, c(list(x = theoretical), dparams))
-
-				zCrit <- qnorm(p = (1 - (1 - conf) / 2))
+				quantiles <- ppoints(n)
 				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
+				zCrit <- qnorm(p = (1 - (1 - conf) / 2))
 
-				upper <- fittedValues + (zCrit * stdErr)
-				lower <- fittedValues - (zCrit * stdErr)
+				upper <- fittedValues + (stdErr * zCrit)
+				lower <- fittedValues - (stdErr * zCrit)
 			}
 
 			# parametric bootstrap pointwise confidence intervals
@@ -240,6 +241,11 @@ StatQqBand <- ggplot2::ggproto(
 
 			# tail-sensitive confidence bands
 			if (bandType == "ts") {
+				# if (distribution != "norm") {
+				# 	warning("Tail-sensitive confidence bands are only implemented for Normal Q-Q plots. Proceed with caution.}",
+				# 					call. = F)
+				# }
+
 				centerFunc <- function(x) robustbase::s_Qn(x, mu.too = TRUE)[[1]]
 				scaleFunc <- function(x) robustbase::Qn(x, finite.corr = FALSE)
 
@@ -296,7 +302,7 @@ StatQqBand <- ggplot2::ggproto(
 				out$colour <- rgb(.5, .5, .5)
 				# create a data.frame with unique rows
 				out <- dplyr::summarize(
-								group_by(out, x, fill, colour),
+								dplyr::group_by(out, x, fill, colour),
 								upper = max(upper),
 								lower = min(lower)
 							 )

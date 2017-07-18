@@ -57,11 +57,12 @@ standard nomenclature from the \code{stats} package (i.e., for
 chosen \code{distribution} function.}
 
 \item{bandType}{Character. Either \code{"normal"}, \code{"bs"} or
-\code{"ts"}. \code{"normal"} constructs simultaneous confidence
-bands based on Normal confidence intervals. \code{"bs"} creates
-pointwise confidence bands based on a parametric bootstrap. Finally,
-\code{"ts"} constructs tail-sensitive confidence bands, as
-described in Aldor-Noiman et al. (2013).}
+\code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
+on Normal confidence intervals. \code{"bs"} creates pointwise confidence
+bands based on a parametric bootstrap. Finally, \code{"ts"} constructs
+tail-sensitive confidence bands, as described in Aldor-Noiman et al.
+(2013). \emph{Note that tail-sensitive confidence bands are only
+implemented for Normal Q-Q plots.}}
 
 \item{B}{Integer. If \code{bandType = "bs"}, then \code{B} is the number of
 bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
