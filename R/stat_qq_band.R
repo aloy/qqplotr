@@ -3,11 +3,11 @@
 #' Draws quantile-quantile confidence bands, with an additional detrend option.
 #'
 #' @import ggplot2
-#' @importFrom MASS fitdistr
 #' @importFrom dplyr summarize
 #' @importFrom dplyr group_by
 #' @importFrom robustbase s_Qn
 #' @importFrom robustbase Qn
+#' @importFrom stats4 mle
 #'
 #' @include stat_qq_point.R stat_qq_line.R
 #'
@@ -201,36 +201,42 @@ StatQqBand <- ggplot2::ggproto(
 
 			# parametric bootstrap pointwise confidence intervals
 			if (bandType == "bs") {
-				# correspondence between stats and MASS distributions names
-				getDist <- function(distName) {
+				# distributions with default parameters
+				startList <- {function(distName) {
 					switch (
 						distName,
-						beta = "beta",
-						cauchy = "cauchy",
-						chisq = "chi-squared",
-						exp = "exponential",
-						f = "f",
-						gamma = "gamma",
-						geom = "geometric",
-						lnorm = "lognormal",
-						logis = "logistic",
-						nbinom = "negative binomial",
-						norm = "normal",
-						pois = "poisson",
-						t = dt,
-						weibull = "weibull"
+						cauchy = list(location = 0, scale = 1),
+						exp = list(rate = 1),
+						lnorm = list(meanlog = 0, sdlog = 1),
+						logis = list(location = 0, scale = 1),
+						norm = list(mean = 0, sd = 1),
+						NULL
 					)
-				}
+				}}
 
-				# TODO supplying pars to the following dists in MASS::fitdistr is not supported
-				if (distribution %in% c("exp", "geom", "lnorm", "norm", "pois")) {
-					mle <- MASS::fitdistr(x = smp, densfun = getDist(distribution))
+				logLik <- {function() {
+					argList <- as.list(match.call())
+					argList[[1]] <- NULL
+					R <- do.call(dFunc, c(list(x = smp), argList))
+					-sum(log(R))
+				}}
+
+				# distributions with default values
+				if (!is.null(startList) & length(dparams) == 0) {
+					s <- startList(distribution)
+					parList <- rep(list(bquote()), length(s))
+					names(parList) <- names(s)
+					formals(logLik) <- parList
+					mleEst <- stats4::mle(minuslogl = logLik, start = s)
 				} else {
-					mle <- MASS::fitdistr(x = smp, densfun = getDist(distribution), start = dparams)
+					parList <- rep(list(bquote()), length(dparams))
+					names(parList) <- names(dparams)
+					formals(logLik) <- parList
+					mleEst <- stats4::mle(minuslogl = logLik, start = dparams)
 				}
 
 				bs <- apply(
-					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(mle$estimate))), n, B),
+					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(mleEst@coef))), n, B),
 					MARGIN = 2,
 					FUN = sort
 				)
@@ -241,10 +247,10 @@ StatQqBand <- ggplot2::ggproto(
 
 			# tail-sensitive confidence bands
 			if (bandType == "ts") {
-				# if (distribution != "norm") {
-				# 	warning("Tail-sensitive confidence bands are only implemented for Normal Q-Q plots. Proceed with caution.}",
-				# 					call. = F)
-				# }
+				if (distribution != "norm") {
+					warning("Tail-sensitive confidence bands are only implemented for Normal Q-Q plots. Proceed with caution.}",
+									call. = F)
+				}
 
 				centerFunc <- function(x) robustbase::s_Qn(x, mu.too = TRUE)[[1]]
 				scaleFunc <- function(x) robustbase::Qn(x, finite.corr = FALSE)
