@@ -45,10 +45,10 @@
 #' @examples
 #' # generate random Normal data
 #' set.seed(0)
-#' df <- data.frame(norm = rnorm(100))
+#' smp <- data.frame(norm = rnorm(100))
 #'
 #' # Normal Q-Q plot of Normal data
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band() +
 #'  stat_qq_line() +
 #'  stat_qq_point()
@@ -57,7 +57,7 @@
 #' # Exponential Q-Q plot of Normal data
 #' di <- "exp"
 #' dp <- list(rate = 1)
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(distribution = di, dparams = dp) +
 #'  stat_qq_line(distribution = di, dparams = dp) +
 #'  stat_qq_point(distribution = di, dparams = dp)
@@ -65,7 +65,7 @@
 #'
 #' # Detrended Normal Q-Q plot of Normal data
 #' de <- TRUE
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(detrend = de) +
 #'  stat_qq_line(detrend = de) +
 #'  stat_qq_point(detrend = de)
@@ -73,7 +73,7 @@
 #'
 #' # Normal Q-Q plot of Normal data with boostrap confidence bands
 #' bt <- "bs"
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(bandType = bt) +
 #'  stat_qq_line() +
 #'  stat_qq_point()
@@ -81,7 +81,7 @@
 #'
 #' # Normal Q-Q plot of Normal data with tail-sensitive confidence bands
 #' bt <- "ts"
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(bandType = bt) +
 #'  stat_qq_line() +
 #'  stat_qq_point()
@@ -162,7 +162,6 @@ StatQqBand <- ggplot2::ggproto(
 						 detrend = FALSE,
 						 discrete) {
 			# distributional functions
-			qFunc <- eval(parse(text = paste0("q", distribution)))
 			dFunc <- eval(parse(text = paste0("d", distribution)))
 			rFunc <- eval(parse(text = paste0("r", distribution)))
 
@@ -318,7 +317,6 @@ StatQqBand <- ggplot2::ggproto(
 			# detrend the confidence bands by keeping the same distance from the
 			# stat_qq_line, which now should be a line centered on y = 0
 			if (detrend) {
-				aux <- c(max(out$upper), min(out$lower))
 				out$upper <- out$upper - fittedValues
 				out$lower <- out$lower - fittedValues
 			}
