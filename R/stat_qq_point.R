@@ -18,7 +18,9 @@
 #' @param dparams List of additional parameters passed on to the previously
 #'   chosen \code{distribution} function.
 #' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
-#'   the objects will be detrended according to the reference Q-Q line.
+#'   the objects will be detrended according to the reference Q-Q line. This
+#'   procedure was described by Thode (2002), and may help reducing visual bias
+#'   caused by the orthogonal distances from Q-Q points to the reference line.
 #' @param quantiles Numeric vector. Specify the quantiles to be used for the Q-Q
 #'   plot. If \code{quantiles = NULL}, quantiles are automatically created using
 #'   \code{\link[stats]{ppoints}}.
@@ -29,28 +31,37 @@
 #'   TRUE}. Represents the quantiles used by the \code{\link[stats]{quantile}}
 #'   function to construct the Q-Q line.
 #'
+#' @references
+#' \itemize{
+#' \item{\href{https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+#' }
+#'
 #' @examples
 #' # generate random Normal data
 #' set.seed(0)
 #' smp <- data.frame(norm = rnorm(100))
 #'
-#' # Normal Q-Q plot of Normal data
+#' # Normal Q-Q plot of simulated Normal data
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
-#'  stat_qq_point()
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point() +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
-#' # Exponential Q-Q plot of Normal data
+#' # Exponential Q-Q plot of mean ozone levels (airquality dataset)
 #' di <- "exp"
 #' dp <- list(rate = 1)
-#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
-#'  stat_qq_point(distribution = di, dparams = dp)
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
+#'  stat_qq_point(distribution = di, dparams = dp) +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
 #' @export
 stat_qq_point <- function(data = NULL,
 													mapping = NULL,
 													geom = "point",
 													position = "identity",
+													na.rm = TRUE,
 													show.legend = NA,
 													inherit.aes = TRUE,
 													distribution = "norm",
@@ -68,6 +79,7 @@ stat_qq_point <- function(data = NULL,
 		show.legend = show.legend,
 		inherit.aes = inherit.aes,
 		params = list(
+			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
 			quantiles = quantiles,

@@ -14,6 +14,12 @@
 #' @param qprobs Numeric vector of length two. Represents the quantiles used by
 #'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
 #'
+#' @references
+#' \itemize{
+#' \item{\href{https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+#' }
+#'
 #' @examples
 #' # generate random Normal data
 #' set.seed(0)
@@ -22,29 +28,35 @@
 #' # Normal Q-Q plot of Normal data
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_line() +
-#'  stat_qq_point()
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point() +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
-#' # Exponential Q-Q plot of Normal data
+#' # Exponential Q-Q plot of mean ozone levels (airquality dataset)
 #' di <- "exp"
 #' dp <- list(rate = 1)
-#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 #'  stat_qq_line(distribution = di, dparams = dp) +
-#'  stat_qq_point(distribution = di, dparams = dp)
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point(distribution = di, dparams = dp) +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
-#' # Detrended Normal Q-Q plot of Normal data
+#' # Detrended Exponential Q-Q plot of mean ozone levels
+#' di <- "exp"
+#' dp <- list(rate = 1)
 #' de <- TRUE
-#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
-#'  stat_qq_line(detrend = de) +
-#'  stat_qq_point(detrend = de)
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
+#'  stat_qq_line(distribution = di, detrend = de) +
+#'  stat_qq_point(distribution = di, detrend = de) +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
 #' @export
 stat_qq_line <- function(data = NULL,
 												 mapping = NULL,
 												 geom = "path",
 												 position = "identity",
+												 na.rm = TRUE,
 												 show.legend = NA,
 												 inherit.aes = TRUE,
 												 distribution = "norm",
@@ -62,6 +74,7 @@ stat_qq_line <- function(data = NULL,
 		show.legend = show.legend,
 		inherit.aes = inherit.aes,
 		params = list(
+			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
 			qtype = qtype,

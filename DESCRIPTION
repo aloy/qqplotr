@@ -1,9 +1,9 @@
 Package: qqplotr
 Type: Package
-Version: 0.0.0.9000
+Version: 0.0.1
 Title: Q-Q Plot Extensions for ggplot2
-Description: An extension of the functionality of ggplot2 Q-Q plots, by permitting
-		the plotting of Q-Q lines, confidence bands, and plot rotations.
+Description: This package extends the functionality of ggplot2 Q-Q plots by
+		permitting drawing Q-Q lines, confidence bands, and also a detrend option.
 Authors@R: c(person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut", "cre")),
 		person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut")),
     person("Heike", "Hofmann", role = "aut"))

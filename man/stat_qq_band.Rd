@@ -6,9 +6,9 @@
 \usage{
 stat_qq_band(data = NULL, mapping = NULL, geom = "ribbon",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
-  distribution = "norm", dparams = list(), bandType = "normal",
-  B = 1000, conf = 0.95, mu = NULL, sigma = NULL, detrend = FALSE,
-  ...)
+  na.rm = TRUE, distribution = "norm", dparams = list(),
+  bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
+  detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -44,6 +44,9 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
+\item{na.rm}{If \code{FALSE}, the default, missing values are removed with
+a warning. If \code{TRUE}, missing values are silently removed.}
+
 \item{distribution}{Character. Theoretical probability distribution function
 to use. Do not provide the full distribution function name (e.g.,
 \code{"dnorm"}). Instead, just provide its shortened name (e.g.,
@@ -59,10 +62,10 @@ chosen \code{distribution} function.}
 \item{bandType}{Character. Either \code{"normal"}, \code{"bs"} or
 \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
 on Normal confidence intervals. \code{"bs"} creates pointwise confidence
-bands based on a parametric bootstrap. Finally, \code{"ts"} constructs
-tail-sensitive confidence bands, as described in Aldor-Noiman et al.
-(2013). \emph{Note that tail-sensitive confidence bands are only
-implemented for Normal Q-Q plots.}}
+bands based on a parametric bootstrap; parameters are estimated with MLEs.
+Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
+described by Aldor-Noiman et al. (2013) (also, see 'Note' for
+limitations).}
 
 \item{B}{Integer. If \code{bandType = "bs"}, then \code{B} is the number of
 bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
@@ -83,7 +86,9 @@ those parameters are estimated using \code{\link[robustbase]{Qn}} and
 \code{\link[robustbase]{s_Qn}}, respectively.}
 
 \item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
-the objects will be detrended according to the reference Q-Q line.}
+the objects will be detrended according to the reference Q-Q line. This
+procedure was described by Thode (2002), and may help reducing visual bias
+caused by the orthogonal distances from Q-Q points to the reference line.}
 
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
@@ -93,56 +98,73 @@ to the paired geom/stat.}
 \description{
 Draws quantile-quantile confidence bands, with an additional detrend option.
 }
+\note{
+\itemize{
+\item{Tail-sensitive confidence bands are only implemented for Normal Q-Q
+plots. As a future update, we intend to generalize to other distributions.}
+\item{Bootstrap bands are constructed based on a MLE parametric bootstrap.
+Hence, it is not possible to construct such bands if the sample and
+theoretical distributions present mismatching supports.}
+}
+}
 \examples{
 # generate random Normal data
 set.seed(0)
-df <- data.frame(norm = rnorm(100))
+smp <- data.frame(norm = rnorm(100))
 
 # Normal Q-Q plot of Normal data
-gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_qq_band() +
  stat_qq_line() +
  stat_qq_point()
 gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 
-# Exponential Q-Q plot of Normal data
+# Exponential Q-Q plot of mean ozone levels (airquality dataset)
 di <- "exp"
 dp <- list(rate = 1)
-gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
  stat_qq_band(distribution = di, dparams = dp) +
  stat_qq_line(distribution = di, dparams = dp) +
- stat_qq_point(distribution = di, dparams = dp)
-gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ stat_qq_point(distribution = di, dparams = dp) +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
 
-# Detrended Normal Q-Q plot of Normal data
+# Detrended Exponential Q-Q plot of mean ozone levels
+di <- "exp"
+dp <- list(rate = 1)
 de <- TRUE
-gg <- ggplot(data = df, mapping = aes(sample = norm)) +
- stat_qq_band(detrend = de) +
- stat_qq_line(detrend = de) +
- stat_qq_point(detrend = de)
-gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
+ stat_qq_band(distribution = di, detrend = de) +
+ stat_qq_line(distribution = di, detrend = de) +
+ stat_qq_point(distribution = di, detrend = de) +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
 
 # Normal Q-Q plot of Normal data with boostrap confidence bands
 bt <- "bs"
-gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_qq_band(bandType = bt) +
  stat_qq_line() +
- stat_qq_point()
-gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ stat_qq_point() +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
 
 # Normal Q-Q plot of Normal data with tail-sensitive confidence bands
 bt <- "ts"
-gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_qq_band(bandType = bt) +
  stat_qq_line() +
- stat_qq_point()
-gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ stat_qq_point() +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
 
 }
 \references{
 \itemize{
+\item{\href{https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
 \item{\href{http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
-S. et al. 2013. The Power to See: A New Graphical Test of Normality. The
-American Statistician.}}
+S. et al. (2013). The Power to See: A New Graphical Test of Normality. The
+American Statistician. 67:4.}}
 }
 }

@@ -16,10 +16,10 @@
 #' @param bandType Character. Either \code{"normal"}, \code{"bs"} or
 #'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
 #'   on Normal confidence intervals. \code{"bs"} creates pointwise confidence
-#'   bands based on a parametric bootstrap. Finally, \code{"ts"} constructs
-#'   tail-sensitive confidence bands, as described in Aldor-Noiman et al.
-#'   (2013). \emph{Note that tail-sensitive confidence bands are only
-#'   implemented for Normal Q-Q plots.}
+#'   bands based on a parametric bootstrap; parameters are estimated with MLEs.
+#'   Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
+#'   described by Aldor-Noiman et al. (2013) (also, see 'Note' for
+#'   limitations).
 #' @param B Integer. If \code{bandType = "bs"}, then \code{B} is the number of
 #'   bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
 #'   number of simulated samples.
@@ -35,11 +35,22 @@
 #'   those parameters are estimated using \code{\link[robustbase]{Qn}} and
 #'   \code{\link[robustbase]{s_Qn}}, respectively.
 #'
+#' @note
+#' \itemize{
+#' \item{Tail-sensitive confidence bands are only implemented for Normal Q-Q
+#' plots. As a future update, we intend to generalize to other distributions.}
+#' \item{Bootstrap bands are constructed based on a MLE parametric bootstrap.
+#' Hence, it is not possible to construct such bands if the sample and
+#' theoretical distributions present mismatching supports.}
+#' }
+#'
 #' @references
 #' \itemize{
+#' \item{\href{https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
 #' \item{\href{http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
-#' S. et al. 2013. The Power to See: A New Graphical Test of Normality. The
-#' American Statistician.}}
+#' S. et al. (2013). The Power to See: A New Graphical Test of Normality. The
+#' American Statistician. 67:4.}}
 #' }
 #'
 #' @examples
@@ -54,38 +65,44 @@
 #'  stat_qq_point()
 #' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #'
-#' # Exponential Q-Q plot of Normal data
+#' # Exponential Q-Q plot of mean ozone levels (airquality dataset)
 #' di <- "exp"
 #' dp <- list(rate = 1)
-#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 #'  stat_qq_band(distribution = di, dparams = dp) +
 #'  stat_qq_line(distribution = di, dparams = dp) +
-#'  stat_qq_point(distribution = di, dparams = dp)
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point(distribution = di, dparams = dp) +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
-#' # Detrended Normal Q-Q plot of Normal data
+#' # Detrended Exponential Q-Q plot of mean ozone levels
+#' di <- "exp"
+#' dp <- list(rate = 1)
 #' de <- TRUE
-#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
-#'  stat_qq_band(detrend = de) +
-#'  stat_qq_line(detrend = de) +
-#'  stat_qq_point(detrend = de)
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
+#'  stat_qq_band(distribution = di, detrend = de) +
+#'  stat_qq_line(distribution = di, detrend = de) +
+#'  stat_qq_point(distribution = di, detrend = de) +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
 #' # Normal Q-Q plot of Normal data with boostrap confidence bands
 #' bt <- "bs"
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(bandType = bt) +
 #'  stat_qq_line() +
-#'  stat_qq_point()
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point() +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
 #' # Normal Q-Q plot of Normal data with tail-sensitive confidence bands
 #' bt <- "ts"
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(bandType = bt) +
 #'  stat_qq_line() +
-#'  stat_qq_point()
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point() +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
 #' @export
 stat_qq_band <- function(data = NULL,
@@ -94,6 +111,7 @@ stat_qq_band <- function(data = NULL,
 												 position = "identity",
 												 show.legend = NA,
 												 inherit.aes = TRUE,
+												 na.rm = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
 												 bandType = "normal",
@@ -117,6 +135,7 @@ stat_qq_band <- function(data = NULL,
 		show.legend = show.legend,
 		inherit.aes = inherit.aes,
 		params = list(
+			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
 			bandType = bandType,
@@ -200,7 +219,7 @@ StatQqBand <- ggplot2::ggproto(
 
 			# parametric bootstrap pointwise confidence intervals
 			if (bandType == "bs") {
-				# distributions with default parameters
+				# define here distributions with default parameters
 				startList <- {function(distName) {
 					switch (
 						distName,
@@ -213,6 +232,7 @@ StatQqBand <- ggplot2::ggproto(
 					)
 				}}
 
+				# log-likelihood function to maximize with stats4::mle
 				logLik <- {function() {
 					argList <- as.list(match.call())
 					argList[[1]] <- NULL
@@ -220,18 +240,25 @@ StatQqBand <- ggplot2::ggproto(
 					-sum(log(R))
 				}}
 
-				# distributions with default values
+				# for distributions with default values the user do not need to provide
+				# dparams
 				if (!is.null(startList) & length(dparams) == 0) {
 					s <- startList(distribution)
 					parList <- rep(list(bquote()), length(s))
 					names(parList) <- names(s)
 					formals(logLik) <- parList
-					mleEst <- stats4::mle(minuslogl = logLik, start = s)
+
+					mleEst <- suppressWarnings(
+						stats4::mle(minuslogl = logLik, start = s)
+					)
 				} else {
 					parList <- rep(list(bquote()), length(dparams))
 					names(parList) <- names(dparams)
 					formals(logLik) <- parList
-					mleEst <- stats4::mle(minuslogl = logLik, start = dparams)
+
+					mleEst <- suppressWarnings(
+						stats4::mle(minuslogl = logLik, start = dparams)
+					)
 				}
 
 				bs <- apply(

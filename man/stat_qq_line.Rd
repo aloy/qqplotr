@@ -5,9 +5,9 @@
 \title{Quantile-quantile lines}
 \usage{
 stat_qq_line(data = NULL, mapping = NULL, geom = "path",
-  position = "identity", show.legend = NA, inherit.aes = TRUE,
-  distribution = "norm", dparams = list(), qtype = 7, qprobs = c(0.25,
-  0.75), detrend = FALSE, ...)
+  position = "identity", na.rm = TRUE, show.legend = NA,
+  inherit.aes = TRUE, distribution = "norm", dparams = list(),
+  qtype = 7, qprobs = c(0.25, 0.75), detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -33,6 +33,9 @@ plot. You must supply \code{mapping} if there is no plot mapping.}
 
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
+
+\item{na.rm}{If \code{FALSE}, the default, missing values are removed with
+a warning. If \code{TRUE}, missing values are silently removed.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -63,7 +66,9 @@ line.}
 the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
 
 \item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
-the objects will be detrended according to the reference Q-Q line.}
+the objects will be detrended according to the reference Q-Q line. This
+procedure was described by Thode (2002), and may help reducing visual bias
+caused by the orthogonal distances from Q-Q points to the reference line.}
 
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
@@ -76,27 +81,38 @@ Draws a quantile-quantile line, with an additional detrend option.
 \examples{
 # generate random Normal data
 set.seed(0)
-df <- data.frame(norm = rnorm(100))
+smp <- data.frame(norm = rnorm(100))
 
 # Normal Q-Q plot of Normal data
-gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_qq_line() +
- stat_qq_point()
-gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ stat_qq_point() +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
 
-# Exponential Q-Q plot of Normal data
+# Exponential Q-Q plot of mean ozone levels (airquality dataset)
 di <- "exp"
 dp <- list(rate = 1)
-gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
  stat_qq_line(distribution = di, dparams = dp) +
- stat_qq_point(distribution = di, dparams = dp)
-gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ stat_qq_point(distribution = di, dparams = dp) +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
 
-# Detrended Normal Q-Q plot of Normal data
+# Detrended Exponential Q-Q plot of mean ozone levels
+di <- "exp"
+dp <- list(rate = 1)
 de <- TRUE
-gg <- ggplot(data = df, mapping = aes(sample = norm)) +
- stat_qq_line(detrend = de) +
- stat_qq_point(detrend = de)
-gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
+ stat_qq_line(distribution = di, detrend = de) +
+ stat_qq_point(distribution = di, detrend = de) +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
 
+}
+\references{
+\itemize{
+\item{\href{https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+}
 }
