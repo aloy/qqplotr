@@ -2,10 +2,9 @@ Package: qqplotr
 Type: Package
 Version: 0.0.1
 Title: Q-Q Plot Extensions for ggplot2
-Description: This package extends the functionality of ggplot2 Q-Q plots by
-		permitting drawing Q-Q lines, confidence bands, and also a detrend option.
-Authors@R: c(person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut", "cre")),
-		person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut")),
+Description: Extension of ggplot2 Q-Q plot functionalities.
+Authors@R: c(person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut", "cre")),
+		person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut")),
     person("Heike", "Hofmann", role = "aut"))
 URL: https://github.com/aloy/qqplotr
 BugReports: https://github.com/aloy/qqplotr/issues
