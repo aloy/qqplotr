@@ -4,6 +4,7 @@ qqplotr
 =======
 
 [![Build Status](https://travis-ci.org/aloy/qqplotr.svg?branch=master)](https://travis-ci.org/aloy/qqplotr)
+[CRAN Badge](https://www.r-pkg.org/badges/version/qqplotr)](https://cran.r-project.org/package=qqplotr)
 
 Overview
 --------
