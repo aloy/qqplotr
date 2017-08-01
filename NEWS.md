@@ -1,7 +1,3 @@
-# qqplotr 0.0.1-dev
-
-* Added probability-probability stats: `stat_pp_point` and `stat_pp_line`.
-
 # qqplotr 0.0.1
 
 * Initial release of the package.
