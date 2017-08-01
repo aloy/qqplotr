@@ -3,11 +3,11 @@
 #' Draws quantile-quantile confidence bands, with an additional detrend option.
 #'
 #' @import ggplot2
-#' @importFrom MASS fitdistr
 #' @importFrom dplyr summarize
 #' @importFrom dplyr group_by
 #' @importFrom robustbase s_Qn
 #' @importFrom robustbase Qn
+#' @importFrom stats4 mle
 #'
 #' @include stat_qq_point.R stat_qq_line.R
 #'
@@ -16,10 +16,10 @@
 #' @param bandType Character. Either \code{"normal"}, \code{"bs"} or
 #'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
 #'   on Normal confidence intervals. \code{"bs"} creates pointwise confidence
-#'   bands based on a parametric bootstrap. Finally, \code{"ts"} constructs
-#'   tail-sensitive confidence bands, as described in Aldor-Noiman et al.
-#'   (2013). \emph{Note that tail-sensitive confidence bands are only
-#'   implemented for Normal Q-Q plots.}
+#'   bands based on a parametric bootstrap; parameters are estimated with MLEs.
+#'   Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
+#'   described by Aldor-Noiman et al. (2013) (also, see 'Note' for
+#'   limitations).
 #' @param B Integer. If \code{bandType = "bs"}, then \code{B} is the number of
 #'   bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
 #'   number of simulated samples.
@@ -35,57 +35,74 @@
 #'   those parameters are estimated using \code{\link[robustbase]{Qn}} and
 #'   \code{\link[robustbase]{s_Qn}}, respectively.
 #'
+#' @note
+#' \itemize{
+#' \item{Tail-sensitive confidence bands are only implemented for Normal Q-Q
+#' plots. As a future update, we intend to generalize to other distributions.}
+#' \item{Bootstrap bands are constructed based on a MLE parametric bootstrap.
+#' Hence, it is not possible to construct such bands if the sample and
+#' theoretical distributions present mismatching supports.}
+#' }
+#'
 #' @references
 #' \itemize{
+#' \item{\href{https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
 #' \item{\href{http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
-#' S. et al. 2013. The Power to See: A New Graphical Test of Normality. The
-#' American Statistician.}}
+#' S. et al. (2013). The Power to See: A New Graphical Test of Normality. The
+#' American Statistician. 67:4.}}
 #' }
 #'
 #' @examples
 #' # generate random Normal data
 #' set.seed(0)
-#' df <- data.frame(norm = rnorm(100))
+#' smp <- data.frame(norm = rnorm(100))
 #'
 #' # Normal Q-Q plot of Normal data
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band() +
 #'  stat_qq_line() +
 #'  stat_qq_point()
 #' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #'
-#' # Exponential Q-Q plot of Normal data
+#' # Exponential Q-Q plot of mean ozone levels (airquality dataset)
 #' di <- "exp"
 #' dp <- list(rate = 1)
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 #'  stat_qq_band(distribution = di, dparams = dp) +
 #'  stat_qq_line(distribution = di, dparams = dp) +
-#'  stat_qq_point(distribution = di, dparams = dp)
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point(distribution = di, dparams = dp) +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
-#' # Detrended Normal Q-Q plot of Normal data
+#' # Detrended Exponential Q-Q plot of mean ozone levels
+#' di <- "exp"
+#' dp <- list(rate = 1)
 #' de <- TRUE
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
-#'  stat_qq_band(detrend = de) +
-#'  stat_qq_line(detrend = de) +
-#'  stat_qq_point(detrend = de)
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
+#'  stat_qq_band(distribution = di, detrend = de) +
+#'  stat_qq_line(distribution = di, detrend = de) +
+#'  stat_qq_point(distribution = di, detrend = de) +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
 #' # Normal Q-Q plot of Normal data with boostrap confidence bands
 #' bt <- "bs"
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(bandType = bt) +
 #'  stat_qq_line() +
-#'  stat_qq_point()
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point() +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
 #' # Normal Q-Q plot of Normal data with tail-sensitive confidence bands
 #' bt <- "ts"
-#' gg <- ggplot(data = df, mapping = aes(sample = norm)) +
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(bandType = bt) +
 #'  stat_qq_line() +
-#'  stat_qq_point()
-#' gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  stat_qq_point() +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
 #'
 #' @export
 stat_qq_band <- function(data = NULL,
@@ -94,6 +111,7 @@ stat_qq_band <- function(data = NULL,
 												 position = "identity",
 												 show.legend = NA,
 												 inherit.aes = TRUE,
+												 na.rm = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
 												 bandType = "normal",
@@ -117,6 +135,7 @@ stat_qq_band <- function(data = NULL,
 		show.legend = show.legend,
 		inherit.aes = inherit.aes,
 		params = list(
+			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
 			bandType = bandType,
@@ -162,7 +181,6 @@ StatQqBand <- ggplot2::ggproto(
 						 detrend = FALSE,
 						 discrete) {
 			# distributional functions
-			qFunc <- eval(parse(text = paste0("q", distribution)))
 			dFunc <- eval(parse(text = paste0("d", distribution)))
 			rFunc <- eval(parse(text = paste0("r", distribution)))
 
@@ -201,36 +219,50 @@ StatQqBand <- ggplot2::ggproto(
 
 			# parametric bootstrap pointwise confidence intervals
 			if (bandType == "bs") {
-				# correspondence between stats and MASS distributions names
-				getDist <- function(distName) {
+				# define here distributions with default parameters
+				startList <- {function(distName) {
 					switch (
 						distName,
-						beta = "beta",
-						cauchy = "cauchy",
-						chisq = "chi-squared",
-						exp = "exponential",
-						f = "f",
-						gamma = "gamma",
-						geom = "geometric",
-						lnorm = "lognormal",
-						logis = "logistic",
-						nbinom = "negative binomial",
-						norm = "normal",
-						pois = "poisson",
-						t = dt,
-						weibull = "weibull"
+						cauchy = list(location = 0, scale = 1),
+						exp = list(rate = 1),
+						lnorm = list(meanlog = 0, sdlog = 1),
+						logis = list(location = 0, scale = 1),
+						norm = list(mean = 0, sd = 1),
+						NULL
+					)
+				}}
+
+				# log-likelihood function to maximize with stats4::mle
+				logLik <- {function() {
+					argList <- as.list(match.call())
+					argList[[1]] <- NULL
+					R <- do.call(dFunc, c(list(x = smp), argList))
+					-sum(log(R))
+				}}
+
+				# for distributions with default values the user do not need to provide
+				# dparams
+				if (!is.null(startList) & length(dparams) == 0) {
+					s <- startList(distribution)
+					parList <- rep(list(bquote()), length(s))
+					names(parList) <- names(s)
+					formals(logLik) <- parList
+
+					mleEst <- suppressWarnings(
+						stats4::mle(minuslogl = logLik, start = s)
+					)
+				} else {
+					parList <- rep(list(bquote()), length(dparams))
+					names(parList) <- names(dparams)
+					formals(logLik) <- parList
+
+					mleEst <- suppressWarnings(
+						stats4::mle(minuslogl = logLik, start = dparams)
 					)
 				}
 
-				# TODO supplying pars to the following dists in MASS::fitdistr is not supported
-				if (distribution %in% c("exp", "geom", "lnorm", "norm", "pois")) {
-					mle <- MASS::fitdistr(x = smp, densfun = getDist(distribution))
-				} else {
-					mle <- MASS::fitdistr(x = smp, densfun = getDist(distribution), start = dparams)
-				}
-
 				bs <- apply(
-					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(mle$estimate))), n, B),
+					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(mleEst@coef))), n, B),
 					MARGIN = 2,
 					FUN = sort
 				)
@@ -241,10 +273,10 @@ StatQqBand <- ggplot2::ggproto(
 
 			# tail-sensitive confidence bands
 			if (bandType == "ts") {
-				# if (distribution != "norm") {
-				# 	warning("Tail-sensitive confidence bands are only implemented for Normal Q-Q plots. Proceed with caution.}",
-				# 					call. = F)
-				# }
+				if (distribution != "norm") {
+					warning("Tail-sensitive confidence bands are only implemented for Normal Q-Q plots. Proceed with caution.}",
+									call. = F)
+				}
 
 				centerFunc <- function(x) robustbase::s_Qn(x, mu.too = TRUE)[[1]]
 				scaleFunc <- function(x) robustbase::Qn(x, finite.corr = FALSE)
@@ -312,7 +344,6 @@ StatQqBand <- ggplot2::ggproto(
 			# detrend the confidence bands by keeping the same distance from the
 			# stat_qq_line, which now should be a line centered on y = 0
 			if (detrend) {
-				aux <- c(max(out$upper), min(out$lower))
 				out$upper <- out$upper - fittedValues
 				out$lower <- out$lower - fittedValues
 			}

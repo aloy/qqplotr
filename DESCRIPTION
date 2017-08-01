@@ -1,11 +1,10 @@
 Package: qqplotr
 Type: Package
-Version: 0.0.0.9000
-Title: Q-Q Plot Extensions for ggplot2
-Description: An extension of the functionality of ggplot2 Q-Q plots, by permitting
-		the plotting of Q-Q lines, confidence bands, and plot rotations.
-Authors@R: c(person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut", "cre")),
-		person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut")),
+Version: 0.0.1.9000
+Title: Quantile-Quantile Plot Extensions for 'ggplot2'
+Description: Extensions of 'ggplot2' Q-Q plot functionalities.
+Authors@R: c(person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut", "cre")),
+		person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut")),
     person("Heike", "Hofmann", role = "aut"))
 URL: https://github.com/aloy/qqplotr
 BugReports: https://github.com/aloy/qqplotr/issues
@@ -13,11 +12,13 @@ License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Collate:
+Collate: 
+    'stat_pp_line.R'
+    'stat_pp_point.R'
     'stat_qq_point.R'
     'stat_qq_line.R'
     'stat_qq_band.R'
 Depends: ggplot2
-Imports: MASS,
-    dplyr,
-    robustbase
+Imports: dplyr,
+    robustbase,
+    stats4
