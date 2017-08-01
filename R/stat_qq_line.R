@@ -132,7 +132,6 @@ StatQqLine <- ggplot2::ggproto(
 				xCoords <- do.call(qFunc, c(list(p = qprobs), dparams))
 				yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
 
-				do.call(quantile, list(x = smp, qprobs = qprobs, type = qtype))
 				slope <- diff(yCoords) / diff(xCoords)
 				intercept <- yCoords[1L] - slope * xCoords[1L]
 
