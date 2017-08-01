@@ -47,8 +47,6 @@ stat_pp_line <- function(data = NULL,
 												 na.rm = TRUE,
 												 show.legend = NA,
 												 inherit.aes = TRUE,
-												 distribution = "norm",
-												 dparams = list(),
 												 ab = c(0, 1),
 												 ...) {
 	ggplot2::layer(
@@ -61,8 +59,6 @@ stat_pp_line <- function(data = NULL,
 		inherit.aes = inherit.aes,
 		params = list(
 			na.rm = na.rm,
-			distribution = distribution,
-			dparams = dparams,
 			ab = ab,
 			...
 		)
@@ -86,12 +82,7 @@ StatPpLine <- ggplot2::ggproto(
 		function(data,
 						 self,
 						 scales,
-						 distribution = "norm",
-						 dparams = list(),
 						 ab = c(0, 1)) {
-			# distributional function
-			qFunc <- eval(parse(text = paste0("q", distribution)))
-
 			intercept <- ab[1]
 			slope <- ab[2]
 
