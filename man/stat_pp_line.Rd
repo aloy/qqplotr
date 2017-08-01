@@ -6,8 +6,7 @@
 \usage{
 stat_pp_line(data = NULL, mapping = NULL, geom = "path",
   position = "identity", na.rm = TRUE, show.legend = NA,
-  inherit.aes = TRUE, distribution = "norm", dparams = list(), ab = c(0,
-  1), ...)
+  inherit.aes = TRUE, ab = c(0, 1), ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
