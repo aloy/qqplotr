@@ -107,7 +107,7 @@
 #' @export
 stat_qq_band <- function(data = NULL,
 												 mapping = NULL,
-												 geom = "ribbon",
+												 geom = "qq_band",
 												 position = "identity",
 												 show.legend = NA,
 												 inherit.aes = TRUE,
@@ -327,7 +327,7 @@ StatQqBand <- ggplot2::ggproto(
 				x = theoretical,
 				upper = upper,
 				lower = lower,
-				fill = rgb(.6, .6, .6, .5)
+				fill = if (is.null(data$fill)) rgb(.6, .6, .6, .5) else data$fill
 			)
 
 			if (discrete) {
