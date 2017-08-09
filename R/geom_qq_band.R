@@ -1,3 +1,5 @@
+#' @rdname stat_qq_band
+#' @param stat statistic to use to calculate confidence bands. Should be `qq_band`.
 #' @export
 geom_qq_band <- function(mapping = NULL, data = NULL, stat = "qq_band",
 												position = "identity", na.rm = FALSE,
