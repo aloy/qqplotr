@@ -3,7 +3,7 @@
 qqplotr
 =======
 
-[![Build Status](https://travis-ci.org/aloy/qqplotr.svg?branch=master)](https://travis-ci.org/aloy/qqplotr) [![CRAN Version](https://www.r-pkg.org/badges/version/qqplotr)](https://cran.r-project.org/package=qqplotr) [![Dev Version](https://rawgit.com/aloy/qqplotr/master/man/figures/devBadge.svg)](https://github.com/aloy/qqplotr)
+[![Build Status](https://travis-ci.org/aloy/qqplotr.svg?branch=master)](https://travis-ci.org/aloy/qqplotr) [![CRAN Version](https://www.r-pkg.org/badges/version/qqplotr)](https://cran.r-project.org/package=qqplotr)
 
 Overview
 --------
