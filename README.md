@@ -61,16 +61,17 @@ gg
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
-As previously described in the Details section, three confidence bands constructs are available, which may be adjusted with the `bandType` parameter. The corresponding color legend for the confidence bands methods is: <span style="color:lime">`bs`</span>, <span style="color:red">`normal`</span>, and <span style="color:blue">`ts`</span>.
+As previously described in the Details section, three confidence bands constructs are available, which may be adjusted with the `bandType` parameter.
 
 ``` r
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
-    stat_qq_band(bandType = "ts", fill = rgb(.0, .0, 1, .65)) +
-    stat_qq_band(bandType = "normal", fill = rgb(1, 0, 0, .65)) +
-    stat_qq_band(bandType = "bs", fill = rgb(.0, 1, .0, .65)) +
+    geom_qq_band(bandType = "ts", aes(fill = "TS")) +
+    geom_qq_band(bandType = "normal", aes(fill = "Normal")) +
+    geom_qq_band(bandType = "bs", aes(fill = "Bootstrap")) +
     stat_qq_line() +
     stat_qq_point() +
-    labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+    labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
+    scale_fill_discrete("Bandtype")
 gg
 ```
 
