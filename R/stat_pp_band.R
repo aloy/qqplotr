@@ -131,6 +131,7 @@ StatPpBand <- ggplot2::ggproto(
 						 discrete) {
 			# distributional functions
 			dFunc <- eval(parse(text = paste0("d", distribution)))
+			pFunc <- eval(parse(text = paste0("p", distribution)))
 			qFunc <- eval(parse(text = paste0("q", distribution)))
 			rFunc <- eval(parse(text = paste0("r", distribution)))
 
@@ -143,11 +144,8 @@ StatPpBand <- ggplot2::ggproto(
 				bs <- matrix(do.call(rFunc, c(list(n = n * B), dparams)), n, B)
 
 				sim <- apply(bs, MARGIN = 2, FUN = function(x) {
-					# create an empirical cdf for each simulation
-					empCdf <- ecdf(x)
-
-					# evaluate the empirical cdf above on theoretical quantiles
-					empCdf(do.call(qFunc, c(list(p = probs), dparams)))
+					# evaluate the cdf on the observed quantiles
+					do.call(pFunc, c(list(q = sort(x)), dparams))
 				})
 
 				upper <- apply(X = sim, MARGIN = 1, FUN = quantile, prob = (1 + conf) / 2)
