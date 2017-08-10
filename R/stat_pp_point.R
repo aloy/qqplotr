@@ -88,18 +88,15 @@ StatPpPoint <- ggplot2::ggproto(
 													 scales,
 													 distribution = "norm",
 													 dparams = list()) {
-		# distributional function
-		qFunc <- eval(parse(text = paste0("q", distribution)))
+		# cumulative distributional function
+		pFunc <- eval(parse(text = paste0("q", distribution)))
 
 		smp <- sort(data$sample)
 		n <- length(smp)
 		probs <- ppoints(n)
 
-		# create an empirical cdf with the sample data
-		empCdf <- ecdf(smp)
-
-		# evaluate the empirical cdf on theoretical quantiles
-		y <- empCdf(do.call(qFunc, c(list(p = probs), dparams)))
+		# evaluate the cdf on the observed quantiles
+		y <- do.call(pFunc, c(list(q = smp), dparams))
 
 		out <- data.frame(sample = y, theoretical = probs)
 
