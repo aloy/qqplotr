@@ -89,7 +89,7 @@ StatPpPoint <- ggplot2::ggproto(
 													 distribution = "norm",
 													 dparams = list()) {
 		# cumulative distributional function
-		pFunc <- eval(parse(text = paste0("q", distribution)))
+		pFunc <- eval(parse(text = paste0("p", distribution)))
 
 		smp <- sort(data$sample)
 		n <- length(smp)
