@@ -95,24 +95,24 @@ StatPpPoint <- ggplot2::ggproto(
 		n <- length(smp)
 		probs <- ppoints(n)
 
-		# create an empirical cdf of the sample data
+		# create an empirical cdf with the sample data
 		empCdf <- ecdf(smp)
 
 		# evaluate the empirical cdf on theoretical quantiles
 		y <- empCdf(do.call(qFunc, c(list(p = probs), dparams)))
 
 		out <- data.frame(sample = y, theoretical = probs)
-		out$alpha <- NA
 
-		out <- rbind(out, tail(out, 2))
-
-		out$theoretical[length(out)] <- 0
-		out$sample[length(out)] <- 0
-		out$alpha[length(out)] <- 0
-
-		out$theoretical[length(out) - 1] <- 1
-		out$sample[length(out) - 1] <- 1
-		out$alpha[length(out) - 1] <- 0
+		# TODO Here the plot limits are forced as a unit square. This is just a
+		# placeholder until we figure out how to do this in a more elegant way
+		# out$alpha <- NA
+		# out <- rbind(out, tail(out, 2))
+		# out$theoretical[length(out)] <- 0
+		# out$sample[length(out)] <- 0
+		# out$alpha[length(out)] <- 0
+		# out$theoretical[length(out) - 1] <- 1
+		# out$sample[length(out) - 1] <- 1
+		# out$alpha[length(out) - 1] <- 0
 
 		out
 	}

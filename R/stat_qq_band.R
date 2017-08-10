@@ -11,7 +11,7 @@
 #'
 #' @include stat_qq_point.R stat_qq_line.R
 #'
-#' @inheritParams stat_qq_point
+#' @inheritParams stat_qq_line
 #'
 #' @param bandType Character. Either \code{"normal"}, \code{"bs"} or
 #'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
@@ -209,8 +209,8 @@ StatQqBand <- ggplot2::ggproto(
 
 			# confidence bands based on normal confidence intervals
 			if (bandType == "normal") {
-				quantiles <- ppoints(n)
-				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(quantiles * (1 - quantiles) / n)
+				probs <- ppoints(n)
+				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(probs * (1 - probs) / n)
 				zCrit <- qnorm(p = (1 - (1 - conf) / 2))
 
 				upper <- fittedValues + (stdErr * zCrit)
@@ -240,8 +240,7 @@ StatQqBand <- ggplot2::ggproto(
 					-sum(log(R))
 				}}
 
-				# for distributions with default values the user do not need to provide
-				# dparams
+				# for distributions with default values, there's no need to provide dparams
 				if (!is.null(startList) & length(dparams) == 0) {
 					s <- startList(distribution)
 					parList <- rep(list(bquote()), length(s))
@@ -267,8 +266,8 @@ StatQqBand <- ggplot2::ggproto(
 					FUN = sort
 				)
 
-				upper <- apply(X = bs, MARGIN = 1, FUN = quantile, prob = (1 + conf) / 2)
-				lower <- apply(X = bs, MARGIN = 1, FUN = quantile, prob = (1 - conf) / 2)
+				upper <- apply(X = bs, MARGIN = 1, FUN = quantile, probs = (1 + conf) / 2)
+				lower <- apply(X = bs, MARGIN = 1, FUN = quantile, probs = (1 - conf) / 2)
 			}
 
 			# tail-sensitive confidence bands
