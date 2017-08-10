@@ -5,7 +5,7 @@
 #' @import ggplot2
 #'
 #' @inheritParams ggplot2::layer
-#' @inheritParams ggplot2::geom_point
+#' @inheritParams ggplot2::geom_path
 #'
 #' @param ab Numeric vector of length two. The intercept (\code{a}) and slope
 #'   (\code{b}) of the P-P line. Defaults to the identity line (\code{a = 0, b =
