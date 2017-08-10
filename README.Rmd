@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 [![Build Status](https://travis-ci.org/aloy/qqplotr.svg?branch=master)](https://travis-ci.org/aloy/qqplotr)
 [![CRAN Version](https://www.r-pkg.org/badges/version/qqplotr)](https://cran.r-project.org/package=qqplotr)
-[![Dev Version](man/figures/devBadge.svg)](https://github.com/aloy/qqplotr)
+[![Dev Version](https://github.com/aloy/qqplotr/blob/master/man/figures/devBadge.svg)](https://github.com/aloy/qqplotr)
 
 ## Overview
 
