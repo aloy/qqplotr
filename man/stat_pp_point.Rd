@@ -6,7 +6,8 @@
 \usage{
 stat_pp_point(data = NULL, mapping = NULL, geom = "point",
   position = "identity", na.rm = TRUE, show.legend = NA,
-  inherit.aes = TRUE, distribution = "norm", dparams = list(), ...)
+  inherit.aes = TRUE, distribution = "norm", dparams = list(),
+  detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -57,6 +58,12 @@ standard nomenclature from the \code{stats} package (i.e., for
 \item{dparams}{List of additional parameters passed on to the previously
 chosen \code{distribution} function.}
 
+\item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
+the objects will be detrended according to the default identity P-P line.
+This procedure was described by Thode (2002), and may help reducing visual
+bias caused by the orthogonal distances from P-P points to the reference
+line.}
+
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
@@ -73,21 +80,27 @@ smp <- data.frame(norm = rnorm(100))
 # Normal P-P plot of Normal data
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_pp_point() +
- labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ labs(x = "Probability Points", y = "Cumulative Probability")
 gg
 
 # Shifted Normal P-P plot of Normal data
 dp <- list(mean = 1.5)
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_pp_point(dparams = dp) +
- labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ labs(x = "Probability Points", y = "Cumulative Probability")
 gg
 
 # Normal P-P plot of mean ozone levels (airquality dataset)
 dp <- list(mean = 38, sd = 27)
 gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 	stat_pp_point(dparams = dp) +
-	labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ labs(x = "Probability Points", y = "Cumulative Probability")
 gg
 
+}
+\references{
+\itemize{
+\item{\href{https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+}
 }

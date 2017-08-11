@@ -4,10 +4,13 @@
 #'
 #' @import ggplot2
 #'
-#' @include stat_qq_point.R
+#' @inheritParams ggplot2::layer
+#' @inheritParams ggplot2::geom_path
 #'
-#' @inheritParams stat_qq_point
-#'
+#' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
+#'   the objects will be detrended according to the reference Q-Q line. This
+#'   procedure was described by Thode (2002), and may help reducing visual bias
+#'   caused by the orthogonal distances from Q-Q points to the reference line.
 #' @param qtype Integer between 1 and 9. Type of the quantile algorithm to be
 #'   used by the \code{\link[stats]{quantile}} function to construct the Q-Q
 #'   line.
@@ -92,7 +95,7 @@ stat_qq_line <- function(data = NULL,
 #' @export
 StatQqLine <- ggplot2::ggproto(
 	`_class` = "StatQqLine",
-	`_inherit` = StatQqPoint,
+	`_inherit` = ggplot2::Stat,
 
 	default_aes = ggplot2::aes(x = ..xline.., y = ..yline..),
 
@@ -102,11 +105,11 @@ StatQqLine <- ggplot2::ggproto(
 		function(data,
 						 self,
 						 scales,
-						 distribution = "norm",
-						 dparams = list(),
-						 qtype = 7,
-						 qprobs = c(.25, .75),
-						 detrend = FALSE) {
+						 distribution,
+						 dparams,
+						 qtype,
+						 qprobs,
+						 detrend) {
 			if (length(qprobs) != 2) {
 				stop("Cannot fit line quantiles (",
 					  paste0(qprobs, collapse = ", "),
@@ -117,13 +120,11 @@ StatQqLine <- ggplot2::ggproto(
 			# distributional function
 			qFunc <- eval(parse(text = paste0("q", distribution)))
 
-			# inherit smp and theoretical from StatQqPoint
-			smp <- self$super()$compute_group(data = data,
-																				distribution = distribution,
-																				dparams = dparams)$sample
-			theoretical <- self$super()$compute_group(data = data,
-																								distribution = distribution,
-																								dparams = dparams)$theoretical
+			smp <- sort(data$sample)
+			n <- length(smp)
+			quantiles <- ppoints(n)
+
+			theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
 
 			if (detrend) {
 				out <- data.frame(xline = c(min(theoretical), max(theoretical)))
@@ -133,7 +134,7 @@ StatQqLine <- ggplot2::ggproto(
 				yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
 
 				slope <- diff(yCoords) / diff(xCoords)
-				intercept <- yCoords[1L] - slope * xCoords[1L]
+				intercept <- yCoords[1] - slope * xCoords[1]
 
 				out <- data.frame(xline = c(min(theoretical), max(theoretical)))
 				out$yline <- slope * out$xline + intercept

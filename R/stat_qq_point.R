@@ -21,9 +21,6 @@
 #'   the objects will be detrended according to the reference Q-Q line. This
 #'   procedure was described by Thode (2002), and may help reducing visual bias
 #'   caused by the orthogonal distances from Q-Q points to the reference line.
-#' @param quantiles Numeric vector. Specify the quantiles to be used for the Q-Q
-#'   plot. If \code{quantiles = NULL}, quantiles are automatically created using
-#'   \code{\link[stats]{ppoints}}.
 #' @param qtype Integer between 1 and 9. Only used if \code{detrend = TRUE}.
 #'   Type of the quantile algorithm to be used by the
 #'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
@@ -66,10 +63,9 @@ stat_qq_point <- function(data = NULL,
 													inherit.aes = TRUE,
 													distribution = "norm",
 													dparams = list(),
-													quantiles = NULL,
+													detrend = FALSE,
 													qtype = 7,
 													qprobs = c(.25, .75),
-													detrend = FALSE,
 													...) {
 	ggplot2::layer(
 		mapping = mapping,
@@ -82,10 +78,9 @@ stat_qq_point <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
-			quantiles = quantiles,
+			detrend = detrend,
 			qtype = qtype,
 			qprobs = qprobs,
-			detrend = detrend,
 			...
 		)
 	)
@@ -107,24 +102,17 @@ StatQqPoint <- ggplot2::ggproto(
 	compute_group = function(data,
 													 self,
 													 scales,
-													 distribution = "norm",
-													 dparams = list(),
-													 quantiles = NULL,
-													 qtype = 7,
-													 qprobs = c(.25, .75),
-													 detrend = FALSE) {
+													 distribution,
+													 dparams,
+													 detrend,
+													 qtype,
+													 qprobs) {
 		# distributional function
 		qFunc <- eval(parse(text = paste0("q", distribution)))
 
 		smp <- sort(data$sample)
 		n <- length(smp)
-
-		# compute theoretical quantiles
-		if (is.null(quantiles)) {
-			quantiles <- ppoints(n)
-		} else {
-			stopifnot(length(quantiles) == n)
-		}
+		quantiles <- ppoints(n)
 
 		theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
 
@@ -133,7 +121,7 @@ StatQqPoint <- ggplot2::ggproto(
 			yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
 
 			slope <- diff(yCoords) / diff(xCoords)
-			intercept <- yCoords[1L] - slope * xCoords[1L]
+			intercept <- yCoords[1] - slope * xCoords[1]
 
 			# calculate new ys for the detrended sample
 			dSmp <- NULL
@@ -142,9 +130,9 @@ StatQqPoint <- ggplot2::ggproto(
 				dSmp[i] <- smp[i] - lSmp
 			}
 
-			out <- data.frame(sample = dSmp, theoretical)
+			out <- data.frame(sample = dSmp, theoretical = theoretical)
 		} else {
-			out <- data.frame(sample = smp, theoretical)
+			out <- data.frame(sample = smp, theoretical = theoretical)
 		}
 
 		out

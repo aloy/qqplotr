@@ -46,18 +46,6 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link{borders}}.}
 
-\item{distribution}{Character. Theoretical probability distribution function
-to use. Do not provide the full distribution function name (e.g.,
-\code{"dnorm"}). Instead, just provide its shortened name (e.g.,
-\code{"norm"}). If you wish to provide a custom distribution, you may do so
-by first creating the density, quantile, and random functions following the
-standard nomenclature from the \code{stats} package (i.e., for
-\code{"custom"}, create the \code{"dcustom"}, \code{"qcustom"}, and
-\code{"rcustom"} functions).}
-
-\item{dparams}{List of additional parameters passed on to the previously
-chosen \code{distribution} function.}
-
 \item{qtype}{Integer between 1 and 9. Type of the quantile algorithm to be
 used by the \code{\link[stats]{quantile}} function to construct the Q-Q
 line.}

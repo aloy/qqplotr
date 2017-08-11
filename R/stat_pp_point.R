@@ -17,6 +17,17 @@
 #'   \code{"rcustom"} functions).
 #' @param dparams List of additional parameters passed on to the previously
 #'   chosen \code{distribution} function.
+#' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
+#'   the objects will be detrended according to the default identity P-P line.
+#'   This procedure was described by Thode (2002), and may help reducing visual
+#'   bias caused by the orthogonal distances from P-P points to the reference
+#'   line.
+#'
+#' @references
+#' \itemize{
+#' \item{\href{https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+#' }
 #'
 #' @examples
 #' # generate random Normal data
@@ -26,21 +37,21 @@
 #' # Normal P-P plot of Normal data
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_pp_point() +
-#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' # Shifted Normal P-P plot of Normal data
 #' dp <- list(mean = 1.5)
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_pp_point(dparams = dp) +
-#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' # Normal P-P plot of mean ozone levels (airquality dataset)
 #' dp <- list(mean = 38, sd = 27)
 #' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 #' 	stat_pp_point(dparams = dp) +
-#' 	labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' @export
@@ -53,6 +64,7 @@ stat_pp_point <- function(data = NULL,
 													inherit.aes = TRUE,
 													distribution = "norm",
 													dparams = list(),
+													detrend = FALSE,
 													...) {
 	ggplot2::layer(
 		mapping = mapping,
@@ -65,6 +77,7 @@ stat_pp_point <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			detrend = detrend,
 			...
 		)
 	)
@@ -86,8 +99,9 @@ StatPpPoint <- ggplot2::ggproto(
 	compute_group = function(data,
 													 self,
 													 scales,
-													 distribution = "norm",
-													 dparams = list()) {
+													 distribution,
+													 dparams,
+													 detrend) {
 		# distributional function
 		qFunc <- eval(parse(text = paste0("q", distribution)))
 
@@ -101,18 +115,14 @@ StatPpPoint <- ggplot2::ggproto(
 		# evaluate the empirical cdf on theoretical quantiles
 		y <- empCdf(do.call(qFunc, c(list(p = probs), dparams)))
 
-		out <- data.frame(sample = y, theoretical = probs)
+		if (detrend) {
+			# calculate new ys for the detrended sample using the identity line
+			dY <- y - probs
 
-		# TODO Here the plot limits are forced as a unit square. This is just a
-		# placeholder until we figure out how to do this in a more elegant way
-		# out$alpha <- NA
-		# out <- rbind(out, tail(out, 2))
-		# out$theoretical[length(out)] <- 0
-		# out$sample[length(out)] <- 0
-		# out$alpha[length(out)] <- 0
-		# out$theoretical[length(out) - 1] <- 1
-		# out$sample[length(out) - 1] <- 1
-		# out$alpha[length(out) - 1] <- 0
+			out <- data.frame(sample = dY, theoretical = probs)
+		} else {
+			out <- data.frame(sample = y, theoretical = probs)
+		}
 
 		out
 	}

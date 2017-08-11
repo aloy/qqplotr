@@ -13,9 +13,9 @@ geom_qq_band(mapping = NULL, data = NULL, stat = "qq_band",
 
 stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
-  na.rm = TRUE, distribution = "norm", dparams = list(),
-  bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
-  detrend = FALSE, ...)
+  na.rm = TRUE, distribution = "norm", dparams = list(), qtype = 7,
+  qprobs = c(0.25, 0.75), bandType = "normal", B = 1000, conf = 0.95,
+  mu = NULL, sigma = NULL, detrend = FALSE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -44,18 +44,6 @@ a call to a position adjustment function.}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
-
-\item{distribution}{Character. Theoretical probability distribution function
-to use. Do not provide the full distribution function name (e.g.,
-\code{"dnorm"}). Instead, just provide its shortened name (e.g.,
-\code{"norm"}). If you wish to provide a custom distribution, you may do so
-by first creating the density, quantile, and random functions following the
-standard nomenclature from the \code{stats} package (i.e., for
-\code{"custom"}, create the \code{"dcustom"}, \code{"qcustom"}, and
-\code{"rcustom"} functions).}
-
-\item{dparams}{List of additional parameters passed on to the previously
-chosen \code{distribution} function.}
 
 \item{bandType}{Character. Either \code{"normal"}, \code{"bs"} or
 \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
@@ -103,6 +91,13 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.}
 
 \item{geom}{The geometric object to use display the data}
+
+\item{qtype}{Integer between 1 and 9. Type of the quantile algorithm to be
+used by the \code{\link[stats]{quantile}} function to construct the Q-Q
+line.}
+
+\item{qprobs}{Numeric vector of length two. Represents the quantiles used by
+the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
 }
 \description{
 Draws quantile-quantile confidence bands, with an additional detrend option.

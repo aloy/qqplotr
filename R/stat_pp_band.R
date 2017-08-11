@@ -22,6 +22,11 @@
 #' @param B Integer. If \code{bandType = "bs"}, then \code{B} is the number of
 #'   bootstrap replicates.
 #' @param conf Numerical. Confidence level of the bands.
+#' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
+#'   the objects will be detrended according to the default identity P-P line.
+#'   This procedure was described by Thode (2002), and may help reducing visual
+#'   bias caused by the orthogonal distances from P-P points to the reference
+#'   line.
 #'
 #' @examples
 #' # generate random Normal data
@@ -33,7 +38,7 @@
 #'  stat_pp_band() +
 #'  stat_pp_line() +
 #'  stat_pp_point() +
-#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' # Shifted Normal P-P plot of Normal data
@@ -42,7 +47,7 @@
 #'  stat_pp_band(dparams = dp) +
 #'  stat_pp_line() +
 #'  stat_pp_point(dparams = dp) +
-#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' # Exponential P-P plot of Exponential data
@@ -51,7 +56,7 @@
 #'  stat_pp_band(distribution = di) +
 #'  stat_pp_line() +
 #'  stat_pp_point(distribution = di) +
-#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' # Normal P-P plot of mean ozone levels (airquality dataset)
@@ -60,7 +65,7 @@
 #'  stat_pp_band(dparams = dp) +
 #'  stat_pp_line() +
 #' 	stat_pp_point(dparams = dp) +
-#' 	labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' @export
@@ -76,6 +81,7 @@ stat_pp_band <- function(data = NULL,
 													bandType = "bs",
 													B = 1000,
 													conf = .95,
+													detrend = FALSE,
 													...) {
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "hyper", "multinom", "nbinom", "pois")
@@ -97,6 +103,7 @@ stat_pp_band <- function(data = NULL,
 			B = B,
 			conf = conf,
 			discrete = distribution %in% discreteDist,
+			detrend = detrend,
 			...
 		)
 	)
@@ -123,12 +130,13 @@ StatPpBand <- ggplot2::ggproto(
 		function(data,
 						 self,
 						 scales,
-						 distribution = "norm",
-						 dparams = list(),
-						 bandType = "bs",
-						 B = 1000,
-						 conf = .95,
-						 discrete) {
+						 distribution,
+						 dparams,
+						 bandType,
+						 B,
+						 conf,
+						 discrete,
+						 detrend) {
 			# distributional functions
 			dFunc <- eval(parse(text = paste0("d", distribution)))
 			qFunc <- eval(parse(text = paste0("q", distribution)))
@@ -140,6 +148,60 @@ StatPpBand <- ggplot2::ggproto(
 
 			# bootstrap pointwise confidence intervals
 			if (bandType == "bs") {
+				# # define here distributions with default parameters
+				# startList <- {function(distName) {
+				# 	switch (
+				# 		distName,
+				# 		cauchy = list(location = 0, scale = 1),
+				# 		exp = list(rate = 1),
+				# 		lnorm = list(meanlog = 0, sdlog = 1),
+				# 		logis = list(location = 0, scale = 1),
+				# 		norm = list(mean = 0, sd = 1),
+				# 		NULL
+				# 	)
+				# }}
+				#
+				# # log-likelihood function to maximize with stats4::mle
+				# logLik <- {function() {
+				# 	argList <- as.list(match.call())
+				# 	argList[[1]] <- NULL
+				# 	R <- do.call(dFunc, c(list(x = smp), argList))
+				# 	-sum(log(R))
+				# }}
+				#
+				# # for distributions with default values, there's no need to provide dparams
+				# if (!is.null(startList) & length(dparams) == 0) {
+				# 	s <- startList(distribution)
+				# 	parList <- rep(list(bquote()), length(s))
+				# 	names(parList) <- names(s)
+				# 	formals(logLik) <- parList
+				#
+				# 	mleEst <- suppressWarnings(
+				# 		stats4::mle(minuslogl = logLik, start = s)
+				# 	)
+				# } else {
+				# 	parList <- rep(list(bquote()), length(dparams))
+				# 	names(parList) <- names(dparams)
+				# 	formals(logLik) <- parList
+				#
+				# 	mleEst <- suppressWarnings(
+				# 		stats4::mle(minuslogl = logLik, start = dparams)
+				# 	)
+				# }
+				#
+				# bs <- matrix(do.call(rFunc, c(list(n = n * B), as.list(mleEst@coef))), n, B)
+				#
+				# sim <- apply(bs, MARGIN = 2, FUN = function(x) {
+				# 	# create an empirical cdf for each simulation
+				# 	empCdf <- ecdf(x)
+				#
+				# 	# evaluate the empirical cdf above on theoretical quantiles
+				# 	empCdf(do.call(qFunc, c(list(p = probs), dparams)))
+				# })
+				#
+				# upper <- apply(X = sim, MARGIN = 1, FUN = quantile, probs = (1 + conf) / 2)
+				# lower <- apply(X = sim, MARGIN = 1, FUN = quantile, probs = (1 - conf) / 2)
+
 				bs <- matrix(do.call(rFunc, c(list(n = n * B), dparams)), n, B)
 
 				sim <- apply(bs, MARGIN = 2, FUN = function(x) {
@@ -170,6 +232,13 @@ StatPpBand <- ggplot2::ggproto(
 					lower = min(lower)
 				)
 				out <- as.data.frame(out)
+			}
+
+			# detrend the confidence bands by keeping the same distance from the
+			# identity line, which now is a line centered on y = 0
+			if (detrend) {
+				out$upper <- out$upper - probs
+				out$lower <- out$lower - probs
 			}
 
 			out

@@ -7,7 +7,7 @@
 stat_pp_band(data = NULL, mapping = NULL, geom = "ribbon",
   position = "identity", na.rm = TRUE, show.legend = NA,
   inherit.aes = TRUE, distribution = "norm", dparams = list(),
-  bandType = "bs", B = 1000, conf = 0.95, ...)
+  bandType = "bs", B = 1000, conf = 0.95, detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -66,6 +66,12 @@ bootstrap replicates.}
 
 \item{conf}{Numerical. Confidence level of the bands.}
 
+\item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
+the objects will be detrended according to the default identity P-P line.
+This procedure was described by Thode (2002), and may help reducing visual
+bias caused by the orthogonal distances from P-P points to the reference
+line.}
+
 \item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
@@ -84,7 +90,7 @@ gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_pp_band() +
  stat_pp_line() +
  stat_pp_point() +
- labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ labs(x = "Probability Points", y = "Cumulative Probability")
 gg
 
 # Shifted Normal P-P plot of Normal data
@@ -93,7 +99,7 @@ gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_pp_band(dparams = dp) +
  stat_pp_line() +
  stat_pp_point(dparams = dp) +
- labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ labs(x = "Probability Points", y = "Cumulative Probability")
 gg
 
 # Exponential P-P plot of Exponential data
@@ -102,7 +108,7 @@ gg <- ggplot(data = smp, mapping = aes(sample = exp)) +
  stat_pp_band(distribution = di) +
  stat_pp_line() +
  stat_pp_point(distribution = di) +
- labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ labs(x = "Probability Points", y = "Cumulative Probability")
 gg
 
 # Normal P-P plot of mean ozone levels (airquality dataset)
@@ -111,7 +117,7 @@ gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
  stat_pp_band(dparams = dp) +
  stat_pp_line() +
 	stat_pp_point(dparams = dp) +
-	labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+ labs(x = "Probability Points", y = "Cumulative Probability")
 gg
 
 }

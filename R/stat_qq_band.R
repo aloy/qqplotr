@@ -9,10 +9,20 @@
 #' @importFrom robustbase Qn
 #' @importFrom stats4 mle
 #'
-#' @include stat_qq_point.R stat_qq_line.R
+#' @include stat_qq_line.R
 #'
-#' @inheritParams stat_qq_line
+#' @inheritParams ggplot2::layer
+#' @inheritParams ggplot2::geom_ribbon
 #'
+#' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
+#'   the objects will be detrended according to the reference Q-Q line. This
+#'   procedure was described by Thode (2002), and may help reducing visual bias
+#'   caused by the orthogonal distances from Q-Q points to the reference line.
+#' @param qtype Integer between 1 and 9. Type of the quantile algorithm to be
+#'   used by the \code{\link[stats]{quantile}} function to construct the Q-Q
+#'   line.
+#' @param qprobs Numeric vector of length two. Represents the quantiles used by
+#'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
 #' @param bandType Character. Either \code{"normal"}, \code{"bs"} or
 #'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
 #'   on Normal confidence intervals. \code{"bs"} creates pointwise confidence
@@ -114,6 +124,8 @@ stat_qq_band <- function(data = NULL,
 												 na.rm = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
+												 qtype = 7,
+												 qprobs = c(.25, .75),
 												 bandType = "normal",
 												 B = 1000,
 												 conf = .95,
@@ -138,6 +150,8 @@ stat_qq_band <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			qtype = qtype,
+			qprobs = qprobs,
 			bandType = bandType,
 			B = B,
 			conf = conf,
@@ -171,36 +185,41 @@ StatQqBand <- ggplot2::ggproto(
 		function(data,
 						 self,
 						 scales,
-						 distribution = "norm",
-						 dparams = list(),
-						 bandType = "normal",
-						 B = 1000,
-						 conf = .95,
-						 mu = NULL,
-						 sigma = NULL,
-						 detrend = FALSE,
+						 distribution,
+						 dparams,
+						 qtype,
+						 qprobs,
+						 bandType,
+						 B,
+						 conf,
+						 mu,
+						 sigma,
+						 detrend,
 						 discrete) {
 			# distributional functions
 			dFunc <- eval(parse(text = paste0("d", distribution)))
+			qFunc <- eval(parse(text = paste0("q", distribution)))
 			rFunc <- eval(parse(text = paste0("r", distribution)))
 
-			# inherit from StatQqPoint
-			smp <- self$super()$super()$compute_group(data = data,
-																												distribution = distribution,
-																												dparams = dparams)$sample
-			theoretical <- self$super()$super()$compute_group(data = data,
-																												distribution = distribution,
-																												dparams = dparams)$theoretical
-
+			smp <- sort(data$sample)
 			n <- length(smp)
+			quantiles <- ppoints(n)
+
+			theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
 
 			# inherit from StatQqLine
 			xline <- self$super()$compute_group(data = data,
 																					distribution = distribution,
-																					dparams = dparams)$xline
+																					dparams = dparams,
+																					qtype = 7,
+																					qprobs = c(.25, .75),
+																					detrend = FALSE)$xline
 			yline <- self$super()$compute_group(data = data,
 																					distribution = distribution,
-																					dparams = dparams)$yline
+																					dparams = dparams,
+																					qtype = 7,
+																					qprobs = c(.25, .75),
+																					detrend = FALSE)$yline
 
 			slope <- diff(yline) / diff(xline)
 			intercept <- yline[1L] - slope * xline[1L]
@@ -341,7 +360,7 @@ StatQqBand <- ggplot2::ggproto(
 			}
 
 			# detrend the confidence bands by keeping the same distance from the
-			# stat_qq_line, which now should be a line centered on y = 0
+			# stat_qq_line, which now is a line centered on y = 0
 			if (detrend) {
 				out$upper <- out$upper - fittedValues
 				out$lower <- out$lower - fittedValues

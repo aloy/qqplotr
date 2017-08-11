@@ -10,6 +10,11 @@
 #' @param ab Numeric vector of length two. The intercept (\code{a}) and slope
 #'   (\code{b}) of the P-P line. Defaults to the identity line (\code{a = 0, b =
 #'   1}).
+#' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
+#'   the objects will be detrended according to the default identity P-P line.
+#'   This procedure was described by Thode (2002), and may help reducing visual
+#'   bias caused by the orthogonal distances from P-P points to the reference
+#'   line.
 #'
 #' @examples
 #' # generate random Normal data
@@ -20,7 +25,7 @@
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_pp_line() +
 #'  stat_pp_point() +
-#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' # Shifted Normal P-P plot of Normal data
@@ -28,7 +33,7 @@
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_pp_line() +
 #'  stat_pp_point(dparams = dp) +
-#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' # Normal P-P plot of mean ozone levels (airquality dataset)
@@ -36,7 +41,7 @@
 #' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 #'  stat_pp_line() +
 #' 	stat_pp_point(dparams = dp) +
-#' 	labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#'  labs(x = "Probability Points", y = "Cumulative Probability")
 #' gg
 #'
 #' @export
@@ -48,6 +53,7 @@ stat_pp_line <- function(data = NULL,
 												 show.legend = NA,
 												 inherit.aes = TRUE,
 												 ab = c(0, 1),
+												 detrend = FALSE,
 												 ...) {
 	ggplot2::layer(
 		data = data,
@@ -60,6 +66,7 @@ stat_pp_line <- function(data = NULL,
 		params = list(
 			na.rm = na.rm,
 			ab = ab,
+			detrend = detrend,
 			...
 		)
 	)
@@ -82,9 +89,15 @@ StatPpLine <- ggplot2::ggproto(
 		function(data,
 						 self,
 						 scales,
-						 ab = c(0, 1)) {
-			intercept <- ab[1]
-			slope <- ab[2]
+						 ab,
+						 detrend) {
+			if (detrend) {
+				intercept <- 0
+				slope <- 0
+			} else {
+				intercept <- ab[1]
+				slope <- ab[2]
+			}
 
 			out <- data.frame(xline = c(0, 1))
 			out$yline <- slope * out$xline + intercept
