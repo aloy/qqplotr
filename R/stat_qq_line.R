@@ -97,9 +97,12 @@ StatQqLine <- ggplot2::ggproto(
 	`_class` = "StatQqLine",
 	`_inherit` = ggplot2::Stat,
 
-	default_aes = ggplot2::aes(x = ..xline.., y = ..yline..),
-
 	required_aes = c("sample"),
+
+	default_aes = ggplot2::aes(
+		x = ..xline..,
+		y = ..yline..
+	),
 
 	compute_group = {
 		function(data,
@@ -141,7 +144,7 @@ StatQqLine <- ggplot2::ggproto(
 			}
 
 			out$size <- .8
-			out$colour <- rgb(.3, .3, .3)
+			out$colour <- if (is.null(data$colour)) rgb(.3, .3, .3) else rep(data$colour[1], 2)
 
 			out
 		}
