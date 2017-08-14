@@ -45,6 +45,18 @@ a call to a position adjustment function.}
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
+\item{distribution}{Character. Theoretical probability distribution function
+to use. Do not provide the full distribution function name (e.g.,
+\code{"dnorm"}). Instead, just provide its shortened name (e.g.,
+\code{"norm"}). If you wish to provide a custom distribution, you may do so
+by first creating the density, quantile, and random functions following the
+standard nomenclature from the \code{stats} package (i.e., for
+\code{"custom"}, create the \code{"dcustom"}, \code{"qcustom"}, and
+\code{"rcustom"} functions).}
+
+\item{dparams}{List of additional parameters passed on to the previously
+chosen \code{distribution} function.}
+
 \item{bandType}{Character. Either \code{"normal"}, \code{"bs"} or
 \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
 on Normal confidence intervals. \code{"bs"} creates pointwise confidence
