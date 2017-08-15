@@ -95,7 +95,10 @@ StatQqPoint <- ggplot2::ggproto(
 	`_class` = "StatQqPoint",
 	`_inherit` = ggplot2::Stat,
 
-	default_aes = ggplot2::aes(x = ..theoretical.., y = ..sample..),
+	default_aes = ggplot2::aes(
+		x = ..theoretical..,
+		y = ..sample..
+	),
 
 	required_aes = c("sample"),
 

@@ -1,5 +1,8 @@
 # qqplotr 0.0.1.9000
 
+* Fixed a bug caused by `stat_qq_line` default colors when facetting.
+
+
 * Created the vignette `introduction.Rmd`.
 
 * Removed most inheritances from Q-Q functions, as they were not essential.
@@ -12,6 +15,7 @@
 * Implemented the P-P band stat `stat_pp_band` via parametric bootstrap.
 
 * Created a description for the package itself, i.e., now `?qqplotr` works.
+
 
 * Implemented the P-P plot stats: `stat_pp_point` and `stat_pp_line`.
 
