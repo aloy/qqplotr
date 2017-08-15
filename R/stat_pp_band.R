@@ -205,10 +205,10 @@ StatPpBand <- ggplot2::ggproto(
 
 				bs <- matrix(do.call(rFunc, c(list(n = n * B), dparams)), n, B)
 
-				sim <- apply(bs, MARGIN = 2, FUN = function(x) {
+				sim <- apply(bs, MARGIN = 2, FUN = function(x, dparams) {
 					# evaluate the cdf on the observed quantiles
 					do.call(pFunc, c(list(q = sort(x)), dparams))
-				})
+				}, dparams = dparams)
 
 				upper <- apply(X = sim, MARGIN = 1, FUN = quantile, prob = (1 + conf) / 2)
 				lower <- apply(X = sim, MARGIN = 1, FUN = quantile, prob = (1 - conf) / 2)
