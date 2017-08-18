@@ -7,9 +7,9 @@
 \usage{
 geom_qq_band(mapping = NULL, data = NULL, stat = "qq_band",
   position = "identity", na.rm = FALSE, distribution = "norm",
-  dparams = list(), bandType = "normal", B = 1000, conf = 0.95,
-  mu = NULL, sigma = NULL, detrend = FALSE, show.legend = NA,
-  inherit.aes = TRUE, ...)
+  dparams = list(), qtype = 7, qprobs = c(0.25, 0.75),
+  bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
+  detrend = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 
 stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
@@ -56,6 +56,13 @@ standard nomenclature from the \code{stats} package (i.e., for
 
 \item{dparams}{List of additional parameters passed on to the previously
 chosen \code{distribution} function.}
+
+\item{qtype}{Integer between 1 and 9. Type of the quantile algorithm to be
+used by the \code{\link[stats]{quantile}} function to construct the Q-Q
+line.}
+
+\item{qprobs}{Numeric vector of length two. Represents the quantiles used by
+the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
 
 \item{bandType}{Character. Either \code{"normal"}, \code{"bs"} or
 \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
@@ -105,13 +112,6 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.}
 
 \item{geom}{The geometric object to use display the data}
-
-\item{qtype}{Integer between 1 and 9. Type of the quantile algorithm to be
-used by the \code{\link[stats]{quantile}} function to construct the Q-Q
-line.}
-
-\item{qprobs}{Numeric vector of length two. Represents the quantiles used by
-the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
 }
 \description{
 Draws quantile-quantile confidence bands, with an additional detrend option.

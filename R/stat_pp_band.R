@@ -83,6 +83,17 @@ stat_pp_band <- function(data = NULL,
 													conf = .95,
 													detrend = FALSE,
 													...) {
+	# error handling
+	if (conf < 0 | conf > 1) {
+		stop("Please provide a valid confidence level for the bands: ",
+				 "'conf' must be between 0 and 1.",
+				 call. = FALSE)
+	}
+	if (B < 0) {
+		stop("Please provide a positive value for B.",
+				 call. = FALSE)
+	}
+
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "hyper", "multinom", "nbinom", "pois")
 
@@ -99,8 +110,8 @@ stat_pp_band <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
-			bandType = bandType,
-			B = B,
+			bandType = match.arg(bandType, c("bs")),
+			B = round(B),
 			conf = conf,
 			discrete = distribution %in% discreteDist,
 			detrend = detrend,

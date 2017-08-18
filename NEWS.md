@@ -1,5 +1,11 @@
 # qqplotr 0.0.1.9000
 
+* Created the Shiny app.
+
+* Error handling for the parameters in all implemented functions.
+
+* Option to partially match some arguments.
+
 * Fixed a bug caused by `stat_qq_line` default colors when facetting.
 
 

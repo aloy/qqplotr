@@ -143,6 +143,22 @@ stat_qq_band <- function(data = NULL,
 												 sigma = NULL,
 												 detrend = FALSE,
 												 ...) {
+	# error handling
+	if (qtype < 1 | qtype > 9) {
+		stop("Please provide a valid quantile type: ",
+				 "'qtype' must be between 1 and 9.",
+				 call. = FALSE)
+	}
+	if (conf < 0 | conf > 1) {
+		stop("Please provide a valid confidence level for the bands: ",
+				 "'conf' must be between 0 and 1.",
+				 call. = FALSE)
+	}
+	if (B < 0) {
+		stop("Please provide a positive value for B.",
+				 call. = FALSE)
+	}
+
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "hyper", "multinom", "nbinom", "pois")
 
@@ -162,13 +178,13 @@ stat_qq_band <- function(data = NULL,
 			dparams = dparams,
 			qtype = qtype,
 			qprobs = qprobs,
-			bandType = bandType,
-			B = B,
+			bandType = match.arg(bandType, c("normal", "ts", "bs")),
+			B = round(B),
 			conf = conf,
 			mu = mu,
 			sigma = sigma,
-			detrend = detrend,
 			discrete = distribution %in% discreteDist,
+			detrend = detrend,
 			...
 		)
 	)
@@ -204,8 +220,8 @@ StatQqBand <- ggplot2::ggproto(
 						 conf,
 						 mu,
 						 sigma,
-						 detrend,
-						 discrete) {
+						 discrete,
+						 detrend) {
 			# distributional functions
 			dFunc <- eval(parse(text = paste0("d", distribution)))
 			qFunc <- eval(parse(text = paste0("q", distribution)))
@@ -221,14 +237,14 @@ StatQqBand <- ggplot2::ggproto(
 			xline <- self$super()$compute_group(data = data,
 																					distribution = distribution,
 																					dparams = dparams,
-																					qtype = 7,
-																					qprobs = c(.25, .75),
+																					qtype = qtype,
+																					qprobs = qprobs,
 																					detrend = FALSE)$xline
 			yline <- self$super()$compute_group(data = data,
 																					distribution = distribution,
 																					dparams = dparams,
-																					qtype = 7,
-																					qprobs = c(.25, .75),
+																					qtype = qtype,
+																					qprobs = qprobs,
 																					detrend = FALSE)$yline
 
 			slope <- diff(yline) / diff(xline)
@@ -302,7 +318,7 @@ StatQqBand <- ggplot2::ggproto(
 			# tail-sensitive confidence bands
 			if (bandType == "ts") {
 				if (distribution != "norm") {
-					warning("Tail-sensitive confidence bands are only implemented for Normal Q-Q plots. Proceed with caution.}",
+					warning("Tail-sensitive confidence bands are only implemented for Normal Q-Q plots. Proceed with caution.",
 									call. = F)
 				}
 

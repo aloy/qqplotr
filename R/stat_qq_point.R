@@ -63,10 +63,25 @@ stat_qq_point <- function(data = NULL,
 													inherit.aes = TRUE,
 													distribution = "norm",
 													dparams = list(),
-													detrend = FALSE,
 													qtype = 7,
 													qprobs = c(.25, .75),
+													detrend = FALSE,
 													...) {
+	# error handling
+	if (qtype < 1 | qtype > 9) {
+		stop("Please provide a valid quantile type: ",
+				 "'qtype' must be between 1 and 9.",
+				 call. = FALSE)
+	}
+	if (length(qprobs) != 2) {
+		stop("'qprobs' must have length two.",
+				 call = FALSE)
+	}
+	if (sum(qprobs > 1) + sum(qprobs < 0)) {
+		stop("'qprobs' cannot have any elements outside the probability domain [0,1].",
+				 call = FALSE)
+	}
+
 	ggplot2::layer(
 		mapping = mapping,
 		stat = StatQqPoint,
@@ -78,9 +93,9 @@ stat_qq_point <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
-			detrend = detrend,
 			qtype = qtype,
 			qprobs = qprobs,
+			detrend = detrend,
 			...
 		)
 	)
@@ -107,9 +122,9 @@ StatQqPoint <- ggplot2::ggproto(
 													 scales,
 													 distribution,
 													 dparams,
-													 detrend,
 													 qtype,
-													 qprobs) {
+													 qprobs,
+													 detrend) {
 		# distributional function
 		qFunc <- eval(parse(text = paste0("q", distribution)))
 

@@ -7,7 +7,7 @@
 stat_qq_point(data = NULL, mapping = NULL, geom = "point",
   position = "identity", na.rm = TRUE, show.legend = NA,
   inherit.aes = TRUE, distribution = "norm", dparams = list(),
-  detrend = FALSE, qtype = 7, qprobs = c(0.25, 0.75), ...)
+  qtype = 7, qprobs = c(0.25, 0.75), detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -60,11 +60,6 @@ standard nomenclature from the \code{stats} package (i.e., for
 \item{dparams}{List of additional parameters passed on to the previously
 chosen \code{distribution} function.}
 
-\item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
-the objects will be detrended according to the reference Q-Q line. This
-procedure was described by Thode (2002), and may help reducing visual bias
-caused by the orthogonal distances from Q-Q points to the reference line.}
-
 \item{qtype}{Integer between 1 and 9. Only used if \code{detrend = TRUE}.
 Type of the quantile algorithm to be used by the
 \code{\link[stats]{quantile}} function to construct the Q-Q line.}
@@ -72,6 +67,11 @@ Type of the quantile algorithm to be used by the
 \item{qprobs}{Numeric vector of length two. Only used if \code{detrend =
 TRUE}. Represents the quantiles used by the \code{\link[stats]{quantile}}
 function to construct the Q-Q line.}
+
+\item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
+the objects will be detrended according to the reference Q-Q line. This
+procedure was described by Thode (2002), and may help reducing visual bias
+caused by the orthogonal distances from Q-Q points to the reference line.}
 
 \item{...}{other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like

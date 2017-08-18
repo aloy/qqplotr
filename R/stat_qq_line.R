@@ -78,6 +78,21 @@ stat_qq_line <- function(data = NULL,
 												 qprobs = c(.25, .75),
 												 detrend = FALSE,
 												 ...) {
+	# error handling
+	if (qtype < 1 | qtype > 9) {
+		stop("Please provide a valid quantile type: ",
+				 "'qtype' must be between 1 and 9.",
+				 call. = FALSE)
+	}
+	if (length(qprobs) != 2) {
+		stop("'qprobs' must have length two.",
+				 call = FALSE)
+	}
+	if (sum(qprobs > 1) + sum(qprobs < 0)) {
+		stop("'qprobs' cannot have any elements outside the probability domain [0,1].",
+				 call = FALSE)
+	}
+
 	ggplot2::layer(
 		data = data,
 		mapping = mapping,
@@ -123,13 +138,6 @@ StatQqLine <- ggplot2::ggproto(
 						 qtype,
 						 qprobs,
 						 detrend) {
-			if (length(qprobs) != 2) {
-				stop("Cannot fit line quantiles (",
-					  paste0(qprobs, collapse = ", "),
-					  "). 'qprobs' must have length two.",
-					  call = FALSE)
-			}
-
 			# distributional function
 			qFunc <- eval(parse(text = paste0("q", distribution)))
 

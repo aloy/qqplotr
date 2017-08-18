@@ -1,22 +1,22 @@
 ---
-title: "An Introduction to qqplotr"
-author: "Alexandre Almeida"
+title: "An Introduction to 'qqplotr'"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{An Introduction to qqplotr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette presents a more in-depth walkthrough of the `qqplotr` package
-functionalities.
+This vignette presents a in-depth overview of the `qqplotr` package.
 
-The `qqplotr` package itself extends some `ggplot2` functionalities by 
-permitting the drawing of quantile-quantile (Q-Q) and probability-probability 
-(P-P) points, lines, and confidence bands. The functions of this package also 
-allow the detrend adjustment, which was proposed by Thode (2002) to help reduce 
-visual bias when assessing those type of plots.
+The `qqplotr` package extends some `ggplot2` functionalities by permitting the 
+drawing of both quantile-quantile (Q-Q) and probability-probability (P-P) 
+points, lines, and confidence bands. The functions of this package also allow a 
+detrend adjustment of the plots, proposed by Thode (2002) to help reduce visual
+bias when assessing the results.
 
 ## Installation
 
@@ -26,10 +26,10 @@ by using, for example, `devtools`:
 ``` {r eval = F} 
 # install.packages("devtools")
 library(devtools)
-install_github("aloy/qqplotr")
+devtools::install_github("aloy/qqplotr")
 ```
 
-If instead you wish to install the stable CRAN version, then simply do:
+If, instead, you wish to install the stable CRAN version, then simply do:
 
 ``` {r eval = F} 
 install.packages("qqplotr")
@@ -37,42 +37,46 @@ install.packages("qqplotr")
 
 ## Details
 
-The functions of this package, implemeneted as `ggplot2` Stats, are divided
+The functions of this package, implemeneted as Stats from `ggplot2`, are divided
 into two groups: (1) Q-Q and (2) P-P plot.
 
 Both groups are composed of three functions: *point*, *line*, and *band*. Those 
-Stats complement each other when plotted together, but they may also be plotted
+Stats complement each other when drawn together, but they may also be plotted
 independently.
 
-Below we give a quick overview of each of all the implemented Stats.
+Below we will give an overview of all those Stats and, further in the document,
+we will present some usage examples.
 
 ### Q-Q plot
 
 * `stat_qq_point` This is a modified version of `ggplot2::stat_qq` 
 with some parameters adjustments and a new option to detrend the points.
-* `stat_qq_line` Draws a reference line based on the first and third quartiles
-of the data (as in `stats::qqline`).
+* `stat_qq_line` Draws a reference line based on the data quantiles, as in
+`stats::qqline`.
 * `stat_qq_band` Draws confidence bands based on three methods: `"normal"`, 
-`"bs"`, and `"ts"`.
+`"bs"`, and `"ts"`:
 	+ `"normal"` constructs simultaneous confidence bands based on Normal confidence
 intervals;
 	+ `"bs"` creates pointwise confidence bands based on a parametric boostrap;
-	+ `"ts"` constructs tail-sensitive confidence bands (Aldor-Noiman et al., 2013).
+	+ `"ts"` constructs tail-sensitive confidence bands, as proposed by
+	Aldor-Noiman et al. (2013).
 	
-Also, in order to visualize multiple Q-Q band methods at the same time, we 
-produced the `geom_qq_band` Geom, which usage will be better illustrated below.
+In order to facilitate the visualization of multiple Q-Q band methods at the 
+same time, the `geom_qq_band` Geom was also implemented. Its usage will be 
+illustrated further below.
 
 ### P-P plot
 
-* `stat_pp_point` Plots cumulative probabilities versus probability points. The
-cumulative probability function is constructed with the sample data, and the
-evaluated at each probability point. Hence, the plotted points will be limited
-in a unit square plot, since only probabilities are being plotted.
+* `stat_pp_point` Plots cumulative probabilities versus probability points. The 
+cumulative probability function is constructed with the sample data, and then
+evaluated at each probability point.
 * `stat_pp_line` Draws a reference identity line ($x = y$).
 * `stat_pp_band` Draws confidence bands. For now, only the bootstrap version
 (`"bs"`) is available.
 
 ## Usage
+
+### Q-Q plot
 
 Start by loading the `qqplotr` package:
 
@@ -80,7 +84,7 @@ Start by loading the `qqplotr` package:
 require(qqplotr)
 ```
 
-First, let simulate a Normal-distributed sample:
+Let's start by simulating from a standard Normal distribution:
 
 ```{r}
 set.seed(0)
@@ -101,13 +105,13 @@ gg
 ```
 
 As we can see, all the points lie within the confidence bands, which is
-expected.
+expected for the given distribution.
 
 As previously described in the Details section, three confidence bands 
 constructs are available, which may be adjusted with the `bandType` parameter. 
-Here, we may use the `geom_qq_band` instead of `stat_qq_band` to have a little 
-more flexibility with graphical parameters when constructing and visualizing
-different confidence bands.
+Here, we may use the `geom_qq_band` instead of `stat_qq_band`, which permits a 
+little more flexibility with the graphical parameters when constructing and 
+visualizing different confidence bands.
 
 ```{r fig.align = "center", fig.width = 7, fig.height = 5} 
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
@@ -123,25 +127,25 @@ gg
 
 To construct Q-Q plots with other theoretical distributions we may use the 
 `distribution` parameter. Specific distributional parameters may be passed as a 
-list to the `dparams` paramater. Note that distributional parameters have little
-impact when building Q-Q plots, as they usually only change the x-axis range. 
-Those paramaters will affect more the P-P plots, which is shown further in this
-text.
+list to the `dparams` paramater.
 
-Now, say that we want to create a Q-Q plot with a different sample data - the 
-*mean ozone levels* from the `airquality` dataset. Since the data is 
-non-negative, lets evaluate the Exponential distribution (`exp`) as the
-theoretical.
+> Note that distributional parameters have little impact when building Q-Q 
+plots, as changing them will only modify the x-axis range. In contrast, those
+paramaters will have a higher effect on P-P plots.
+
+Now, let's use draw the Q-Q plot functions for the *mean ozone levels* from the 
+`airquality` dataset . Since the data is non-negative, lets choose the 
+Exponential distribution (`exp`) as the theoretical.
 
 > It is important to note that the distribution nomenclature follows that from 
 the `stats` package. So, if you wish to provide a custom distribution, you may 
 do so by creating the density, cumulative, quantile, and random functions 
-following the standard nomenclature from the \code{stats} package, i.e., for 
-\code{"custom"}, create the \code{"dcustom"}, \code{"pcustom"}, 
-\code{"qcustom"}, and \code{"rcustom"} functions.
+following the standard nomenclature from the `stats` package, i.e., for the 
+`"custom"` distribution, you must define `"dcustom"`, `"pcustom"`, `"qcustom"`,
+and `"rcustom"` functions.
 
 That being said, let's set `distribution = "exp"` and `rate = 2` (the latter one
-just to exemplify the usage):
+just to exemplify the usage of `dparams`):
 
 ```{r fig.align = "center", fig.width = 7, fig.height = 5} 
 di <- "exp" # exponential distribution
@@ -155,12 +159,15 @@ gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 gg
 ```
 
-With this package we may also *detrend* the Q-Q and P-P plots to help reducing
-visual bias caused by the orthogonal distances from points to the reference
-lines. That bias may cause wrong conclusions to be made via visual inference of
-the plot. We do that by setting `detrend = TRUE`:
+The `qqplotr` package also offers the option to *detrend* Q-Q and P-P plots in 
+order to help reducing visual bias caused by the orthogonal distances from 
+points to the reference lines (Thode, 2002). That bias may cause wrong 
+conclusions to be drawn via visual inference of the plot. To do that we must set
+`detrend = TRUE`:
 
 ```{r fig.align = "center", fig.width = 7, fig.height = 5}
+di <- "exp"
+dp <- list(rate = 2)
 de <- TRUE # enabling the detrend option
 
 gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
@@ -171,13 +178,32 @@ gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 gg
 ```
 
-Note that the detrend option causes to plot to "rotate". Now, instead of being
-presented as a diagonal plot, we visualize the data in a horizontal manner.
+Note that the detrend option causes to plot to "rotate", that is, instead of
+being presented as a diagonal plot, we visualize the data in a horizontal
+manner.
 
-***
+The Q-Q plot functions are also compatible with many `ggplot2` operators, such 
+as Facets (sub-plots). For instance, lets consider the *barley* dataset from the
+`lattice` package to illustrate how Facets behave when applied to the Q-Q plot
+functions:
 
-Now let's evaluate how's the behavior of the P-P plots. We start by plotting
-the simulated Normal data versus the standard Normal distribution:
+```{r fig.align = "center", fig.width = 7, fig.height = 5}
+# install.packages("lattice")
+data("barley", package = "lattice")
+
+gg <- ggplot(data = barley, mapping = aes(sample = yield, color = site, fill = site)) +
+	stat_qq_band() +
+	stat_qq_line() +
+	stat_qq_point() +
+	facet_wrap(~ site) +
+	labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
+```
+
+### P-P plot
+
+Let's start by plotting the previously simulated Normal data versus the standard
+Normal distribution:
 
 ```{r fig.align = "center", fig.width = 7, fig.height = 5} 
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
@@ -188,16 +214,16 @@ gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 gg
 ```
 
-The cumulative probability points (y-axis) are constructed by evaluating the
-theoretical CDF on sample quantiles. As we can see, with the exception of one
-point at the lower tail, all the other points lie within the confidence bands.
+Notice that the label names are different from those of the Q-Q plots. Here, the
+cumulative probability points (y-axis) are constructed by evaluating the 
+theoretical CDF on sample quantiles.
 
-As discussed before, different from the Q-Q plot, here the distributional 
-parameters **do** impact the results. Say we want to evaluate the same standard 
-Normal data with a shifted and rescaled Normal(2,2) distribution:
+As discussed before, in the case of P-P plots the distributional parameters 
+**do** impact the results. For instance, say we want to evaluate the same
+standard Normal data with a shifted and rescaled Normal(2,2) distribution:
 
 ```{r fig.align = "center", fig.width = 7, fig.height = 5}
-dp <- list(mean = 2, sd = 2) # shifted and rescaled normal parameters
+dp <- list(mean = 2, sd = 2) # shifted and rescaled Normal parameters
 
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 	stat_pp_band(dparams = dp) +
@@ -207,17 +233,33 @@ gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 gg
 ```
 
-As we already know, the plot shows that the parameters chosen by the theoretical
-distribution are not appropriate.
+As we already know, the plot shows that the chosen Normal distribution 
+parameters are not appropriate for the input data.
+
+Also notice that the `stat_pp_line` function lacks the `dparams` paramater. The 
+reason is that `stat_pp_line` draws by default the identity line and, thus, it 
+isn't dependent of the sample data and/or its distribution. However, if the user
+wishes to draw another line (different from the identity) he/she may do so by 
+providing the intercept and slope values, respectively, as a vector of length
+two to the `ab` parameter:
+
+```{r fig.align = "center", fig.width = 7, fig.height = 5} 
+gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
+	stat_pp_band() +
+	stat_pp_line(ab = c(.2, .5)) + # intercept = 0.2, slope = 0.5
+	stat_pp_point() +
+	labs(x = "Probability Points", y = "Cumulative Probability")
+gg
+```
 
 We may also detrend the P-P plots in the same way as before. Let's evaluate 
 again the *mean ozone levels* from the `airquality` dataset. We had previously 
 seen that the Exponential distribution was more appropriate than the Normal
-distribution, so let's also take that into account:
+distribution, so let's take that into account:
 
 ```{r fig.align = "center", fig.width = 7, fig.height = 5}
 di <- "exp"
-dp <- list(rate = .022) # based on empirical tests
+dp <- list(rate = .022) # value is based on some empirical tests
 de <- TRUE
 
 gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
@@ -229,17 +271,15 @@ gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 gg
 ```
 
-Based on empirical tests, the chosen rate parameter is the one that best locates
-de P-P points inside the confidence bands. Even though, that group of points at 
-the lower tail outside the confidence bands indicate that we might need to
-rethink this distribution and its parameters.
+Based on empirical tests, we set the rate parameter to `rate = .022`. That value
+let the most P-P points inside the confidence bands. Even so, that group of 
+outside the confidence bands (at the lower tail) indicate that a more
+appropriate distribution should be selected.
 
 ## Shiny App
 
 Next, we present an interactive Shiny app in which you'll be able to explore,
 visualize, and test even further this package functions and its parameters.
-
-TBD
 
 ## References
 
