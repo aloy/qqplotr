@@ -15,20 +15,20 @@ RoxygenNote: 6.0.1
 Collate:
     'geom_qq_band.R'
     'qqplotr.R'
+    'runShinyExample.R'
     'stat_pp_band.R'
     'stat_pp_line.R'
     'stat_pp_point.R'
     'stat_qq_line.R'
     'stat_qq_band.R'
     'stat_qq_point.R'
-Depends: ggplot2,
-    shiny
+VignetteBuilder: knitr
+Depends: ggplot2
 Imports: dplyr,
     robustbase,
     stats4,
-    plotly
-Suggests: knitr,
-    rmarkdown,
+    knitr
+Suggests: plotly,
+    shiny,
     devtools,
     lattice
-VignetteBuilder: knitr

@@ -278,8 +278,13 @@ appropriate distribution should be selected.
 
 ## Shiny App
 
-Next, we present an interactive Shiny app in which you'll be able to explore,
-visualize, and test even further this package functions and its parameters.
+In this package, we also included an interactive Shiny app with which you're 
+able to explore this package functions and its parameters. To run the app,
+simply call:
+
+```{r eval = F}
+runShinyExample()
+```
 
 ## References
 

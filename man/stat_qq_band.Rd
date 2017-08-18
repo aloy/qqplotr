@@ -5,11 +5,11 @@
 \alias{stat_qq_band}
 \title{Quantile-quantile confidence bands}
 \usage{
-geom_qq_band(mapping = NULL, data = NULL, stat = "qq_band",
-  position = "identity", na.rm = FALSE, distribution = "norm",
-  dparams = list(), qtype = 7, qprobs = c(0.25, 0.75),
-  bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
-  detrend = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
+geom_qq_band(data = NULL, mapping = NULL, stat = "qq_band",
+  position = "identity", show.legend = NA, inherit.aes = TRUE,
+  na.rm = FALSE, distribution = "norm", dparams = list(), qtype = 7,
+  qprobs = c(0.25, 0.75), bandType = "normal", B = 1000, conf = 0.95,
+  mu = NULL, sigma = NULL, detrend = FALSE, ...)
 
 stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
@@ -18,11 +18,6 @@ stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   mu = NULL, sigma = NULL, detrend = FALSE, ...)
 }
 \arguments{
-\item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
-\code{\link[=aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
-default), it is combined with the default mapping at the top level of the
-plot. You must supply \code{mapping} if there is no plot mapping.}
-
 \item{data}{The data to be displayed in this layer. There are three
 options:
 
@@ -37,10 +32,27 @@ A \code{function} will be called with a single argument,
 the plot data. The return value must be a \code{data.frame.}, and
 will be used as the layer data.}
 
-\item{stat}{statistic to use to calculate confidence bands. Should be `qq_band`.}
+\item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
+\code{\link[=aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply \code{mapping} if there is no plot mapping.}
+
+\item{stat}{statistic to use to calculate confidence bands. Should be
+`qq_band`.}
 
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
+
+\item{show.legend}{logical. Should this layer be included in the legends?
+\code{NA}, the default, includes if any aesthetics are mapped.
+\code{FALSE} never includes, and \code{TRUE} always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.}
+
+\item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
@@ -94,17 +106,6 @@ those parameters are estimated using \code{\link[robustbase]{Qn}} and
 the objects will be detrended according to the reference Q-Q line. This
 procedure was described by Thode (2002), and may help reducing visual bias
 caused by the orthogonal distances from Q-Q points to the reference line.}
-
-\item{show.legend}{logical. Should this layer be included in the legends?
-\code{NA}, the default, includes if any aesthetics are mapped.
-\code{FALSE} never includes, and \code{TRUE} always includes.
-It can also be a named logical vector to finely select the aesthetics to
-display.}
-
-\item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
-rather than combining with them. This is most useful for helper functions
-that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
 \item{...}{other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like

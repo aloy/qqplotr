@@ -1,4 +1,9 @@
-require(shiny)
+if (!requireNamespace("shiny", quietly = TRUE)) {
+	stop("'shiny' package is needed for this Shiny app to work. Please install it.",
+			 call. = FALSE)
+} else {
+	require(shiny)
+}
 
 shinyUI(
 	fluidPage(
