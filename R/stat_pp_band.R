@@ -160,60 +160,6 @@ StatPpBand <- ggplot2::ggproto(
 
 			# bootstrap pointwise confidence intervals
 			if (bandType == "bs") {
-				# # define here distributions with default parameters
-				# startList <- {function(distName) {
-				# 	switch (
-				# 		distName,
-				# 		cauchy = list(location = 0, scale = 1),
-				# 		exp = list(rate = 1),
-				# 		lnorm = list(meanlog = 0, sdlog = 1),
-				# 		logis = list(location = 0, scale = 1),
-				# 		norm = list(mean = 0, sd = 1),
-				# 		NULL
-				# 	)
-				# }}
-				#
-				# # log-likelihood function to maximize with stats4::mle
-				# logLik <- {function() {
-				# 	argList <- as.list(match.call())
-				# 	argList[[1]] <- NULL
-				# 	R <- do.call(dFunc, c(list(x = smp), argList))
-				# 	-sum(log(R))
-				# }}
-				#
-				# # for distributions with default values, there's no need to provide dparams
-				# if (!is.null(startList) & length(dparams) == 0) {
-				# 	s <- startList(distribution)
-				# 	parList <- rep(list(bquote()), length(s))
-				# 	names(parList) <- names(s)
-				# 	formals(logLik) <- parList
-				#
-				# 	mleEst <- suppressWarnings(
-				# 		stats4::mle(minuslogl = logLik, start = s)
-				# 	)
-				# } else {
-				# 	parList <- rep(list(bquote()), length(dparams))
-				# 	names(parList) <- names(dparams)
-				# 	formals(logLik) <- parList
-				#
-				# 	mleEst <- suppressWarnings(
-				# 		stats4::mle(minuslogl = logLik, start = dparams)
-				# 	)
-				# }
-				#
-				# bs <- matrix(do.call(rFunc, c(list(n = n * B), as.list(mleEst@coef))), n, B)
-				#
-				# sim <- apply(bs, MARGIN = 2, FUN = function(x) {
-				# 	# create an empirical cdf for each simulation
-				# 	empCdf <- ecdf(x)
-				#
-				# 	# evaluate the empirical cdf above on theoretical quantiles
-				# 	empCdf(do.call(qFunc, c(list(p = probs), dparams)))
-				# })
-				#
-				# upper <- apply(X = sim, MARGIN = 1, FUN = quantile, probs = (1 + conf) / 2)
-				# lower <- apply(X = sim, MARGIN = 1, FUN = quantile, probs = (1 - conf) / 2)
-
 				bs <- matrix(do.call(rFunc, c(list(n = n * B), dparams)), n, B)
 
 				sim <- apply(bs, MARGIN = 2, FUN = function(x, dparams) {
@@ -229,7 +175,7 @@ StatPpBand <- ggplot2::ggproto(
 				x = probs,
 				upper = upper,
 				lower = lower,
-				fill = rgb(.6, .6, .6, .5)
+				fill = if (is.null(data$fill)) rgb(.6, .6, .6, .5) else data$fill
 			)
 
 			if (discrete) {

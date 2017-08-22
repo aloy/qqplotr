@@ -1,10 +1,15 @@
 #' @rdname stat_qq_band
-#' @param stat statistic to use to calculate confidence bands. Should be `qq_band`.
+#'
+#' @param stat statistic to use to calculate confidence bands. Should be
+#'   `qq_band`.
+#'
 #' @export
-geom_qq_band <- function(mapping = NULL,
-												 data = NULL,
+geom_qq_band <- function(data = NULL,
+												 mapping = NULL,
 												 stat = "qq_band",
 												 position = "identity",
+												 show.legend = NA,
+												 inherit.aes = TRUE,
 												 na.rm = FALSE,
 												 distribution = "norm",
 												 dparams = list(),
@@ -16,8 +21,6 @@ geom_qq_band <- function(mapping = NULL,
 												 mu = NULL,
 												 sigma = NULL,
 												 detrend = FALSE,
-												 show.legend = NA,
-												 inherit.aes = TRUE,
 												 ...) {
 	# error handling
 	if (qtype < 1 | qtype > 9) {
@@ -56,14 +59,18 @@ geom_qq_band <- function(mapping = NULL,
 			conf = conf,
 			mu = mu,
 			sigma = sigma,
-			detrend = detrend,
 			discrete = distribution %in% discreteDist,
+			detrend = detrend,
 			...
 		)
 	)
 }
 
-#' @importFrom grid grobTree
+#' GeomQqBand
+#'
+#' @keywords internal
+#' @usage NULL
+#' @export
 GeomQqBand <- ggplot2::ggproto(
 	`_class` = "GeomQqBand",
 	`_inherit` = ggplot2::Geom,
