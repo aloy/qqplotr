@@ -1,6 +1,7 @@
 # qqplotr 0.0.1.9000
 
-* Created the Shiny app.
+* Created the Shiny app and commited its first version (WIP).
+
 
 * Error handling for the parameters in all implemented functions.
 

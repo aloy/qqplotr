@@ -1,22 +1,12 @@
-if (!requireNamespace("plotly", quietly = TRUE)) {
-	stop("'plotly' package is needed for this Shiny app to work. Please install it.",
-			 call. = FALSE)
-} else {
-	require(plotly)
-}
-
-# 'ggplot2' is always loaded if 'qqplotr' is loaded
-require(qqplotr)
-
 dist <- c(
-	"qbeta",
-	"qbinom",
-	"qchisq",
-	"qexp",
-	"qf",
-	"qgamma",
-	"qnorm",
-	"qpois"
+	"beta",
+	"binom",
+	"chisq",
+	"exp",
+	"f",
+	"gamma",
+	"norm",
+	"pois"
 )
 
 names(dist) <- c(
@@ -29,3 +19,5 @@ names(dist) <- c(
 	"Normal",
 	"Poisson"
 )
+
+smp <- data.frame(norm = rnorm(100), exp = rexp(100))
