@@ -1,5 +1,5 @@
 if (!requireNamespace("shiny", quietly = TRUE)) {
-	stop("'shiny' package is needed for this Shiny app to work. Please install it.",
+	stop("'shiny' package is needed for the Shiny example app to work properly. Please install it.",
 			 call. = FALSE)
 } else {
 	require(shiny)
@@ -9,6 +9,22 @@ source("global.R")
 
 shinyServer(
 	function(input, output, session) {
+		v <- reactiveValues(
+			paramList = list(
+				"beta" = list("shape1" = 0, "shape2" = 1),
+				"cauchy" = list("scale" = 1, "location" = 0),
+				"chisq" = list("df" = 1),
+				"exp" = list("rate" = 1),
+				"f" = list("df1" = 1, "df2" = 1),
+				"gamma" = list("shape" = 0, "scale" = 1),
+				"lnorm" = list("sdlog" = 1, "meanlog" = 0),
+				"norm" = list("sd" = 1, "mean" = 0),
+				"t" = list("df" = 1),
+				"unif" = list("min" = 0, "max" = 1),
+				"weibull" = list("shape" = 0, "scale" = 1)
+			)
+		)
+
 		# update qprobs sliders
 		observeEvent(input$optQprobsMin, {
 			updateSliderInput(
@@ -25,73 +41,87 @@ shinyServer(
 			)
 		})
 
-		# v <- reactiveValues(
-		# 	paramList = list(
-		# 		"beta" = list("shape1" = 0, "shape2" = 1),
-		# 		"binom" = list("prob" = 0.5, "size" = length(mtcars$mpg)),
-		# 		"chisq" = list("df" = 1), ###
-		# 		"exp" = list("rate" = 1), ###
-		# 		"f" = list("df1" = 1, "df2" = 1),
-		# 		"gamma" = list("shape" = 0, "rate" = 1),
-		# 		"norm" = list("mean" = 0, "sd" = 1),
-		# 		"pois" = list("lambda" = 1) ###
-		# 	)
-		# )
-		#
-		# observeEvent(input$dist, {
-		# 	if(input$dist %in% c("qbeta", "qchisq", "qexp", "qf", "qgamma", "qpois"))
-		# 		updateSliderInput(
-		# 			session,
-		# 			inputId = "sliderPos1",
-		# 			label = names(v$paramList[[input$dist]])[1],
-		# 			value = 1
-		# 		)
-		# 	if(input$dist %in% c("qbeta", "qf", "qgamma", "qnorm"))
-		# 		updateSliderInput(
-		# 			session,
-		# 			inputId = "sliderPos2",
-		# 			label = names(v$paramList[[input$dist]])[2],
-		# 			value = 1
-		# 		)
-		# 	if(input$dist %in% c("qnorm"))
-		# 		updateSliderInput(
-		# 			session,
-		# 			inputId = "sliderReal",
-		# 			label = names(v$paramList[[input$dist]])[1],
-		# 			value = 0
-		# 		)
-		# 	if(input$dist %in% c("qbinom"))
-		# 		updateSliderInput(
-		# 			session,
-		# 			inputId = "slider01",
-		# 			label = names(v$paramList[[input$dist]])[1],
-		# 			value = 0.5
-		# 		)
-		# })
-		#
-		# observeEvent(input$sliderPos1, {
-		# 	v$paramList[["qbeta"]][[1]] <- input$sliderPos1
-		# 	v$paramList[["qchisq"]][[1]] <- input$sliderPos1
-		# 	v$paramList[["qexp"]][[1]] <- input$sliderPos1
-		# 	v$paramList[["qf"]][[1]] <- input$sliderPos1
-		# 	v$paramList[["qgamma"]][[1]] <- input$sliderPos1
-		# 	v$paramList[["qpois"]][[1]] <- input$sliderPos1
-		# })
-		#
-		# observeEvent(input$sliderPos2, {
-		# 	v$paramList[["qbeta"]][[2]] <- input$sliderPos2
-		# 	v$paramList[["qf"]][[2]] <- input$sliderPos2
-		# 	v$paramList[["qgamma"]][[2]] <- input$sliderPos2
-		# 	v$paramList[["qnorm"]][[2]] <- input$sliderPos2
-		# })
-		#
-		# observeEvent(input$sliderReal, {
-		# 	v$paramList[["qnorm"]][[1]] <- input$sliderReal
-		# })
-		#
-		# observeEvent(input$slider01, {
-		# 	v$paramList[["qbinom"]][[1]] <- input$slider01
-		# })
+		# change sliders' names based on input$optDistribution
+		observeEvent(input$optDistribution, {
+			if(input$optDistribution %in% c("beta", "gamma", "weibull")) {
+				updateSliderInput(
+					session,
+					inputId = "sliderPos1",
+					label = names(v$paramList[[input$optDistribution]])[1],
+					value = 0
+				)
+			}
+			if(input$optDistribution %in% c("cauchy", "chisq", "exp", "f", "lnorm", "norm", "t")) {
+				updateSliderInput(
+					session,
+					inputId = "sliderPos1",
+					label = names(v$paramList[[input$optDistribution]])[1],
+					value = 1
+				)
+			}
+			if(input$optDistribution %in% c("beta", "f", "gamma", "weibull")) {
+				updateSliderInput(
+					session,
+					inputId = "sliderPos2",
+					label = names(v$paramList[[input$optDistribution]])[2],
+					value = 1
+				)
+			}
+			if(input$optDistribution %in% c("cauchy", "lnorm", "norm")) {
+				updateSliderInput(
+					session,
+					inputId = "sliderReal1",
+					label = names(v$paramList[[input$optDistribution]])[2],
+					value = 0
+				)
+			}
+			if(input$optDistribution %in% c("unif")) {
+				updateSliderInput(
+					session,
+					inputId = "sliderReal1",
+					label = names(v$paramList[[input$optDistribution]])[1],
+					value = 0
+				)
+				updateSliderInput(
+					session,
+					inputId = "sliderReal2",
+					label = names(v$paramList[[input$optDistribution]])[2],
+					value = 1
+				)
+			}
+		})
+
+		# change distribution parameter values based on the sliders' input
+		observeEvent(input$sliderPos1, {
+			v$paramList[["beta"]][[1]] <- input$sliderPos1
+			v$paramList[["cauchy"]][[1]] <- input$sliderPos1
+			v$paramList[["chisq"]][[1]] <- input$sliderPos1
+			v$paramList[["exp"]][[1]] <- input$sliderPos1
+			v$paramList[["f"]][[1]] <- input$sliderPos1
+			v$paramList[["gamma"]][[1]] <- input$sliderPos1
+			v$paramList[["lnorm"]][[1]] <- input$sliderPos1
+			v$paramList[["norm"]][[1]] <- input$sliderPos1
+			v$paramList[["t"]][[1]] <- input$sliderPos1
+			v$paramList[["weibull"]][[1]] <- input$sliderPos1
+		})
+
+		observeEvent(input$sliderPos2, {
+			v$paramList[["beta"]][[2]] <- input$sliderPos2
+			v$paramList[["f"]][[2]] <- input$sliderPos2
+			v$paramList[["gamma"]][[2]] <- input$sliderPos2
+			v$paramList[["weibull"]][[2]] <- input$sliderPos2
+		})
+
+		observeEvent(input$sliderReal1, {
+			v$paramList[["cauchy"]][[2]] <- input$sliderReal1
+			v$paramList[["lnorm"]][[2]] <- input$sliderReal1
+			v$paramList[["norm"]][[2]] <- input$sliderReal1
+			v$paramList[["unif"]][[1]] <- input$sliderReal1
+		})
+
+		observeEvent(input$sliderReal2, {
+			v$paramList[["unif"]][[2]] <- input$sliderReal2
+		})
 
 		output$ggPlot <- renderPlot({
 			gg <- ggplot(data = smp, mapping = aes(sample = norm))
@@ -104,7 +134,8 @@ shinyServer(
 							bandType = input$optBandTypeQq,
 							conf = input$optConf,
 							B = input$optB,
-							distribution = input$optDistribution
+							distribution = input$optDistribution,
+							dparams = v$paramList[[input$optDistribution]]
 						)
 				}
 				if("line" %in% input$plotFunc) {
@@ -112,7 +143,8 @@ shinyServer(
 						stat_qq_line(
 							detrend = input$optDetrend,
 							qprobs = c(input$optQprobsMin, input$optQprobsMax),
-							distribution = input$optDistribution
+							distribution = input$optDistribution,
+							dparams = v$paramList[[input$optDistribution]]
 						)
 				}
 				if("point" %in% input$plotFunc) {
@@ -120,7 +152,8 @@ shinyServer(
 						stat_qq_point(
 							detrend = input$optDetrend,
 							qprobs = c(input$optQprobsMin, input$optQprobsMax),
-							distribution = input$optDistribution
+							distribution = input$optDistribution,
+							dparams = v$paramList[[input$optDistribution]]
 						)
 				}
 				gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
@@ -131,7 +164,8 @@ shinyServer(
 																	bandType = input$optBandTypePp,
 																	conf = input$optConf,
 																	B = input$optB,
-																	distribution = input$optDistribution)
+																	distribution = input$optDistribution,
+																	dparams = v$paramList[[input$optDistribution]])
 				}
 				if("line" %in% input$plotFunc) {
 					gg <- gg + stat_pp_line(detrend = input$optDetrend,
@@ -139,7 +173,8 @@ shinyServer(
 				}
 				if("point" %in% input$plotFunc) {
 					gg <- gg + stat_pp_point(detrend = input$optDetrend,
-																	 distribution = input$optDistribution)
+																	 distribution = input$optDistribution,
+																	 dparams = v$paramList[[input$optDistribution]])
 				}
 				gg + labs(x = "Probability Points", y = "Cumulative Probability")
 			}
