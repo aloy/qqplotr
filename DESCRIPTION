@@ -28,8 +28,7 @@ Imports: dplyr,
     robustbase,
     stats4,
     knitr
-Suggests: plotly,
-    shiny,
+Suggests: shiny,
     devtools,
     lattice,
     shinyBS
