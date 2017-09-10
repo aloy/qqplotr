@@ -65,7 +65,7 @@ used by the \code{\link[stats]{quantile}} function to construct the Q-Q
 line.}
 
 \item{qprobs}{Numeric vector of length two. Represents the quantiles used by
-the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
+the \code{\link[stats]{quantile}} function to construct the Q-Q line. Defaults to the first and third quartile.}
 
 \item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
 the objects will be detrended according to the reference Q-Q line. This

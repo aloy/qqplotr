@@ -25,7 +25,7 @@
 #'   used by the \code{\link[stats]{quantile}} function to construct the Q-Q
 #'   line.
 #' @param qprobs Numeric vector of length two. Represents the quantiles used by
-#'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
+#'   the \code{\link[stats]{quantile}} function to construct the Q-Q line. Defaults to the first and third quartile.
 #'
 #' @references
 #' \itemize{
@@ -144,7 +144,6 @@ StatQqLine <- ggplot2::ggproto(
 			smp <- sort(data$sample)
 			n <- length(smp)
 			quantiles <- ppoints(n)
-
 			theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
 
 			if (detrend) {
