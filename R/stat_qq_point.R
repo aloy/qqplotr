@@ -83,6 +83,7 @@ stat_qq_point <- function(data = NULL,
 	}
 
 	ggplot2::layer(
+		data = data,
 		mapping = mapping,
 		stat = StatQqPoint,
 		geom = geom,
@@ -128,7 +129,8 @@ StatQqPoint <- ggplot2::ggproto(
 		# distributional function
 		qFunc <- eval(parse(text = paste0("q", distribution)))
 
-		smp <- sort(data$sample)
+		oidx <- order(data$sample)
+		smp <- data$sample[oidx]
 		n <- length(smp)
 		quantiles <- ppoints(n)
 
