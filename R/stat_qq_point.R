@@ -63,6 +63,7 @@ stat_qq_point <- function(data = NULL,
 													inherit.aes = TRUE,
 													distribution = "norm",
 													dparams = list(),
+													auto = FALSE,
 													qtype = 7,
 													qprobs = c(.25, .75),
 													detrend = FALSE,
@@ -94,6 +95,7 @@ stat_qq_point <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			auto = auto,
 			qtype = qtype,
 			qprobs = qprobs,
 			detrend = detrend,
@@ -123,16 +125,64 @@ StatQqPoint <- ggplot2::ggproto(
 													 scales,
 													 distribution,
 													 dparams,
+													 auto,
 													 qtype,
 													 qprobs,
 													 detrend) {
 		# distributional function
+		dFunc <- eval(parse(text = paste0("d", distribution)))
 		qFunc <- eval(parse(text = paste0("q", distribution)))
 
 		oidx <- order(data$sample)
 		smp <- data$sample[oidx]
 		n <- length(smp)
 		quantiles <- ppoints(n)
+
+		if(auto) {
+			# define here distributions with default parameters
+			startList <- {function(distName) {
+				switch (
+					distName,
+					cauchy = list(location = 0, scale = 1),
+					exp = list(rate = 1),
+					lnorm = list(meanlog = 0, sdlog = 1),
+					logis = list(location = 0, scale = 1),
+					norm = list(mean = 0, sd = 1),
+					NULL
+				)
+			}}
+
+			# log-likelihood function to maximize with stats4::mle
+			logLik <- {function() {
+				argList <- as.list(match.call())
+				argList[[1]] <- NULL
+				R <- do.call(dFunc, c(list(x = smp), argList))
+				-sum(log(R))
+			}}
+
+			# for distributions with default values, there's no need to provide dparams
+			if (!is.null(startList(distribution)) & length(dparams) == 0) {
+				s <- startList(distribution)
+				parList <- rep(list(bquote()), length(s))
+				names(parList) <- names(s)
+				formals(logLik) <- parList
+
+				mleEst <- suppressWarnings(
+					stats4::mle(minuslogl = logLik, start = s)
+				)
+			} else {
+				parList <- rep(list(bquote()), length(dparams))
+				names(parList) <- names(dparams)
+				formals(logLik) <- parList
+
+				mleEst <- suppressWarnings(
+					stats4::mle(minuslogl = logLik, start = dparams)
+				)
+			}
+
+			dparams <- as.list(mleEst@coef)
+			print(dparams)
+		}
 
 		theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
 

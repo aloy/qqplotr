@@ -7,7 +7,7 @@
 stat_qq_line(data = NULL, mapping = NULL, geom = "path",
   position = "identity", na.rm = TRUE, show.legend = NA,
   inherit.aes = TRUE, distribution = "norm", dparams = list(),
-  qtype = 7, qprobs = c(0.25, 0.75), detrend = FALSE, ...)
+  auto = FALSE, qtype = 7, qprobs = c(0.25, 0.75), detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three

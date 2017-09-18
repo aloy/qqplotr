@@ -134,6 +134,7 @@ stat_qq_band <- function(data = NULL,
 												 na.rm = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
+												 auto = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
 												 bandType = "normal",
@@ -176,6 +177,7 @@ stat_qq_band <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			auto = auto,
 			qtype = qtype,
 			qprobs = qprobs,
 			bandType = match.arg(bandType, c("normal", "ts", "bs")),
@@ -213,6 +215,7 @@ StatQqBand <- ggplot2::ggproto(
 						 scales,
 						 distribution,
 						 dparams,
+						 auto,
 						 qtype,
 						 qprobs,
 						 bandType,
@@ -230,19 +233,66 @@ StatQqBand <- ggplot2::ggproto(
 			smp <- sort(data$sample)
 			n <- length(smp)
 			quantiles <- ppoints(n)
-
 			theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
+
+			if(auto) {
+				# define here distributions with default parameters
+				startList <- {function(distName) {
+					switch (
+						distName,
+						cauchy = list(location = 0, scale = 1),
+						exp = list(rate = 1),
+						lnorm = list(meanlog = 0, sdlog = 1),
+						logis = list(location = 0, scale = 1),
+						norm = list(mean = 0, sd = 1),
+						NULL
+					)
+				}}
+
+				# log-likelihood function to maximize with stats4::mle
+				logLik <- {function() {
+					argList <- as.list(match.call())
+					argList[[1]] <- NULL
+					R <- do.call(dFunc, c(list(x = smp), argList))
+					-sum(log(R))
+				}}
+
+				# for distributions with default values, there's no need to provide dparams
+				if (!is.null(startList(distribution)) & length(dparams) == 0) {
+					s <- startList(distribution)
+					parList <- rep(list(bquote()), length(s))
+					names(parList) <- names(s)
+					formals(logLik) <- parList
+
+					mleEst <- suppressWarnings(
+						stats4::mle(minuslogl = logLik, start = s)
+					)
+				} else {
+					parList <- rep(list(bquote()), length(dparams))
+					names(parList) <- names(dparams)
+					formals(logLik) <- parList
+
+					mleEst <- suppressWarnings(
+						stats4::mle(minuslogl = logLik, start = dparams)
+					)
+				}
+
+				dparams <- as.list(mleEst@coef)
+				print(dparams)
+			}
 
 			# inherit from StatQqLine
 			xline <- self$super()$compute_group(data = data,
 																					distribution = distribution,
 																					dparams = dparams,
+																					auto = au,
 																					qtype = qtype,
 																					qprobs = qprobs,
 																					detrend = FALSE)$xline
 			yline <- self$super()$compute_group(data = data,
 																					distribution = distribution,
 																					dparams = dparams,
+																					auto = au,
 																					qtype = qtype,
 																					qprobs = qprobs,
 																					detrend = FALSE)$yline
@@ -286,7 +336,7 @@ StatQqBand <- ggplot2::ggproto(
 				}}
 
 				# for distributions with default values, there's no need to provide dparams
-				if (!is.null(startList) & length(dparams) == 0) {
+				if (!is.null(startList(distribution)) & length(dparams) == 0) {
 					s <- startList(distribution)
 					parList <- rep(list(bquote()), length(s))
 					names(parList) <- names(s)

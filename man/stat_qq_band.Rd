@@ -13,9 +13,9 @@ geom_qq_band(data = NULL, mapping = NULL, stat = "qq_band",
 
 stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
-  na.rm = TRUE, distribution = "norm", dparams = list(), qtype = 7,
-  qprobs = c(0.25, 0.75), bandType = "normal", B = 1000, conf = 0.95,
-  mu = NULL, sigma = NULL, detrend = FALSE, ...)
+  na.rm = TRUE, distribution = "norm", dparams = list(), auto = FALSE,
+  qtype = 7, qprobs = c(0.25, 0.75), bandType = "normal", B = 1000,
+  conf = 0.95, mu = NULL, sigma = NULL, detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three

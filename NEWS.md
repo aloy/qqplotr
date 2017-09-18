@@ -1,5 +1,9 @@
 # qqplotr 0.0.1.9000 (to be 0.0.2)
 
+* Distributional parameters are now automatically estimated with MLE for `stat_qq_point`, 
+`stat_qq_line`, and `stat_pp_point` when `dparams` is not used.
+
+
 * Created a Shiny app to showcase the package functions and parameters.
 
 * Error handling for the parameters in all implemented functions.
