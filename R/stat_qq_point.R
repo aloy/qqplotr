@@ -3,6 +3,7 @@
 #' Draws quantile-quantile points, with an additional detrend option.
 #'
 #' @import ggplot2
+#' @importFrom MASS fitdistr
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_point
@@ -16,7 +17,8 @@
 #'   \code{"custom"}, create the \code{"dcustom"}, \code{"qcustom"}, and
 #'   \code{"rcustom"} functions).
 #' @param dparams List of additional parameters passed on to the previously
-#'   chosen \code{distribution} function.
+#'   chosen \code{distribution} function. If an empty list is provided (default)
+#'   then the distributional parameters are estimated via MLE.
 #' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
 #'   the objects will be detrended according to the reference Q-Q line. This
 #'   procedure was described by Thode (2002), and may help reducing visual bias
@@ -63,7 +65,6 @@ stat_qq_point <- function(data = NULL,
 													inherit.aes = TRUE,
 													distribution = "norm",
 													dparams = list(),
-													auto = FALSE,
 													qtype = 7,
 													qprobs = c(.25, .75),
 													detrend = FALSE,
@@ -95,7 +96,6 @@ stat_qq_point <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
-			auto = auto,
 			qtype = qtype,
 			qprobs = qprobs,
 			detrend = detrend,
@@ -125,12 +125,10 @@ StatQqPoint <- ggplot2::ggproto(
 													 scales,
 													 distribution,
 													 dparams,
-													 auto,
 													 qtype,
 													 qprobs,
 													 detrend) {
 		# distributional function
-		dFunc <- eval(parse(text = paste0("d", distribution)))
 		qFunc <- eval(parse(text = paste0("q", distribution)))
 
 		oidx <- order(data$sample)
@@ -138,50 +136,50 @@ StatQqPoint <- ggplot2::ggproto(
 		n <- length(smp)
 		quantiles <- ppoints(n)
 
-		if(auto) {
-			# define here distributions with default parameters
-			startList <- {function(distName) {
-				switch (
+		# automatically estimate parameters with MLE, only if no parameters are
+		# provided with dparams
+		if(length(dparams) == 0) {
+			# equivalence between base R and MASS::fitdistr distribution names
+			corresp <- function(distName) {
+				switch(
 					distName,
-					cauchy = list(location = 0, scale = 1),
-					exp = list(rate = 1),
-					lnorm = list(meanlog = 0, sdlog = 1),
-					logis = list(location = 0, scale = 1),
-					norm = list(mean = 0, sd = 1),
+					beta = "beta",
+					cauchy = "cauchy",
+					chisq = "chi-squared",
+					exp = "exponential",
+					f = "f",
+					gamma = "gamma",
+					geom = "geometric",
+					lnorm = "log-normal",
+					logis = "logistic",
+					norm = "normal",
+					nbinom = "negative binomial",
+					pois = "poisson",
+					t = dt,
+					weibull = "weibull",
 					NULL
-				)
-			}}
-
-			# log-likelihood function to maximize with stats4::mle
-			logLik <- {function() {
-				argList <- as.list(match.call())
-				argList[[1]] <- NULL
-				R <- do.call(dFunc, c(list(x = smp), argList))
-				-sum(log(R))
-			}}
-
-			# for distributions with default values, there's no need to provide dparams
-			if (!is.null(startList(distribution)) & length(dparams) == 0) {
-				s <- startList(distribution)
-				parList <- rep(list(bquote()), length(s))
-				names(parList) <- names(s)
-				formals(logLik) <- parList
-
-				mleEst <- suppressWarnings(
-					stats4::mle(minuslogl = logLik, start = s)
-				)
-			} else {
-				parList <- rep(list(bquote()), length(dparams))
-				names(parList) <- names(dparams)
-				formals(logLik) <- parList
-
-				mleEst <- suppressWarnings(
-					stats4::mle(minuslogl = logLik, start = dparams)
 				)
 			}
 
-			dparams <- as.list(mleEst@coef)
-			print(dparams)
+			# initial value for some distributions
+			initVal <- function(distName) {
+				switch(
+					distName,
+					beta = list(shape1 = 1, shape2 = 1),
+					chisq = list(df = 1),
+					f = list(df1 = 1, df2 = 2),
+					t = list(df = 1),
+					NULL
+				)
+			}
+
+			suppressWarnings({
+				if(is.null(initVal(distribution))) {
+					dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution))$estimate
+				} else {
+					dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution), start = initVal(distribution))$estimate
+				}
+			})
 		}
 
 		theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))

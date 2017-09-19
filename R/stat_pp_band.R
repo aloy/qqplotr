@@ -149,14 +149,58 @@ StatPpBand <- ggplot2::ggproto(
 						 discrete,
 						 detrend) {
 			# distributional functions
-			dFunc <- eval(parse(text = paste0("d", distribution)))
 			pFunc <- eval(parse(text = paste0("p", distribution)))
-			qFunc <- eval(parse(text = paste0("q", distribution)))
 			rFunc <- eval(parse(text = paste0("r", distribution)))
 
 			smp <- data$sample
 			n <- length(smp)
 			probs <- ppoints(n)
+
+			# automatically estimate parameters with MLE, only if no parameters are
+			# provided with dparams
+			if(length(dparams) == 0) {
+				# equivalence between base R and MASS::fitdistr distribution names
+				corresp <- function(distName) {
+					switch(
+						distName,
+						beta = "beta",
+						cauchy = "cauchy",
+						chisq = "chi-squared",
+						exp = "exponential",
+						f = "f",
+						gamma = "gamma",
+						geom = "geometric",
+						lnorm = "log-normal",
+						logis = "logistic",
+						norm = "normal",
+						nbinom = "negative binomial",
+						pois = "poisson",
+						t = dt,
+						weibull = "weibull",
+						NULL
+					)
+				}
+
+				# initial value for some distributions
+				initVal <- function(distName) {
+					switch(
+						distName,
+						beta = list(shape1 = 1, shape2 = 1),
+						chisq = list(df = 1),
+						f = list(df1 = 1, df2 = 2),
+						t = list(df = 1),
+						NULL
+					)
+				}
+
+				suppressWarnings({
+					if(is.null(initVal(distribution))) {
+						dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution))$estimate
+					} else {
+						dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution), start = initVal(distribution))$estimate
+					}
+				})
+			}
 
 			# bootstrap pointwise confidence intervals
 			if (bandType == "bs") {

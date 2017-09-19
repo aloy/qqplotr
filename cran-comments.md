@@ -7,5 +7,3 @@
 ## R CMD check results
 
 There were no ERRORs or WARNINGs.
-
-Apart from the 'New submission' NOTE, there were no other NOTEs.

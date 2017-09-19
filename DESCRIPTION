@@ -26,8 +26,8 @@ VignetteBuilder: knitr
 Depends: ggplot2
 Imports: dplyr,
     robustbase,
-    stats4,
-    knitr
+    knitr,
+    MASS
 Suggests: shiny,
     devtools,
     lattice,
