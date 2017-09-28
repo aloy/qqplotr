@@ -24,7 +24,8 @@ Collate:
     'stat_qq_band.R'
     'stat_qq_point.R'
 VignetteBuilder: knitr
-Depends: ggplot2
+Depends: R (>= 3.1), 
+		ggplot2 (>= 2.2)
 Imports: dplyr,
     robustbase,
     knitr,
