@@ -25,7 +25,24 @@ shinyServer(
 			)
 		)
 
-		# update qprobs sliders
+		# update input variable selectInput
+		observeEvent(input$inputData, {
+			if(input$inputData == "simulated") {
+				updateSelectInput(
+					session = session,
+					inputId = "inputVar",
+					choices = simulatedNames
+				)
+			} else {
+				updateSelectInput(
+					session = session,
+					inputId = "inputVar",
+					choices = names(get(input$inputData))
+				)
+			}
+		})
+
+		# update qprobs sliders limits
 		observeEvent(input$optQprobsMin, {
 			updateSliderInput(
 				session = session,
@@ -104,27 +121,25 @@ shinyServer(
 			v$paramList[["t"]][[1]] <- input$sliderPos1
 			v$paramList[["weibull"]][[1]] <- input$sliderPos1
 		})
-
 		observeEvent(input$sliderPos2, {
 			v$paramList[["beta"]][[2]] <- input$sliderPos2
 			v$paramList[["f"]][[2]] <- input$sliderPos2
 			v$paramList[["gamma"]][[2]] <- input$sliderPos2
 			v$paramList[["weibull"]][[2]] <- input$sliderPos2
 		})
-
 		observeEvent(input$sliderReal1, {
 			v$paramList[["cauchy"]][[2]] <- input$sliderReal1
 			v$paramList[["lnorm"]][[2]] <- input$sliderReal1
 			v$paramList[["norm"]][[2]] <- input$sliderReal1
 			v$paramList[["unif"]][[1]] <- input$sliderReal1
 		})
-
 		observeEvent(input$sliderReal2, {
 			v$paramList[["unif"]][[2]] <- input$sliderReal2
 		})
 
+		# renders ggplot
 		output$ggPlot <- renderPlot({
-			gg <- ggplot(data = smp, mapping = aes(sample = norm))
+			gg <- ggplot(data = get(input$inputData), mapping = aes_string(sample = input$inputVar))
 			if(input$plotType == "qq") {
 				if("band" %in% input$plotFunc) {
 					gg <- gg +

@@ -10,6 +10,33 @@ shinyUI(
 		titlePanel(strong("qqplotr Example App")),
 		sidebarLayout(
 			sidebarPanel(
+				h2("Input"),
+
+				fluidRow(
+					column(
+						width = 6,
+						selectInput(inputId = "inputData",
+												label = "Dataset",
+												choices = datasets,
+												selected = "simulated")
+					),
+					column(
+						width = 6,
+						selectInput(inputId = "inputVar",
+												label = "Variable",
+												choices = NULL,
+												selected = NULL)
+					)
+				),
+
+				bsTooltip(
+					id = "inputData",
+					title = '<div align="justify">Format: <br> dataset (package)</div>',
+					placement = "top",
+					trigger = "focus",
+					options = list(container = "body")
+				),
+
 				h2("Plot"),
 
 				fluidRow(

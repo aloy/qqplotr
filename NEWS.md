@@ -1,28 +1,29 @@
-# qqplotr 0.0.1.9000
+# qqplotr 0.0.1.9000 (to be 0.0.2)
 
-* Created the Shiny app and commited its first version (WIP).
+* Distributional parameters are now automatically estimated with MLE for
+`stat_qq_point`, `stat_qq_line`, `stat_pp_point`, and `stat_pp_band`, when
+`dparams` is not used (default).
 
+* Created a Shiny app to showcase the package functions and its parameters.
 
-* Error handling for the parameters in all implemented functions.
+* Included error handling for most of the main parameters from all functions.
 
-* Option to partially match some arguments.
+* Added partial match for some character arguments.
 
 * Fixed a bug caused by `stat_qq_line` default colors when facetting.
 
-
 * Created the vignette `introduction.Rmd`.
 
-* Removed most inheritances from Q-Q functions, as they were not essential.
+* Removed most inheritances from Q-Q functions, as they were not actually
+essential.
 
-* Detrended option on P-P functions.
+* Added detrend option for P-P functions.
 
 * Changed the P-P functions labels in the examples from the documentation.
-
 
 * Implemented the P-P band stat `stat_pp_band` via parametric bootstrap.
 
 * Created a description for the package itself, i.e., now `?qqplotr` works.
-
 
 * Implemented the P-P plot stats: `stat_pp_point` and `stat_pp_line`.
 

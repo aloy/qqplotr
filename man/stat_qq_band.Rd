@@ -65,7 +65,8 @@ standard nomenclature from the \code{stats} package (i.e., for
 \code{"rcustom"} functions).}
 
 \item{dparams}{List of additional parameters passed on to the previously
-chosen \code{distribution} function.}
+chosen \code{distribution} function. If an empty list is provided (default)
+then the distributional parameters are estimated via MLE.}
 
 \item{qtype}{Integer between 1 and 9. Type of the quantile algorithm to be
 used by the \code{\link[stats]{quantile}} function to construct the Q-Q
