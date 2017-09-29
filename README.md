@@ -95,9 +95,9 @@ As previously described in the Details section, three confidence bands construct
 
 ``` r
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
-    geom_qq_band(bandType = "ts", aes(fill = "TS")) +
-    geom_qq_band(bandType = "normal", aes(fill = "Normal")) +
-    geom_qq_band(bandType = "bs", aes(fill = "Bootstrap")) +
+    geom_qq_band(bandType = "ts", mapping = aes(fill = "TS")) +
+    geom_qq_band(bandType = "normal", mapping = aes(fill = "Normal")) +
+    geom_qq_band(bandType = "bs", mapping = aes(fill = "Bootstrap")) +
     stat_qq_line() +
     stat_qq_point() +
     labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +

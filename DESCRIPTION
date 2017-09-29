@@ -12,7 +12,8 @@ License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Collate:
+Collate: 
+    'data.R'
     'geom_qq_band.R'
     'qqplotr.R'
     'runShinyExample.R'
@@ -23,7 +24,8 @@ Collate:
     'stat_qq_band.R'
     'stat_qq_point.R'
 VignetteBuilder: knitr
-Depends: ggplot2
+Depends: R (>= 3.1), 
+		ggplot2 (>= 2.2)
 Imports: dplyr,
     robustbase,
     knitr,
