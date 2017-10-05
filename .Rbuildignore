@@ -2,5 +2,4 @@
 ^.*\.Rmd$
 ^\.Rproj\.user$
 ^\.travis\.yml$
-^\R\test.R$
 ^cran-comments.md$
