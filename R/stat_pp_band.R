@@ -13,10 +13,13 @@
 #'   \code{"norm"}). If you wish to provide a custom distribution, you may do so
 #'   by first creating the density, quantile, and random functions following the
 #'   standard nomenclature from the \code{stats} package (i.e., for
-#'   \code{"custom"}, create the \code{"dcustom"}, \code{"qcustom"}, and
-#'   \code{"rcustom"} functions).
+#'   \code{"custom"}, create the \code{dcustom}, \code{pcustom},
+#'   \code{qcustom}, and \code{rcustom} functions).
 #' @param dparams List of additional parameters passed on to the previously
-#'   chosen \code{distribution} function.
+#'   chosen \code{distribution} function. If an empty list is provided (default)
+#'   then the distributional parameters are estimated via MLE. MLE for custom
+#'   distributions is currently not supported, so you must provide the
+#'   appropriate \code{dparams} in that case.
 #' @param bandType Character. Only \code{"bs"} is available for now. \code{"bs"}
 #'   creates pointwise confidence bands based on a bootstrap.
 #' @param B Integer. If \code{bandType = "bs"}, then \code{B} is the number of
@@ -84,6 +87,29 @@ stat_pp_band <- function(data = NULL,
 													detrend = FALSE,
 													...) {
 	# error handling
+	if (!(distribution %in% c(
+		"beta",
+		"cauchy",
+		"chisq",
+		"exp",
+		"f",
+		"gamma",
+		"geom",
+		"lnorm",
+		"logis",
+		"norm",
+		"nbinom",
+		"pois",
+		"t",
+		"weibull")) &
+		length(dparams) == 0 &
+		table(sapply(formals(eval(parse(text = paste0("q", distribution)))), typeof))["symbol"] > 1) {
+		stop(
+			"MLE is currently not supported for custom distributions.\n",
+			"Please provide all the custom distribution parameters to 'dparams'.",
+			call. = FALSE
+		)
+	}
 	if (conf < 0 | conf > 1) {
 		stop("Please provide a valid confidence level for the bands: ",
 				 "'conf' must be between 0 and 1.",
@@ -157,8 +183,9 @@ StatPpBand <- ggplot2::ggproto(
 			probs <- ppoints(n)
 
 			# automatically estimate parameters with MLE, only if no parameters are
-			# provided with dparams
-			if(length(dparams) == 0) {
+			# provided with dparams and there are at least one distributional parameter
+			# without a default value
+			if(length(dparams) == 0 & table(sapply(formals(qFunc), typeof))["symbol"] > 1) {
 				# equivalence between base R and MASS::fitdistr distribution names
 				corresp <- function(distName) {
 					switch(

@@ -14,11 +14,13 @@
 #'   \code{"norm"}). If you wish to provide a custom distribution, you may do so
 #'   by first creating the density, quantile, and random functions following the
 #'   standard nomenclature from the \code{stats} package (i.e., for
-#'   \code{"custom"}, create the \code{"dcustom"}, \code{"qcustom"}, and
-#'   \code{"rcustom"} functions).
+#'   \code{"custom"}, create the \code{dcustom}, \code{pcustom},
+#'   \code{qcustom}, and \code{rcustom} functions).
 #' @param dparams List of additional parameters passed on to the previously
 #'   chosen \code{distribution} function. If an empty list is provided (default)
-#'   then the distributional parameters are estimated via MLE.
+#'   then the distributional parameters are estimated via MLE. MLE for custom
+#'   distributions is currently not supported, so you must provide the
+#'   appropriate \code{dparams} in that case.
 #' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
 #'   the objects will be detrended according to the reference Q-Q line. This
 #'   procedure was described by Thode (2002), and may help reducing visual bias
@@ -27,7 +29,8 @@
 #'   used by the \code{\link[stats]{quantile}} function to construct the Q-Q
 #'   line.
 #' @param qprobs Numeric vector of length two. Represents the quantiles used by
-#'   the \code{\link[stats]{quantile}} function to construct the Q-Q line. Defaults to the first and third quartile.
+#'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
+#'   Defaults to the first and third quartile.
 #'
 #' @references
 #' \itemize{
@@ -76,11 +79,34 @@ stat_qq_line <- function(data = NULL,
 												 inherit.aes = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
+												 detrend = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
-												 detrend = FALSE,
 												 ...) {
 	# error handling
+	if (!(distribution %in% c(
+		"beta",
+		"cauchy",
+		"chisq",
+		"exp",
+		"f",
+		"gamma",
+		"geom",
+		"lnorm",
+		"logis",
+		"norm",
+		"nbinom",
+		"pois",
+		"t",
+		"weibull")) &
+		length(dparams) == 0 &
+		table(sapply(formals(eval(parse(text = paste0("q", distribution)))), typeof))["symbol"] > 1) {
+		stop(
+			"MLE is currently not supported for custom distributions.\n",
+			"Please provide all the custom distribution parameters to 'dparams'.",
+			call. = FALSE
+		)
+	}
 	if (qtype < 1 | qtype > 9) {
 		stop("Please provide a valid quantile type: ",
 				 "'qtype' must be between 1 and 9.",
@@ -107,9 +133,9 @@ stat_qq_line <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			detrend = detrend,
 			qtype = qtype,
 			qprobs = qprobs,
-			detrend = detrend,
 			...
 		)
 	)
@@ -137,9 +163,9 @@ StatQqLine <- ggplot2::ggproto(
 						 scales,
 						 distribution,
 						 dparams,
+						 detrend,
 						 qtype,
-						 qprobs,
-						 detrend) {
+						 qprobs) {
 			# distributional function
 			qFunc <- eval(parse(text = paste0("q", distribution)))
 
@@ -148,8 +174,9 @@ StatQqLine <- ggplot2::ggproto(
 			quantiles <- ppoints(n)
 
 			# automatically estimate parameters with MLE, only if no parameters are
-			# provided with dparams
-			if(length(dparams) == 0) {
+			# provided with dparams and there are at least one distributional parameter
+			# without a default value
+			if(length(dparams) == 0 & table(sapply(formals(qFunc), typeof))["symbol"] > 1) {
 				# equivalence between base R and MASS::fitdistr distribution names
 				corresp <- function(distName) {
 					switch(
