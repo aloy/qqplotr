@@ -140,7 +140,7 @@ StatPpPoint <- ggplot2::ggproto(
 		# automatically estimate parameters with MLE, only if no parameters are
 		# provided with dparams and there are at least one distributional parameter
 		# without a default value
-		if(length(dparams) == 0 & table(sapply(formals(qFunc), typeof))["symbol"] > 1) {
+		if(length(dparams) == 0) {
 			# equivalence between base R and MASS::fitdistr distribution names
 			corresp <- function(distName) {
 				switch(
@@ -176,10 +176,12 @@ StatPpPoint <- ggplot2::ggproto(
 			}
 
 			suppressWarnings({
-				if(is.null(initVal(distribution))) {
-					dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution))$estimate
-				} else {
-					dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution), start = initVal(distribution))$estimate
+				if(!is.null(corresp(distribution))) {
+					if(is.null(initVal(distribution))) {
+						dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution))$estimate
+					} else {
+						dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution), start = initVal(distribution))$estimate
+					}
 				}
 			})
 		}
