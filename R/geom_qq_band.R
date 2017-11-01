@@ -10,9 +10,11 @@ geom_qq_band <- function(data = NULL,
 												 position = "identity",
 												 show.legend = NA,
 												 inherit.aes = TRUE,
-												 na.rm = FALSE,
+												 na.rm = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
+												 identity = TRUE,
+												 detrend = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
 												 bandType = "normal",
@@ -20,9 +22,31 @@ geom_qq_band <- function(data = NULL,
 												 conf = .95,
 												 mu = NULL,
 												 sigma = NULL,
-												 detrend = FALSE,
 												 ...) {
 	# error handling
+	if (!(distribution %in% c(
+		"beta",
+		"cauchy",
+		"chisq",
+		"exp",
+		"f",
+		"gamma",
+		"geom",
+		"lnorm",
+		"logis",
+		"norm",
+		"nbinom",
+		"pois",
+		"t",
+		"weibull")) &
+		length(dparams) == 0 &
+		table(sapply(formals(eval(parse(text = paste0("q", distribution)))), typeof))["symbol"] > 1) {
+		stop(
+			"MLE is currently not supported for custom distributions.\n",
+			"Please provide all the custom distribution parameters to 'dparams'.",
+			call. = FALSE
+		)
+	}
 	if (qtype < 1 | qtype > 9) {
 		stop("Please provide a valid quantile type: ",
 				 "'qtype' must be between 1 and 9.",
@@ -38,7 +62,8 @@ geom_qq_band <- function(data = NULL,
 				 call. = FALSE)
 	}
 
-	discreteDist <- c("binom", "geom", "hyper", "multinom", "nbinom", "pois")
+	# vector with common discrete distributions
+	discreteDist <- c("binom", "geom", "nbinom", "pois")
 
 	ggplot2::layer(
 		data = data,
@@ -52,15 +77,16 @@ geom_qq_band <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			identity = identity,
+			detrend = detrend,
 			qtype = qtype,
 			qprobs = qprobs,
-			bandType = match.arg(bandType, c("normal", "ts", "bs")),
+			bandType = match.arg(bandType, c("normal", "boot", "ts")),
 			B = round(B),
 			conf = conf,
 			mu = mu,
 			sigma = sigma,
 			discrete = distribution %in% discreteDist,
-			detrend = detrend,
 			...
 		)
 	)

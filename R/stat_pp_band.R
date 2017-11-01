@@ -20,9 +20,9 @@
 #'   then the distributional parameters are estimated via MLE. MLE for custom
 #'   distributions is currently not supported, so you must provide the
 #'   appropriate \code{dparams} in that case.
-#' @param bandType Character. Only \code{"bs"} is available for now. \code{"bs"}
+#' @param bandType Character. Only \code{"boot"} is available for now. \code{"boot"}
 #'   creates pointwise confidence bands based on a bootstrap.
-#' @param B Integer. If \code{bandType = "bs"}, then \code{B} is the number of
+#' @param B Integer. If \code{bandType = "boot"}, then \code{B} is the number of
 #'   bootstrap replicates.
 #' @param conf Numerical. Confidence level of the bands.
 #' @param detrend Logical. Should the plot objects be detrended? If \code{TRUE},
@@ -81,7 +81,7 @@ stat_pp_band <- function(data = NULL,
 													inherit.aes = TRUE,
 													distribution = "norm",
 													dparams = list(),
-													bandType = "bs",
+													bandType = "boot",
 													B = 1000,
 													conf = .95,
 													detrend = FALSE,
@@ -136,7 +136,7 @@ stat_pp_band <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
-			bandType = match.arg(bandType, c("bs")),
+			bandType = match.arg(bandType, c("boot")),
 			B = round(B),
 			conf = conf,
 			discrete = distribution %in% discreteDist,
@@ -232,7 +232,7 @@ StatPpBand <- ggplot2::ggproto(
 			}
 
 			# bootstrap pointwise confidence intervals
-			if (bandType == "bs") {
+			if (bandType == "boot") {
 				bs <- matrix(do.call(rFunc, c(list(n = n * B), dparams)), n, B)
 
 				sim <- apply(bs, MARGIN = 2, FUN = function(x, dparams) {

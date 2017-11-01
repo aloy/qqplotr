@@ -79,6 +79,7 @@ stat_qq_line <- function(data = NULL,
 												 inherit.aes = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
+												 identity = TRUE,
 												 detrend = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
@@ -133,6 +134,7 @@ stat_qq_line <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			identity = identity,
 			detrend = detrend,
 			qtype = qtype,
 			qprobs = qprobs,
@@ -163,6 +165,7 @@ StatQqLine <- ggplot2::ggproto(
 						 scales,
 						 distribution,
 						 dparams,
+						 identity,
 						 detrend,
 						 qtype,
 						 qprobs) {
@@ -228,11 +231,16 @@ StatQqLine <- ggplot2::ggproto(
 				out <- data.frame(xline = c(min(theoretical), max(theoretical)))
 				out$yline <- 0
 			} else {
-				xCoords <- do.call(qFunc, c(list(p = qprobs), dparams))
-				yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
 
-				slope <- diff(yCoords) / diff(xCoords)
-				intercept <- yCoords[1] - slope * xCoords[1]
+				if (identity) {
+					slope <- 1
+					intercept <- 0
+				} else {
+					xCoords <- do.call(qFunc, c(list(p = qprobs), dparams))
+					yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
+					slope <- diff(yCoords) / diff(xCoords)
+					intercept <- yCoords[1] - slope * xCoords[1]
+				}
 
 				out <- data.frame(xline = c(min(theoretical), max(theoretical)))
 				out$yline <- slope * out$xline + intercept

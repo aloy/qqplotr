@@ -67,6 +67,7 @@ stat_qq_point <- function(data = NULL,
 													inherit.aes = TRUE,
 													distribution = "norm",
 													dparams = list(),
+													identity = TRUE,
 													detrend = FALSE,
 													qtype = 7,
 													qprobs = c(.25, .75),
@@ -123,6 +124,7 @@ stat_qq_point <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			identity = identity,
 			detrend = detrend,
 			qtype = qtype,
 			qprobs = qprobs,
@@ -152,6 +154,7 @@ StatQqPoint <- ggplot2::ggproto(
 													 scales,
 													 distribution,
 													 dparams,
+													 identity,
 													 detrend,
 													 qtype,
 													 qprobs) {
@@ -215,11 +218,16 @@ StatQqPoint <- ggplot2::ggproto(
 		theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
 
 		if (detrend) {
-			xCoords <- do.call(qFunc, c(list(p = qprobs), dparams))
-			yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
+			if (identity) {
+				slope <- 1
+				intercept <- 0
+			} else {
+				xCoords <- do.call(qFunc, c(list(p = qprobs), dparams))
+				yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
 
-			slope <- diff(yCoords) / diff(xCoords)
-			intercept <- yCoords[1] - slope * xCoords[1]
+				slope <- diff(yCoords) / diff(xCoords)
+				intercept <- yCoords[1] - slope * xCoords[1]
+			}
 
 			# calculate new ys for the detrended sample
 			dSmp <- NULL

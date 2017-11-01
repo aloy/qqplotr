@@ -36,14 +36,14 @@
 #'   line.
 #' @param qprobs Numeric vector of length two. Represents the quantiles used by
 #'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
-#' @param bandType Character. Either \code{"normal"}, \code{"bs"} or
+#' @param bandType Character. Either \code{"normal"}, \code{"boot"} or
 #'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
-#'   on Normal confidence intervals. \code{"bs"} creates pointwise confidence
+#'   on Normal confidence intervals. \code{"boot"} creates pointwise confidence
 #'   bands based on a parametric bootstrap; parameters are estimated with MLEs.
 #'   Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
 #'   described by Aldor-Noiman et al. (2013) (also, see 'Note' for
 #'   limitations).
-#' @param B Integer. If \code{bandType = "bs"}, then \code{B} is the number of
+#' @param B Integer. If \code{bandType = "boot"}, then \code{B} is the number of
 #'   bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
 #'   number of simulated samples.
 #' @param conf Numerical. Confidence level of the bands.
@@ -110,7 +110,7 @@
 #' gg
 #'
 #' # Normal Q-Q plot of Normal data with boostrap confidence bands
-#' bt <- "bs"
+#' bt <- "boot"
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(bandType = bt) +
 #'  stat_qq_line() +
@@ -137,6 +137,7 @@ stat_qq_band <- function(data = NULL,
 												 na.rm = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
+												 identity = TRUE,
 												 detrend = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
@@ -202,10 +203,11 @@ stat_qq_band <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
+			identity = identity,
 			detrend = detrend,
 			qtype = qtype,
 			qprobs = qprobs,
-			bandType = match.arg(bandType, c("normal", "ts", "bs")),
+			bandType = match.arg(bandType, c("normal", "boot", "ts")),
 			B = round(B),
 			conf = conf,
 			mu = mu,
@@ -239,6 +241,7 @@ StatQqBand <- ggplot2::ggproto(
 						 scales,
 						 distribution,
 						 dparams,
+						 identity,
 						 detrend,
 						 qtype,
 						 qprobs,
@@ -314,12 +317,14 @@ StatQqBand <- ggplot2::ggproto(
 																					dparams = dparams,
 																					qtype = qtype,
 																					qprobs = qprobs,
+																					identity = identity,
 																					detrend = FALSE)$xline
 			yline <- self$super()$compute_group(data = data,
 																					distribution = distribution,
 																					dparams = dparams,
 																					qtype = qtype,
 																					qprobs = qprobs,
+																					identity = identity,
 																					detrend = FALSE)$yline
 
 			slope <- diff(yline) / diff(xline)
@@ -338,7 +343,7 @@ StatQqBand <- ggplot2::ggproto(
 			}
 
 			# parametric bootstrap pointwise confidence intervals
-			if (bandType == "bs") {
+			if (bandType == "boot") {
 				bs <- apply(
 					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(dparams))), n, B),
 					MARGIN = 2,

@@ -1,5 +1,12 @@
 # qqplotr 0.0.1.9000 (to be 0.0.2)
 
+* Added the `identity` argument to the `*_qq_*` functions, which permits to draw
+the identity line (instead of a line which crosses data quantiles), and also use
+it as the reference to the detrending procedure.
+
+* Changed `"bs"` to `"boot"` as one of the possible values of the `bandType`
+argument, for obvious reasons. :)
+
 * Distributional parameters are now automatically estimated with MLE for
 `stat_qq_point`, `stat_qq_line`, `stat_pp_point`, and `stat_pp_band`, when
 `dparams` is not used (default).
