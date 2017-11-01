@@ -25,12 +25,17 @@
 #'   the objects will be detrended according to the reference Q-Q line. This
 #'   procedure was described by Thode (2002), and may help reducing visual bias
 #'   caused by the orthogonal distances from Q-Q points to the reference line.
-#' @param qtype Integer between 1 and 9. Type of the quantile algorithm to be
-#'   used by the \code{\link[stats]{quantile}} function to construct the Q-Q
-#'   line.
-#' @param qprobs Numeric vector of length two. Represents the quantiles used by
-#'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
-#'   Defaults to the first and third quartile.
+#' @param identity Logical. Should an identity line be used as the reference
+#'   line? If \code{TRUE} (default), the identity line is used. If \code{FALSE},
+#'   the commonly-used Q-Q line that intercepts two data quantiles specified in
+#'   \code{qprobs} is used. Please notice that the chosen reference line will
+#'   also be used for the detrending procedure, if \code{detrend = TRUE}.
+#' @param qtype Integer between 1 and 9. Only used if \code{detrend = TRUE} and
+#'   \code{identity =  FALSE}. Type of the quantile algorithm to be used by the
+#'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
+#' @param qprobs Numeric vector of length two. Only used if \code{detrend =
+#'   TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
+#'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
 #'
 #' @references
 #' \itemize{
@@ -79,8 +84,8 @@ stat_qq_line <- function(data = NULL,
 												 inherit.aes = TRUE,
 												 distribution = "norm",
 												 dparams = list(),
-												 identity = TRUE,
 												 detrend = FALSE,
+												 identity = TRUE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
 												 ...) {
@@ -134,8 +139,8 @@ stat_qq_line <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
-			identity = identity,
 			detrend = detrend,
+			identity = identity,
 			qtype = qtype,
 			qprobs = qprobs,
 			...
@@ -165,8 +170,8 @@ StatQqLine <- ggplot2::ggproto(
 						 scales,
 						 distribution,
 						 dparams,
-						 identity,
 						 detrend,
+						 identity,
 						 qtype,
 						 qprobs) {
 			# distributional function

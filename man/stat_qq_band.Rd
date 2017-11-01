@@ -7,14 +7,15 @@
 \usage{
 geom_qq_band(data = NULL, mapping = NULL, stat = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
-  na.rm = FALSE, distribution = "norm", dparams = list(), qtype = 7,
-  qprobs = c(0.25, 0.75), bandType = "normal", B = 1000, conf = 0.95,
-  mu = NULL, sigma = NULL, detrend = FALSE, ...)
+  na.rm = TRUE, distribution = "norm", dparams = list(),
+  identity = TRUE, detrend = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
+  bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
+  ...)
 
 stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
   na.rm = TRUE, distribution = "norm", dparams = list(),
-  detrend = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
+  detrend = FALSE, identity = TRUE, qtype = 7, qprobs = c(0.25, 0.75),
   bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
   ...)
 }
@@ -73,22 +74,35 @@ then the distributional parameters are estimated via MLE. MLE for custom
 distributions is currently not supported, so you must provide the
 appropriate \code{dparams} in that case.}
 
-\item{qtype}{Integer between 1 and 9. Type of the quantile algorithm to be
-used by the \code{\link[stats]{quantile}} function to construct the Q-Q
-line.}
+\item{identity}{Logical. Should an identity line be used as the reference
+line used to construct the confidence bands? If \code{TRUE} (default), the
+identity line is used. If \code{FALSE}, the commonly-used Q-Q line that
+intercepts two data quantiles specified in \code{qprobs} is used. Please
+notice that the chosen reference line will also be used for the detrending
+procedure, if \code{detrend = TRUE}.}
 
-\item{qprobs}{Numeric vector of length two. Represents the quantiles used by
-the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
+\item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
+the objects will be detrended according to the reference Q-Q line. This
+procedure was described by Thode (2002), and may help reducing visual bias
+caused by the orthogonal distances from Q-Q points to the reference line.}
 
-\item{bandType}{Character. Either \code{"normal"}, \code{"bs"} or
+\item{qtype}{Integer between 1 and 9. Only used if \code{detrend = TRUE} and
+\code{identity =  FALSE}. Type of the quantile algorithm to be used by the
+\code{\link[stats]{quantile}} function to construct the Q-Q line.}
+
+\item{qprobs}{Numeric vector of length two. Only used if \code{detrend =
+TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
+\code{\link[stats]{quantile}} function to construct the Q-Q line.}
+
+\item{bandType}{Character. Either \code{"normal"}, \code{"boot"} or
 \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
-on Normal confidence intervals. \code{"bs"} creates pointwise confidence
+on Normal confidence intervals. \code{"boot"} creates pointwise confidence
 bands based on a parametric bootstrap; parameters are estimated with MLEs.
 Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
 described by Aldor-Noiman et al. (2013) (also, see 'Note' for
 limitations).}
 
-\item{B}{Integer. If \code{bandType = "bs"}, then \code{B} is the number of
+\item{B}{Integer. If \code{bandType = "boot"}, then \code{B} is the number of
 bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
 number of simulated samples.}
 
@@ -105,11 +119,6 @@ distributional parameter used to construct the simulated tail-sensitive
 confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
 those parameters are estimated using robust estimates from the \pkg{stats}
 package.}
-
-\item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
-the objects will be detrended according to the reference Q-Q line. This
-procedure was described by Thode (2002), and may help reducing visual bias
-caused by the orthogonal distances from Q-Q points to the reference line.}
 
 \item{...}{other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
@@ -164,7 +173,7 @@ gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
 gg
 
 # Normal Q-Q plot of Normal data with boostrap confidence bands
-bt <- "bs"
+bt <- "boot"
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_qq_band(bandType = bt) +
  stat_qq_line() +

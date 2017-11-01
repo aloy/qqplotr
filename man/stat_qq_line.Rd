@@ -7,7 +7,8 @@
 stat_qq_line(data = NULL, mapping = NULL, geom = "path",
   position = "identity", na.rm = TRUE, show.legend = NA,
   inherit.aes = TRUE, distribution = "norm", dparams = list(),
-  detrend = FALSE, qtype = 7, qprobs = c(0.25, 0.75), ...)
+  detrend = FALSE, identity = TRUE, qtype = 7, qprobs = c(0.25, 0.75),
+  ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -68,13 +69,19 @@ the objects will be detrended according to the reference Q-Q line. This
 procedure was described by Thode (2002), and may help reducing visual bias
 caused by the orthogonal distances from Q-Q points to the reference line.}
 
-\item{qtype}{Integer between 1 and 9. Type of the quantile algorithm to be
-used by the \code{\link[stats]{quantile}} function to construct the Q-Q
-line.}
+\item{identity}{Logical. Should an identity line be used as the reference
+line? If \code{TRUE} (default), the identity line is used. If \code{FALSE},
+the commonly-used Q-Q line that intercepts two data quantiles specified in
+\code{qprobs} is used. Please notice that the chosen reference line will
+also be used for the detrending procedure, if \code{detrend = TRUE}.}
 
-\item{qprobs}{Numeric vector of length two. Represents the quantiles used by
-the \code{\link[stats]{quantile}} function to construct the Q-Q line.
-Defaults to the first and third quartile.}
+\item{qtype}{Integer between 1 and 9. Only used if \code{detrend = TRUE} and
+\code{identity =  FALSE}. Type of the quantile algorithm to be used by the
+\code{\link[stats]{quantile}} function to construct the Q-Q line.}
+
+\item{qprobs}{Numeric vector of length two. Only used if \code{detrend =
+TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
+\code{\link[stats]{quantile}} function to construct the Q-Q line.}
 
 \item{...}{other arguments passed on to \code{\link[=layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like

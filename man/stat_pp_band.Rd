@@ -7,7 +7,7 @@
 stat_pp_band(data = NULL, mapping = NULL, geom = "ribbon",
   position = "identity", na.rm = TRUE, show.legend = NA,
   inherit.aes = TRUE, distribution = "norm", dparams = list(),
-  bandType = "bs", B = 1000, conf = 0.95, detrend = FALSE, ...)
+  bandType = "boot", B = 1000, conf = 0.95, detrend = FALSE, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -63,10 +63,10 @@ then the distributional parameters are estimated via MLE. MLE for custom
 distributions is currently not supported, so you must provide the
 appropriate \code{dparams} in that case.}
 
-\item{bandType}{Character. Only \code{"bs"} is available for now. \code{"bs"}
+\item{bandType}{Character. Only \code{"boot"} is available for now. \code{"boot"}
 creates pointwise confidence bands based on a bootstrap.}
 
-\item{B}{Integer. If \code{bandType = "bs"}, then \code{B} is the number of
+\item{B}{Integer. If \code{bandType = "boot"}, then \code{B} is the number of
 bootstrap replicates.}
 
 \item{conf}{Numerical. Confidence level of the bands.}

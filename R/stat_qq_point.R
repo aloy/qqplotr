@@ -25,12 +25,17 @@
 #'   the objects will be detrended according to the reference Q-Q line. This
 #'   procedure was described by Thode (2002), and may help reducing visual bias
 #'   caused by the orthogonal distances from Q-Q points to the reference line.
-#' @param qtype Integer between 1 and 9. Only used if \code{detrend = TRUE}.
-#'   Type of the quantile algorithm to be used by the
+#' @param identity Logical. Only used if \code{detrend = TRUE}. Should an
+#'   identity line be used as the reference line for the plot detrending? If
+#'   \code{TRUE} (default), the points will be detrended according to the
+#'   reference identity line. If \code{FALSE}, the commonly-used Q-Q line that
+#'   intercepts two data quantiles specified in \code{qprobs} is used.
+#' @param qtype Integer between 1 and 9. Only used if \code{detrend = TRUE} and
+#'   \code{identity =  FALSE}. Type of the quantile algorithm to be used by the
 #'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
 #' @param qprobs Numeric vector of length two. Only used if \code{detrend =
-#'   TRUE}. Represents the quantiles used by the \code{\link[stats]{quantile}}
-#'   function to construct the Q-Q line.
+#'   TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
+#'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
 #'
 #' @references
 #' \itemize{
@@ -67,8 +72,8 @@ stat_qq_point <- function(data = NULL,
 													inherit.aes = TRUE,
 													distribution = "norm",
 													dparams = list(),
-													identity = TRUE,
 													detrend = FALSE,
+													identity = TRUE,
 													qtype = 7,
 													qprobs = c(.25, .75),
 													...) {
@@ -124,8 +129,8 @@ stat_qq_point <- function(data = NULL,
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
-			identity = identity,
 			detrend = detrend,
+			identity = identity,
 			qtype = qtype,
 			qprobs = qprobs,
 			...
@@ -154,8 +159,8 @@ StatQqPoint <- ggplot2::ggproto(
 													 scales,
 													 distribution,
 													 dparams,
-													 identity,
 													 detrend,
+													 identity,
 													 qtype,
 													 qprobs) {
 		# distributional function
