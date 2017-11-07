@@ -8,34 +8,34 @@
 geom_qq_band(data = NULL, mapping = NULL, stat = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
   na.rm = TRUE, distribution = "norm", dparams = list(),
-  identity = TRUE, detrend = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
+  detrend = FALSE, identity = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
   bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
   ...)
 
 stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
   na.rm = TRUE, distribution = "norm", dparams = list(),
-  detrend = FALSE, identity = TRUE, qtype = 7, qprobs = c(0.25, 0.75),
+  detrend = FALSE, identity = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
   bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
   ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
-options:
+   options:
 
-If \code{NULL}, the default, the data is inherited from the plot
-data as specified in the call to \code{\link[=ggplot]{ggplot()}}.
+   If \code{NULL}, the default, the data is inherited from the plot
+   data as specified in the call to \code{\link{ggplot}}.
 
-A \code{data.frame}, or other object, will override the plot
-data. All objects will be fortified to produce a data frame. See
-\code{\link[=fortify]{fortify()}} for which variables will be created.
+   A \code{data.frame}, or other object, will override the plot
+   data. All objects will be fortified to produce a data frame. See
+   \code{\link{fortify}} for which variables will be created.
 
-A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
-will be used as the layer data.}
+   A \code{function} will be called with a single argument,
+   the plot data. The return value must be a \code{data.frame.}, and
+   will be used as the layer data.}
 
-\item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
-\code{\link[=aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
+\item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
+\code{\link{aes_}}. If specified and \code{inherit.aes = TRUE} (the
 default), it is combined with the default mapping at the top level of the
 plot. You must supply \code{mapping} if there is no plot mapping.}
 
@@ -47,14 +47,12 @@ a call to a position adjustment function.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
-\code{FALSE} never includes, and \code{TRUE} always includes.
-It can also be a named logical vector to finely select the aesthetics to
-display.}
+\code{FALSE} never includes, and \code{TRUE} always includes.}
 
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
+the default plot specification, e.g. \code{\link{borders}}.}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
@@ -74,25 +72,24 @@ then the distributional parameters are estimated via MLE. MLE for custom
 distributions is currently not supported, so you must provide the
 appropriate \code{dparams} in that case.}
 
-\item{identity}{Logical. Should an identity line be used as the reference
-line used to construct the confidence bands? If \code{TRUE} (default), the
-identity line is used. If \code{FALSE}, the commonly-used Q-Q line that
-intercepts two data quantiles specified in \code{qprobs} is used. Please
-notice that the chosen reference line will also be used for the detrending
-procedure, if \code{detrend = TRUE}.}
-
 \item{detrend}{Logical. Should the plot objects be detrended? If \code{TRUE},
 the objects will be detrended according to the reference Q-Q line. This
 procedure was described by Thode (2002), and may help reducing visual bias
 caused by the orthogonal distances from Q-Q points to the reference line.}
 
-\item{qtype}{Integer between 1 and 9. Only used if \code{detrend = TRUE} and
-\code{identity =  FALSE}. Type of the quantile algorithm to be used by the
-\code{\link[stats]{quantile}} function to construct the Q-Q line.}
+\item{identity}{Logical. Should an identity line be used as the reference
+line used to construct the confidence bands? If \code{TRUE}, the identity
+line is used. If \code{FALSE} (default), the commonly-used Q-Q line that
+intercepts two data quantiles specified in \code{qprobs} is used. Please
+notice that the chosen reference line will also be used for the detrending
+procedure, if \code{detrend = TRUE}.}
 
-\item{qprobs}{Numeric vector of length two. Only used if \code{detrend =
-TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
-\code{\link[stats]{quantile}} function to construct the Q-Q line.}
+\item{qtype}{Integer between 1 and 9. Type of the quantile algorithm to be
+used by the \code{\link[stats]{quantile}} function to construct the Q-Q
+line.}
+
+\item{qprobs}{Numeric vector of length two. Represents the quantiles used by
+the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
 
 \item{bandType}{Character. Either \code{"normal"}, \code{"boot"} or
 \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
@@ -120,7 +117,7 @@ confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
 those parameters are estimated using robust estimates from the \pkg{stats}
 package.}
 
-\item{...}{other arguments passed on to \code{\link[=layer]{layer()}}. These are
+\item{...}{other arguments passed on to \code{\link{layer}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}

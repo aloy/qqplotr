@@ -26,7 +26,7 @@
 #'   procedure was described by Thode (2002), and may help reducing visual bias
 #'   caused by the orthogonal distances from Q-Q points to the reference line.
 #' @param identity Logical. Should an identity line be used as the reference
-#'   line? If \code{TRUE} (default), the identity line is used. If \code{FALSE},
+#'   line? If \code{TRUE}, the identity line is used. If \code{FALSE} (default),
 #'   the commonly-used Q-Q line that intercepts two data quantiles specified in
 #'   \code{qprobs} is used. Please notice that the chosen reference line will
 #'   also be used for the detrending procedure, if \code{detrend = TRUE}.
@@ -85,7 +85,7 @@ stat_qq_line <- function(data = NULL,
 												 distribution = "norm",
 												 dparams = list(),
 												 detrend = FALSE,
-												 identity = TRUE,
+												 identity = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
 												 ...) {

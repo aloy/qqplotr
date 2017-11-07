@@ -32,17 +32,16 @@
 #'   procedure was described by Thode (2002), and may help reducing visual bias
 #'   caused by the orthogonal distances from Q-Q points to the reference line.
 #' @param identity Logical. Should an identity line be used as the reference
-#'   line used to construct the confidence bands? If \code{TRUE} (default), the
-#'   identity line is used. If \code{FALSE}, the commonly-used Q-Q line that
+#'   line used to construct the confidence bands? If \code{TRUE}, the identity
+#'   line is used. If \code{FALSE} (default), the commonly-used Q-Q line that
 #'   intercepts two data quantiles specified in \code{qprobs} is used. Please
 #'   notice that the chosen reference line will also be used for the detrending
 #'   procedure, if \code{detrend = TRUE}.
-#' @param qtype Integer between 1 and 9. Only used if \code{detrend = TRUE} and
-#'   \code{identity =  FALSE}. Type of the quantile algorithm to be used by the
-#'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
-#' @param qprobs Numeric vector of length two. Only used if \code{detrend =
-#'   TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
-#'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
+#' @param qtype Integer between 1 and 9. Type of the quantile algorithm to be
+#'   used by the \code{\link[stats]{quantile}} function to construct the Q-Q
+#'   line.
+#' @param qprobs Numeric vector of length two. Represents the quantiles used by
+#'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
 #' @param bandType Character. Either \code{"normal"}, \code{"boot"} or
 #'   \code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
 #'   on Normal confidence intervals. \code{"boot"} creates pointwise confidence
@@ -145,7 +144,7 @@ stat_qq_band <- function(data = NULL,
 												 distribution = "norm",
 												 dparams = list(),
 												 detrend = FALSE,
-												 identity = TRUE,
+												 identity = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
 												 bandType = "normal",

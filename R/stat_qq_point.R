@@ -27,8 +27,8 @@
 #'   caused by the orthogonal distances from Q-Q points to the reference line.
 #' @param identity Logical. Only used if \code{detrend = TRUE}. Should an
 #'   identity line be used as the reference line for the plot detrending? If
-#'   \code{TRUE} (default), the points will be detrended according to the
-#'   reference identity line. If \code{FALSE}, the commonly-used Q-Q line that
+#'   \code{TRUE}, the points will be detrended according to the reference
+#'   identity line. If \code{FALSE} (default), the commonly-used Q-Q line that
 #'   intercepts two data quantiles specified in \code{qprobs} is used.
 #' @param qtype Integer between 1 and 9. Only used if \code{detrend = TRUE} and
 #'   \code{identity =  FALSE}. Type of the quantile algorithm to be used by the
@@ -73,7 +73,7 @@ stat_qq_point <- function(data = NULL,
 													distribution = "norm",
 													dparams = list(),
 													detrend = FALSE,
-													identity = TRUE,
+													identity = FALSE,
 													qtype = 7,
 													qprobs = c(.25, .75),
 													...) {
