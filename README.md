@@ -45,9 +45,9 @@ Below we will give an overview of all those Stats and, further in the document, 
 
 -   `stat_qq_point` This is a modified version of `ggplot2::stat_qq` with some parameters adjustments and a new option to detrend the points.
 -   `stat_qq_line` Draws a reference line based on the data quantiles, as in `stats::qqline`.
--   `stat_qq_band` Draws confidence bands based on three methods: `"normal"`, `"bs"`, and `"ts"`:
+-   `stat_qq_band` Draws confidence bands based on three methods: `"normal"`, `"boot"`, and `"ts"`:
     -   `"normal"` constructs simultaneous confidence bands based on Normal confidence intervals;
-    -   `"bs"` creates pointwise confidence bands based on a parametric boostrap;
+    -   `"boot"` creates pointwise confidence bands based on a parametric boostrap;
     -   `"ts"` constructs tail-sensitive confidence bands, as proposed by Aldor-Noiman et al. (2013).
 
 In order to facilitate the visualization of multiple Q-Q band methods at the same time, the `geom_qq_band` Geom was also implemented. Its usage will be illustrated further below.
@@ -56,7 +56,7 @@ In order to facilitate the visualization of multiple Q-Q band methods at the sam
 
 -   `stat_pp_point` Plots cumulative probabilities versus probability points. The cumulative probability function is constructed with the sample data, and then evaluated at each probability point.
 -   `stat_pp_line` Draws a reference identity line (*x* = *y*).
--   `stat_pp_band` Draws confidence bands. For now, only the bootstrap version (`"bs"`) is available.
+-   `stat_pp_band` Draws confidence bands. For now, only the bootstrap version (`"boot"`) is available.
 
 Usage
 -----
@@ -97,7 +97,7 @@ As previously described in the Details section, three confidence bands construct
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
     geom_qq_band(bandType = "ts", mapping = aes(fill = "TS")) +
     geom_qq_band(bandType = "normal", mapping = aes(fill = "Normal")) +
-    geom_qq_band(bandType = "bs", mapping = aes(fill = "Bootstrap")) +
+    geom_qq_band(bandType = "boot", mapping = aes(fill = "Bootstrap")) +
     stat_qq_line() +
     stat_qq_point() +
     labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
