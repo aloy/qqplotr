@@ -213,7 +213,7 @@ stat_qq_band <- function(data = NULL,
 			identity = identity,
 			qtype = qtype,
 			qprobs = qprobs,
-			bandType = match.arg(bandType, c("normal", "boot", "ts")),
+			bandType = match.arg(bandType, c("normal", "boot", "ts", "dkw")),
 			B = round(B),
 			conf = conf,
 			mu = mu,
@@ -358,6 +358,15 @@ StatQqBand <- ggplot2::ggproto(
 
 				upper <- apply(X = bs, MARGIN = 1, FUN = quantile, probs = (1 + conf) / 2)
 				lower <- apply(X = bs, MARGIN = 1, FUN = quantile, probs = (1 - conf) / 2)
+			}
+
+			# using the DKW inequality for simultaneous bands
+			if (bandType == "dkw") {
+				epsilon <- sqrt((1 / (2 * n)) * log(2/(1-conf)))
+				lp <- pmax(quantiles - epsilon, rep(0, n))
+				up <- pmin(quantiles + epsilon, rep(1, n))
+				lower <- do.call(qFunc, c(list(p = lp), dparams))
+				upper <- do.call(qFunc, c(list(p = up), dparams))
 			}
 
 			# tail-sensitive confidence bands
