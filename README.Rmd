@@ -121,7 +121,7 @@ visualizing different confidence bands.
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 	geom_qq_band(bandType = "ts", mapping = aes(fill = "TS")) +
 	geom_qq_band(bandType = "normal", mapping = aes(fill = "Normal")) +
-	geom_qq_band(bandType = "bs", mapping = aes(fill = "Bootstrap")) +
+	geom_qq_band(bandType = "boot", mapping = aes(fill = "Bootstrap")) +
 	stat_qq_line() +
 	stat_qq_point() +
 	labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
@@ -196,7 +196,7 @@ functions:
 data("barley", package = "lattice")
 
 gg <- ggplot(data = barley, mapping = aes(sample = yield, color = site, fill = site)) +
-	stat_qq_band() +
+	stat_qq_band(alpha=0.5) +
 	stat_qq_line() +
 	stat_qq_point() +
 	facet_wrap(~ site) +
