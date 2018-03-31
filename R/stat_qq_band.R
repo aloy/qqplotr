@@ -286,7 +286,7 @@ StatQqBand <- ggplot2::ggproto(
 						norm = "normal",
 						nbinom = "negative binomial",
 						pois = "poisson",
-						t = dt,
+						t = "t",
 						weibull = "weibull",
 						NULL
 					)
@@ -362,9 +362,10 @@ StatQqBand <- ggplot2::ggproto(
 
 			# using the DKW inequality for simultaneous bands
 			if (bandType == "dkw") {
+				probs <- ppoints(n)
 				epsilon <- sqrt((1 / (2 * n)) * log(2/(1-conf)))
-				lp <- pmax(quantiles - epsilon, rep(0, n))
-				up <- pmin(quantiles + epsilon, rep(1, n))
+				lp <- pmax(probs - epsilon, rep(0, n))
+				up <- pmin(probs + epsilon, rep(1, n))
 				lower <- do.call(qFunc, c(list(p = lp), dparams))
 				upper <- do.call(qFunc, c(list(p = up), dparams))
 			}
