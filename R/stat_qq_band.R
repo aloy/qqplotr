@@ -191,6 +191,7 @@ stat_qq_band <- function(data = NULL,
 		stop("Please provide a positive value for B.",
 				 call. = FALSE)
 	}
+	bandType <- match.arg(bandType, c("normal", "boot", "ts", "dkw"))
 
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "nbinom", "pois")
@@ -213,7 +214,7 @@ stat_qq_band <- function(data = NULL,
 			identity = identity,
 			qtype = qtype,
 			qprobs = qprobs,
-			bandType = match.arg(bandType, c("normal", "boot", "ts", "dkw")),
+			bandType = bandType,
 			B = round(B),
 			conf = conf,
 			mu = mu,

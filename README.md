@@ -45,9 +45,9 @@ Below we will give an overview of all those Stats and, further in the document, 
 
 -   `stat_qq_point` This is a modified version of `ggplot2::stat_qq` with some parameters adjustments and a new option to detrend the points.
 -   `stat_qq_line` Draws a reference line based on the data quantiles, as in `stats::qqline`.
--   `stat_qq_band` Draws confidence bands based on three methods: `"normal"`, `"boot"`, and `"ts"`:
+-   `stat_qq_band` Draws confidence bands based on three methods: `"normal"`, `"bs"`, and `"ts"`:
     -   `"normal"` constructs simultaneous confidence bands based on Normal confidence intervals;
-    -   `"boot"` creates pointwise confidence bands based on a parametric boostrap;
+    -   `"bs"` creates pointwise confidence bands based on a parametric boostrap;
     -   `"ts"` constructs tail-sensitive confidence bands, as proposed by Aldor-Noiman et al. (2013).
 
 In order to facilitate the visualization of multiple Q-Q band methods at the same time, the `geom_qq_band` Geom was also implemented. Its usage will be illustrated further below.
@@ -56,7 +56,7 @@ In order to facilitate the visualization of multiple Q-Q band methods at the sam
 
 -   `stat_pp_point` Plots cumulative probabilities versus probability points. The cumulative probability function is constructed with the sample data, and then evaluated at each probability point.
 -   `stat_pp_line` Draws a reference identity line (*x* = *y*).
--   `stat_pp_band` Draws confidence bands. For now, only the bootstrap version (`"boot"`) is available.
+-   `stat_pp_band` Draws confidence bands. For now, only the bootstrap version (`"bs"`) is available.
 
 Usage
 -----
@@ -157,7 +157,7 @@ The Q-Q plot functions are also compatible with many `ggplot2` operators, such a
 data("barley", package = "lattice")
 
 gg <- ggplot(data = barley, mapping = aes(sample = yield, color = site, fill = site)) +
-    stat_qq_band() +
+    stat_qq_band(alpha=0.5) +
     stat_qq_line() +
     stat_qq_point() +
     facet_wrap(~ site) +
