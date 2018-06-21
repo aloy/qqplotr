@@ -191,7 +191,7 @@ stat_qq_band <- function(data = NULL,
 		stop("Please provide a positive value for B.",
 				 call. = FALSE)
 	}
-	bandType <- match.arg(bandType, c("normal", "boot", "ts", "dkw"))
+	bandType <- match.arg(bandType, c("normal", "boot", "ts", "ks"))
 
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "nbinom", "pois")
@@ -362,13 +362,13 @@ StatQqBand <- ggplot2::ggproto(
 			}
 
 			# using the DKW inequality for simultaneous bands
-			if (bandType == "dkw") {
+			if (bandType == "ks") {
 				probs <- ppoints(n)
 				epsilon <- sqrt((1 / (2 * n)) * log(2/(1-conf)))
 				lp <- pmax(probs - epsilon, rep(0, n))
 				up <- pmin(probs + epsilon, rep(1, n))
-				lower <- do.call(qFunc, c(list(p = lp), dparams))
-				upper <- do.call(qFunc, c(list(p = up), dparams))
+				lower <- intercept + slope * do.call(qFunc, c(list(p = lp), dparams))
+				upper <- intercept + slope * do.call(qFunc, c(list(p = up), dparams))
 			}
 
 			# tail-sensitive confidence bands
