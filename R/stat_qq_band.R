@@ -46,7 +46,7 @@
 #'   \code{"ts"}. \code{"normal"} constructs pointwise confidence bands based
 #'   on Normal confidence intervals. \code{"boot"} creates pointwise confidence
 #'   bands based on a parametric bootstrap; parameters are estimated with MLEs.
-#'   \code{"ks"} constructs simultaneous confidence bands based on the Kolgmorov-Smirnov
+#'   \code{"ks"} constructs simultaneous confidence bands based on the Kolmogorov-Smirnov
 #'   test. Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
 #'   described by Aldor-Noiman et al. (2013) (also, see 'Note' for
 #'   limitations).

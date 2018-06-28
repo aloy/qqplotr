@@ -91,11 +91,12 @@ line.}
 \item{qprobs}{Numeric vector of length two. Represents the quantiles used by
 the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
 
-\item{bandType}{Character. Either \code{"normal"}, \code{"boot"} or
-\code{"ts"}. \code{"normal"} constructs simultaneous confidence bands based
+\item{bandType}{Character. Either \code{"normal"}, \code{"boot"}, \code{"ks"} or
+\code{"ts"}. \code{"normal"} constructs pointwise confidence bands based
 on Normal confidence intervals. \code{"boot"} creates pointwise confidence
 bands based on a parametric bootstrap; parameters are estimated with MLEs.
-Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
+\code{"ks"} constructs simultaneous confidence bands based on the Kolmogorov-Smirnov
+test. Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
 described by Aldor-Noiman et al. (2013) (also, see 'Note' for
 limitations).}
 
