@@ -19,6 +19,7 @@ points, lines, and confidence bands. The functions of this package also allow a
 detrend adjustment of the plots, proposed by Thode (2002) to help reduce visual
 bias when assessing the results.
 
+
 ## Installation
 
 If you would like to install the development version of `qqplotr`, you may do so
@@ -39,7 +40,7 @@ install.packages("qqplotr")
 ## Details
 
 The functions of this package, implemeneted as Stats from `ggplot2`, are divided
-into two groups: (1) Q-Q and (2) P-P plot.
+into two groups: (1) Q-Q and (2) P-P plots.
 
 Both groups are composed of three functions: *point*, *line*, and *band*. Those 
 Stats complement each other when drawn together, but they may also be plotted
@@ -54,11 +55,11 @@ we will present some usage examples.
 with some parameters adjustments and a new option to detrend the points.
 * `stat_qq_line` Draws a reference line based on the data quantiles, as in
 `stats::qqline`.
-* `stat_qq_band` Draws confidence bands based on three methods: `"normal"`, 
-`"boot"`, and `"ts"`:
-	+ `"normal"` constructs simultaneous confidence bands based on Normal confidence
-intervals;
+* `stat_qq_band` Draws confidence bands based on three methods: `"pointwise"`, 
+`"boot"`, `"ks"`, and `"ts"`:
+	+ `"pointwise"` constructs simultaneous confidence bands based on the normal distribution;
 	+ `"boot"` creates pointwise confidence bands based on a parametric boostrap;
+	+ `"ks"` constructs simultaneous confidence bands based on an inversion of the Kolmogorov-Smirnov test;
 	+ `"ts"` constructs tail-sensitive confidence bands, as proposed by
 	Aldor-Noiman et al. (2013).
 	
@@ -116,9 +117,10 @@ visualizing different confidence bands.
 
 ```{r fig.align = "center", fig.width = 7, fig.height = 5} 
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
-	geom_qq_band(bandType = "ts", mapping = aes(fill = "TS")) +
-	geom_qq_band(bandType = "normal", mapping = aes(fill = "Normal")) +
-	geom_qq_band(bandType = "boot", mapping = aes(fill = "Bootstrap")) +
+	geom_qq_band(bandType = "ks", mapping = aes(fill = "KS"), alpha = 0.5) +
+	geom_qq_band(bandType = "ts", mapping = aes(fill = "TS"), alpha = 0.5) +
+	geom_qq_band(bandType = "pointwise", mapping = aes(fill = "Normal"), alpha = 0.5) +
+	geom_qq_band(bandType = "boot", mapping = aes(fill = "Bootstrap"), alpha = 0.5) +
 	stat_qq_line() +
 	stat_qq_point() +
 	labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
@@ -193,7 +195,7 @@ functions:
 data("barley", package = "lattice")
 
 gg <- ggplot(data = barley, mapping = aes(sample = yield, color = site, fill = site)) +
-	stat_qq_band() +
+	stat_qq_band(alpha=0.5) +
 	stat_qq_line() +
 	stat_qq_point() +
 	facet_wrap(~ site) +

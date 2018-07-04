@@ -9,8 +9,8 @@ geom_qq_band(data = NULL, mapping = NULL, stat = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
   na.rm = TRUE, distribution = "norm", dparams = list(),
   detrend = FALSE, identity = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
-  bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
-  ...)
+  bandType = "pointwise", B = 1000, conf = 0.95, mu = NULL,
+  sigma = NULL, ...)
 
 stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
