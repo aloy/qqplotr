@@ -17,7 +17,7 @@ geom_qq_band <- function(data = NULL,
 												 identity = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
-												 bandType = "normal",
+												 bandType = "pointwise",
 												 B = 1000,
 												 conf = .95,
 												 mu = NULL,
@@ -65,7 +65,7 @@ geom_qq_band <- function(data = NULL,
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "nbinom", "pois")
 
-	bandType <- match.arg(bandType, c("normal", "boot", "ts", "dkw"))
+	bandType <- match.arg(bandType, c("pointwise", "boot", "ts", "ks"))
 
 	ggplot2::layer(
 		data = data,

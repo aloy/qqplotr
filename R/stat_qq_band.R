@@ -42,8 +42,8 @@
 #'   line.
 #' @param qprobs Numeric vector of length two. Represents the quantiles used by
 #'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
-#' @param bandType Character. Either \code{"normal"}, \code{"boot"}, \code{"ks"} or
-#'   \code{"ts"}. \code{"normal"} constructs pointwise confidence bands based
+#' @param bandType Character. Either \code{"pointwise"}, \code{"boot"}, \code{"ks"} or
+#'   \code{"ts"}. \code{"pointwise"} constructs pointwise confidence bands based
 #'   on Normal confidence intervals. \code{"boot"} creates pointwise confidence
 #'   bands based on a parametric bootstrap; parameters are estimated with MLEs.
 #'   \code{"ks"} constructs simultaneous confidence bands based on the Kolmogorov-Smirnov
@@ -148,7 +148,7 @@ stat_qq_band <- function(data = NULL,
 												 identity = FALSE,
 												 qtype = 7,
 												 qprobs = c(.25, .75),
-												 bandType = "normal",
+												 bandType = "pointwise",
 												 B = 1000,
 												 conf = .95,
 												 mu = NULL,
@@ -192,7 +192,7 @@ stat_qq_band <- function(data = NULL,
 		stop("Please provide a positive value for B.",
 				 call. = FALSE)
 	}
-	bandType <- match.arg(bandType, c("normal", "boot", "ts", "ks"))
+	bandType <- match.arg(bandType, c("pointwise", "boot", "ts", "ks"))
 
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "nbinom", "pois")
@@ -340,8 +340,8 @@ StatQqBand <- ggplot2::ggproto(
 
 			fittedValues <- (slope * theoretical) + intercept
 
-			# confidence bands based on normal confidence intervals
-			if (bandType == "normal") {
+			# pointwise confidence bands based on normal confidence intervals
+			if (bandType == "pointwise") {
 				probs <- ppoints(n)
 				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(probs * (1 - probs) / n)
 				zCrit <- qnorm(p = (1 - (1 - conf) / 2))
