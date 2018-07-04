@@ -1,6 +1,6 @@
 Package: qqplotr
 Type: Package
-Version: 0.0.2.9000
+Version: 0.0.3
 Title: Quantile-Quantile Plot Extensions for 'ggplot2'
 Description: Extensions of 'ggplot2' Q-Q plot functionalities.
 Authors@R: c(person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut", "cre")),

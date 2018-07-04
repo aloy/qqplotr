@@ -1,3 +1,9 @@
+# qqplotr 0.0.3
+
+* Added `bandType = "ks"`, which draws simultaneous confidence bands based on an inversion of the Kolmogorov-Smirnov test.
+
+* `bandType = "pointwise"` now produces pointwise confidence bands based on normal theory rather than `bandType = "normal"`.
+
 # qqplotr 0.0.2
 
 * Added the `identity` argument to `*_qq_*` functions, which permits to draw the
