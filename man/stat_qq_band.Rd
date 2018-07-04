@@ -16,8 +16,8 @@ stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
   na.rm = TRUE, distribution = "norm", dparams = list(),
   detrend = FALSE, identity = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
-  bandType = "normal", B = 1000, conf = 0.95, mu = NULL, sigma = NULL,
-  ...)
+  bandType = "pointwise", B = 1000, conf = 0.95, mu = NULL,
+  sigma = NULL, ...)
 }
 \arguments{
 \item{data}{The data to be displayed in this layer. There are three
@@ -91,8 +91,8 @@ line.}
 \item{qprobs}{Numeric vector of length two. Represents the quantiles used by
 the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
 
-\item{bandType}{Character. Either \code{"normal"}, \code{"boot"}, \code{"ks"} or
-\code{"ts"}. \code{"normal"} constructs pointwise confidence bands based
+\item{bandType}{Character. Either \code{"pointwise"}, \code{"boot"}, \code{"ks"} or
+\code{"ts"}. \code{"pointwise"} constructs pointwise confidence bands based
 on Normal confidence intervals. \code{"boot"} creates pointwise confidence
 bands based on a parametric bootstrap; parameters are estimated with MLEs.
 \code{"ks"} constructs simultaneous confidence bands based on the Kolmogorov-Smirnov
