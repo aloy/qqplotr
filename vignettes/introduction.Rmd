@@ -1,6 +1,6 @@
 ---
 title: "An Introduction to 'qqplotr'"
-author: "Alexandre Almeida"
+author: "Alexandre Almeida and Adam Loy"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
