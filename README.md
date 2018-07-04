@@ -35,7 +35,7 @@ install.packages("qqplotr")
 Details
 -------
 
-The functions of this package, implemeneted as Stats from `ggplot2`, are divided into two groups: (1) Q-Q and (2) P-P plot.
+The functions of this package, implemeneted as Stats from `ggplot2`, are divided into two groups: (1) Q-Q and (2) P-P plots.
 
 Both groups are composed of three functions: *point*, *line*, and *band*. Those Stats complement each other when drawn together, but they may also be plotted independently.
 
@@ -45,9 +45,10 @@ Below we will give an overview of all those Stats and, further in the document, 
 
 -   `stat_qq_point` This is a modified version of `ggplot2::stat_qq` with some parameters adjustments and a new option to detrend the points.
 -   `stat_qq_line` Draws a reference line based on the data quantiles, as in `stats::qqline`.
--   `stat_qq_band` Draws confidence bands based on three methods: `"normal"`, `"bs"`, and `"ts"`:
-    -   `"normal"` constructs simultaneous confidence bands based on Normal confidence intervals;
-    -   `"bs"` creates pointwise confidence bands based on a parametric boostrap;
+-   `stat_qq_band` Draws confidence bands based on three methods: `"pointwise"`, `"boot"`, `"ks"`, and `"ts"`:
+    -   `"pointwise"` constructs simultaneous confidence bands based on the normal distribution;
+    -   `"boot"` creates pointwise confidence bands based on a parametric boostrap;
+    -   `"ks"` constructs simultaneous confidence bands based on an inversion of the Kolmogorov-Smirnov test;
     -   `"ts"` constructs tail-sensitive confidence bands, as proposed by Aldor-Noiman et al. (2013).
 
 In order to facilitate the visualization of multiple Q-Q band methods at the same time, the `geom_qq_band` Geom was also implemented. Its usage will be illustrated further below.
@@ -56,7 +57,7 @@ In order to facilitate the visualization of multiple Q-Q band methods at the sam
 
 -   `stat_pp_point` Plots cumulative probabilities versus probability points. The cumulative probability function is constructed with the sample data, and then evaluated at each probability point.
 -   `stat_pp_line` Draws a reference identity line (*x* = *y*).
--   `stat_pp_band` Draws confidence bands. For now, only the bootstrap version (`"bs"`) is available.
+-   `stat_pp_band` Draws confidence bands. For now, only the bootstrap version (`"boot"`) is available.
 
 Usage
 -----
@@ -95,9 +96,10 @@ As previously described in the Details section, three confidence bands construct
 
 ``` r
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
-    geom_qq_band(bandType = "ts", mapping = aes(fill = "TS")) +
-    geom_qq_band(bandType = "normal", mapping = aes(fill = "Normal")) +
-    geom_qq_band(bandType = "boot", mapping = aes(fill = "Bootstrap")) +
+    geom_qq_band(bandType = "ks", mapping = aes(fill = "KS"), alpha = 0.5) +
+    geom_qq_band(bandType = "ts", mapping = aes(fill = "TS"), alpha = 0.5) +
+    geom_qq_band(bandType = "pointwise", mapping = aes(fill = "Normal"), alpha = 0.5) +
+    geom_qq_band(bandType = "boot", mapping = aes(fill = "Bootstrap"), alpha = 0.5) +
     stat_qq_line() +
     stat_qq_point() +
     labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
