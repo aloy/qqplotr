@@ -121,14 +121,14 @@ shinyUI(
 									condition = "input.plotType.indexOf('qq') != -1",
 									selectInput(inputId = "optBandTypeQq",
 															label = "Confidence Bands Method",
-															choices = c("Normal" = "normal", "Bootstrap" = "bs", "Tail-sensitive" = "ts"),
-															selected = "normal")
+															choices = c("Normal" = "pointwise", "Bootstrap" = "boot", "Tail-sensitive" = "ts", "Kolmogorov-Smirnov" = "ks"),
+															selected = "pointwise")
 								),
 								conditionalPanel(
 									condition = "input.plotType.indexOf('pp') != -1",
 									selectInput(inputId = "optBandTypePp",
 															label = "Confidence Bands Method",
-															choices = c("Bootstrap" = "bs"),
+															choices = c("Bootstrap" = "boot"),
 															selected = "bs")
 								)
 							),
