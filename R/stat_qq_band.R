@@ -58,7 +58,7 @@
 #'   distributional parameter used to construct the simulated tail-sensitive
 #'   confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
 #'   those parameters are estimated using \code{\link[robustbase]{Qn}} and
-#'   \code{\link[robustbase]{s_Qn}}, respectively.
+#'   \code{\link[robustbase:Qn]{robustbase::s_Qn()}}, respectively.
 #' @param sigma Numerical. Only used if \code{bandType = "ts"}. Scale
 #'   distributional parameter used to construct the simulated tail-sensitive
 #'   confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then

@@ -4,7 +4,7 @@
 \name{GeomQqBand}
 \alias{GeomQqBand}
 \title{GeomQqBand}
-\format{An object of class \code{GeomQqBand} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
+\format{An object of class \code{GeomQqBand} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 6.}
 \description{
 GeomQqBand
 }
