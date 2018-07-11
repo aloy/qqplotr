@@ -4,3 +4,5 @@
 ^cran-comments\.md$
 ^README\.Rmd$
 ^test-qqplotr\.R$
+figure$
+cache$
