@@ -27,9 +27,11 @@ VignetteBuilder: knitr
 Depends: R (>= 3.1), 
 		ggplot2 (>= 2.2)
 Imports: dplyr,
+		MASS,
+		knitr,
+		purrr,
     robustbase,
-    knitr,
-    MASS
+    rmarkdown
 Suggests: shiny,
     devtools,
     lattice,

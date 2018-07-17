@@ -3,8 +3,8 @@ citHeader("To cite qqplotr in publications, please use:")
 citEntry(entry = "manual",
     title = "qqplotr: Quantile-Quantile Plot Extensions for 'ggplot2'",
     author = "Alexandre Almeida and Adam Loy and Heike Hofmann",
-    note = "R package version 0.0.2 initially funded by Google Summer of Code 2017",
+    note = "R package version 0.0.3 initially funded by Google Summer of Code 2017",
     url = "https://github.com/aloy/qqplotr",
     year = "2017",
-    textVersion = "A. Almeida, A. Loy, and H. Hofmann, qqplotr: Quantile-Quantile Plot Extensions for 'ggplot2', R package version 0.0.2 initially funded by Google Summer of Code 2017, https://github.com/aloy/qqplotr, 2017."
+    textVersion = "A. Almeida, A. Loy, and H. Hofmann, qqplotr: Quantile-Quantile Plot Extensions for 'ggplot2', R package version 0.0.3 initially funded by Google Summer of Code 2017, https://github.com/aloy/qqplotr, 2017."
 )

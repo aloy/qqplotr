@@ -3,6 +3,6 @@
 ^\.travis\.yml$
 ^cran-comments\.md$
 ^README\.Rmd$
-^test-qqplotr\.R$
+^README-.*\.png$
 figure$
 cache$
