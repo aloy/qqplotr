@@ -4,7 +4,7 @@
 \name{StatPpPoint}
 \alias{StatPpPoint}
 \title{StatPpPoint}
-\format{An object of class \code{StatPpPoint} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
+\format{An object of class \code{StatPpPoint} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 4.}
 \description{
 StatPpPoint
 }

@@ -4,7 +4,7 @@
 \name{StatQqBand}
 \alias{StatQqBand}
 \title{StatQqBand}
-\format{An object of class \code{StatQqBand} (inherits from \code{StatQqLine}, \code{Stat}, \code{ggproto}) of length 4.}
+\format{An object of class \code{StatQqBand} (inherits from \code{StatQqLine}, \code{Stat}, \code{ggproto}, \code{gg}) of length 4.}
 \description{
 StatQqBand
 }
