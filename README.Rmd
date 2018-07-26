@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-![qqplotr hex sticker](inst/image/qqplotr.png =200x200)
+<img src="inst/image/qqplotr.png" width="200">
 
 The `qqplotr` package extends some `ggplot2` functionalities by permitting the 
 drawing of both quantile-quantile (Q-Q) and probability-probability (P-P) 
