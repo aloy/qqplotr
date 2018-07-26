@@ -1,18 +1,11 @@
 qqplotr
-================
-<a href="https://travis-ci.org/aloy/qqplotr"> <img border="0" src="https://travis-ci.org/aloy/qqplotr.svg?branch=master"> </a> <a href="https://cran.r-project.org/package=qqplotr"> <img border="0" src="https://www.r-pkg.org/badges/version/qqplotr"> </a>
+=======
 
--   [Installation](#installation)
--   [Details](#details)
-    -   [Q-Q plot](#q-q-plot)
-    -   [P-P plot](#p-p-plot)
--   [Usage](#usage)
-    -   [Q-Q plot](#q-q-plot-1)
-    -   [P-P plot](#p-p-plot-1)
--   [Shiny App](#shiny-app)
--   [References](#references)
+[![Build Status](https://travis-ci.org/aloy/qqplotr.svg?branch=master)](https://travis-ci.org/aloy/qqplotr) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/qqplotr)](https://cran.r-project.org/package=qqplotr)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+![qqplotr hex sticker](inst/image/qqplotr.png)
+
 The `qqplotr` package extends some `ggplot2` functionalities by permitting the drawing of both quantile-quantile (Q-Q) and probability-probability (P-P) points, lines, and confidence bands. The functions of this package also allow a detrend adjustment of the plots, proposed by Thode (2002) to help reduce visual bias when assessing the results.
 
 Installation
