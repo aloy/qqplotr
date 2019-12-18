@@ -63,20 +63,22 @@
 #' gg
 #'
 #' @export
-stat_qq_point <- function(data = NULL,
-													mapping = NULL,
-													geom = "point",
-													position = "identity",
-													na.rm = TRUE,
-													show.legend = NA,
-													inherit.aes = TRUE,
-													distribution = "norm",
-													dparams = list(),
-													detrend = FALSE,
-													identity = FALSE,
-													qtype = 7,
-													qprobs = c(.25, .75),
-													...) {
+stat_qq_point <- function(
+	mapping = NULL,
+	data = NULL,
+	geom = "point",
+	position = "identity",
+	na.rm = TRUE,
+	show.legend = NA,
+	inherit.aes = TRUE,
+	distribution = "norm",
+	dparams = list(),
+	detrend = FALSE,
+	identity = FALSE,
+	qtype = 7,
+	qprobs = c(.25, .75),
+	...
+) {
 	# error handling
 	if (!(distribution %in% c(
 		"beta",

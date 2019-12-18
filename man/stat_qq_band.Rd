@@ -5,45 +5,79 @@
 \alias{stat_qq_band}
 \title{Quantile-quantile confidence bands}
 \usage{
-geom_qq_band(data = NULL, mapping = NULL, stat = "qq_band",
-  position = "identity", show.legend = NA, inherit.aes = TRUE,
-  na.rm = TRUE, distribution = "norm", dparams = list(),
-  detrend = FALSE, identity = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
-  bandType = "pointwise", B = 1000, conf = 0.95, mu = NULL,
-  sigma = NULL, ...)
+geom_qq_band(
+  mapping = NULL,
+  data = NULL,
+  stat = "qq_band",
+  position = "identity",
+  na.rm = TRUE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  distribution = "norm",
+  dparams = list(),
+  detrend = FALSE,
+  identity = FALSE,
+  qtype = 7,
+  qprobs = c(0.25, 0.75),
+  bandType = "pointwise",
+  B = 1000,
+  conf = 0.95,
+  mu = NULL,
+  sigma = NULL,
+  ...
+)
 
-stat_qq_band(data = NULL, mapping = NULL, geom = "qq_band",
-  position = "identity", show.legend = NA, inherit.aes = TRUE,
-  na.rm = TRUE, distribution = "norm", dparams = list(),
-  detrend = FALSE, identity = FALSE, qtype = 7, qprobs = c(0.25, 0.75),
-  bandType = "pointwise", B = 1000, conf = 0.95, mu = NULL,
-  sigma = NULL, ...)
+stat_qq_band(
+  mapping = NULL,
+  data = NULL,
+  geom = "qq_band",
+  position = "identity",
+  na.rm = TRUE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  distribution = "norm",
+  dparams = list(),
+  detrend = FALSE,
+  identity = FALSE,
+  qtype = 7,
+  qprobs = c(0.25, 0.75),
+  bandType = "pointwise",
+  B = 1000,
+  conf = 0.95,
+  mu = NULL,
+  sigma = NULL,
+  ...
+)
 }
 \arguments{
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
+\code{\link[ggplot2:aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply \code{mapping} if there is no plot mapping.}
+
 \item{data}{The data to be displayed in this layer. There are three
 options:
 
 If \code{NULL}, the default, the data is inherited from the plot
-data as specified in the call to \code{\link[=ggplot]{ggplot()}}.
+data as specified in the call to \code{\link[ggplot2:ggplot]{ggplot()}}.
 
 A \code{data.frame}, or other object, will override the plot
 data. All objects will be fortified to produce a data frame. See
-\code{\link[=fortify]{fortify()}} for which variables will be created.
+\code{\link[ggplot2:fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
-will be used as the layer data.}
-
-\item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
-\code{\link[=aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
-default), it is combined with the default mapping at the top level of the
-plot. You must supply \code{mapping} if there is no plot mapping.}
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{stat}{statistic to use to calculate confidence bands. Should be
 `qq_band`.}
 
 \item{position}{Position adjustment, either as a string, or the result of
 a call to a position adjustment function.}
+
+\item{na.rm}{If \code{FALSE}, the default, missing values are removed with
+a warning. If \code{TRUE}, missing values are silently removed.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -54,10 +88,7 @@ display.}
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
-
-\item{na.rm}{If \code{FALSE}, the default, missing values are removed with
-a warning. If \code{TRUE}, missing values are silently removed.}
+the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 
 \item{distribution}{Character. Theoretical probability distribution function
 to use. Do not provide the full distribution function name (e.g.,
@@ -111,8 +142,8 @@ number of simulated samples.}
 \item{mu}{Numerical. Only used if \code{bandType = "ts"}. Center
 distributional parameter used to construct the simulated tail-sensitive
 confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
-those parameters are estimated using \code{\link[robustbase]{Qn}} and
-\code{\link[robustbase]{s_Qn}}, respectively.}
+those parameters are estimated using \code{\link[robustbase:Qn]{Qn}} and
+\code{\link[robustbase:Qn]{s_Qn}}, respectively.}
 
 \item{sigma}{Numerical. Only used if \code{bandType = "ts"}. Scale
 distributional parameter used to construct the simulated tail-sensitive
@@ -120,9 +151,9 @@ confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
 those parameters are estimated using robust estimates from the \pkg{stats}
 package.}
 
-\item{...}{Other arguments passed on to \code{\link[=layer]{layer()}}. These are
+\item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
-\code{color = "red"} or \code{size = 3}. They may also be parameters
+\code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
 \item{geom}{The geometric object to use display the data}

@@ -75,20 +75,22 @@
 #' gg
 #'
 #' @export
-stat_qq_line <- function(data = NULL,
-												 mapping = NULL,
-												 geom = "path",
-												 position = "identity",
-												 na.rm = TRUE,
-												 show.legend = NA,
-												 inherit.aes = TRUE,
-												 distribution = "norm",
-												 dparams = list(),
-												 detrend = FALSE,
-												 identity = FALSE,
-												 qtype = 7,
-												 qprobs = c(.25, .75),
-												 ...) {
+stat_qq_line <- function(
+	mapping = NULL,
+	data = NULL,
+	geom = "path",
+	position = "identity",
+	na.rm = TRUE,
+	show.legend = NA,
+	inherit.aes = TRUE,
+	distribution = "norm",
+	dparams = list(),
+	detrend = FALSE,
+	identity = FALSE,
+	qtype = 7,
+	qprobs = c(.25, .75),
+	...
+) {
 	# error handling
 	if (!(distribution %in% c(
 		"beta",

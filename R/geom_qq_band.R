@@ -4,25 +4,27 @@
 #'   `qq_band`.
 #'
 #' @export
-geom_qq_band <- function(data = NULL,
-												 mapping = NULL,
-												 stat = "qq_band",
-												 position = "identity",
-												 show.legend = NA,
-												 inherit.aes = TRUE,
-												 na.rm = TRUE,
-												 distribution = "norm",
-												 dparams = list(),
-												 detrend = FALSE,
-												 identity = FALSE,
-												 qtype = 7,
-												 qprobs = c(.25, .75),
-												 bandType = "pointwise",
-												 B = 1000,
-												 conf = .95,
-												 mu = NULL,
-												 sigma = NULL,
-												 ...) {
+geom_qq_band <- function(
+	mapping = NULL,
+	data = NULL,
+	stat = "qq_band",
+	position = "identity",
+	na.rm = TRUE,
+	show.legend = NA,
+	inherit.aes = TRUE,
+	distribution = "norm",
+	dparams = list(),
+	detrend = FALSE,
+	identity = FALSE,
+	qtype = 7,
+	qprobs = c(.25, .75),
+	bandType = "pointwise",
+	B = 1000,
+	conf = .95,
+	mu = NULL,
+	sigma = NULL,
+	...
+) {
 	# error handling
 	if (!(distribution %in% c(
 		"beta",
@@ -126,7 +128,7 @@ GeomQqBand <- ggplot2::ggproto(
 		data
 	},
 
-  draw_group = ggplot2::GeomRibbon$draw_group,
+	draw_group = ggplot2::GeomRibbon$draw_group,
 
 	draw_key = ggplot2::draw_key_polygon
 )
