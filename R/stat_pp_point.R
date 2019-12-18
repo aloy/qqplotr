@@ -58,17 +58,19 @@
 #' gg
 #'
 #' @export
-stat_pp_point <- function(data = NULL,
-													mapping = NULL,
-													geom = "point",
-													position = "identity",
-													na.rm = TRUE,
-													show.legend = NA,
-													inherit.aes = TRUE,
-													distribution = "norm",
-													dparams = list(),
-													detrend = FALSE,
-													...) {
+stat_pp_point <- function(
+	mapping = NULL,
+	data = NULL,
+	geom = "point",
+	position = "identity",
+	na.rm = TRUE,
+	show.legend = NA,
+	inherit.aes = TRUE,
+	distribution = "norm",
+	dparams = list(),
+	detrend = FALSE,
+	...
+) {
 	# error handling
 	if (!(distribution %in% c(
 		"beta",

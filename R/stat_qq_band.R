@@ -135,25 +135,27 @@
 #' gg
 #'
 #' @export
-stat_qq_band <- function(data = NULL,
-												 mapping = NULL,
-												 geom = "qq_band",
-												 position = "identity",
-												 show.legend = NA,
-												 inherit.aes = TRUE,
-												 na.rm = TRUE,
-												 distribution = "norm",
-												 dparams = list(),
-												 detrend = FALSE,
-												 identity = FALSE,
-												 qtype = 7,
-												 qprobs = c(.25, .75),
-												 bandType = "pointwise",
-												 B = 1000,
-												 conf = .95,
-												 mu = NULL,
-												 sigma = NULL,
-												 ...) {
+stat_qq_band <- function(
+	mapping = NULL,
+	data = NULL,
+	geom = "qq_band",
+	position = "identity",
+	na.rm = TRUE,
+	show.legend = NA,
+	inherit.aes = TRUE,
+	distribution = "norm",
+	dparams = list(),
+	detrend = FALSE,
+	identity = FALSE,
+	qtype = 7,
+	qprobs = c(.25, .75),
+	bandType = "pointwise",
+	B = 1000,
+	conf = .95,
+	mu = NULL,
+	sigma = NULL,
+	...
+) {
 	# error handling
 	if (!(distribution %in% c(
 		"beta",
