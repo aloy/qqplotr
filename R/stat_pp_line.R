@@ -45,16 +45,18 @@
 #' gg
 #'
 #' @export
-stat_pp_line <- function(data = NULL,
-												 mapping = NULL,
-												 geom = "path",
-												 position = "identity",
-												 na.rm = TRUE,
-												 show.legend = NA,
-												 inherit.aes = TRUE,
-												 ab = c(0, 1),
-												 detrend = FALSE,
-												 ...) {
+stat_pp_line <- function(
+	mapping = NULL,
+	data = NULL,
+	geom = "path",
+	position = "identity",
+	na.rm = TRUE,
+	show.legend = NA,
+	inherit.aes = TRUE,
+	ab = c(0, 1),
+	detrend = FALSE,
+	...
+) {
 	ggplot2::layer(
 		data = data,
 		mapping = mapping,

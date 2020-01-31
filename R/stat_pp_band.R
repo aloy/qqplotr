@@ -72,20 +72,22 @@
 #' gg
 #'
 #' @export
-stat_pp_band <- function(data = NULL,
-													mapping = NULL,
-													geom = "ribbon",
-													position = "identity",
-													na.rm = TRUE,
-													show.legend = NA,
-													inherit.aes = TRUE,
-													distribution = "norm",
-													dparams = list(),
-													bandType = "boot",
-													B = 1000,
-													conf = .95,
-													detrend = FALSE,
-													...) {
+stat_pp_band <- function(
+	mapping = NULL,
+	data = NULL,
+	geom = "ribbon",
+	position = "identity",
+	na.rm = TRUE,
+	show.legend = NA,
+	inherit.aes = TRUE,
+	distribution = "norm",
+	dparams = list(),
+	bandType = "boot",
+	B = 1000,
+	conf = .95,
+	detrend = FALSE,
+	...
+) {
 	# error handling
 	if (!(distribution %in% c(
 		"beta",
