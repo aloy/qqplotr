@@ -1,3 +1,6 @@
+# qqplotr 0.0.4
+
+
 # qqplotr 0.0.3
 
 * Added `bandType = "ks"`, which draws simultaneous confidence bands based on an inversion of the Kolmogorov-Smirnov test.
