@@ -3,8 +3,8 @@ Type: Package
 Version: 0.0.4.9000
 Title: Quantile-Quantile Plot Extensions for 'ggplot2'
 Description: Extensions of 'ggplot2' Q-Q plot functionalities.
-Authors@R: c(person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut", "cre")),
-		person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut")),
+Authors@R: c(person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut")),
+		person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut", "cre")),
     person("Heike", "Hofmann", role = "aut"))
 URL: https://github.com/aloy/qqplotr
 BugReports: https://github.com/aloy/qqplotr/issues
