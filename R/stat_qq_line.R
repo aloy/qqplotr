@@ -252,7 +252,7 @@ StatQqLine <- ggplot2::ggproto(
 			}
 
 			out$size <- .8
-			out$colour <- if (is.null(data$colour)) rgb(.3, .3, .3) else rep(data$colour[1], 2)
+			# out$colour <- if (is.null(data$colour)) rgb(.3, .3, .3) else rep(data$colour[1], 2)
 
 			out
 		}
