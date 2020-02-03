@@ -1,8 +1,8 @@
 ## Test envs
 
 * Windows 10 v1709, R 3.4.3 (UPDATE)
-* macOS High Sierra 10.13.5 (local install), R 3.5.0
-* Ubuntu 14.04.3 (on travis-ci), R 3.5.0
+* macOS Mojave 10.14.6 (local install), R 3.6.2 
+* Ubuntu 16.04.6 (on travis-ci), R 3.6.2 
 
 ## R CMD check results
 
