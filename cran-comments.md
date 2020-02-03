@@ -1,6 +1,6 @@
 ## Test envs
 
-* Windows 10 v1709, R 3.6.2 
+* win-builder 
 * macOS Mojave 10.14.6 (local install), R 3.6.2 
 * Ubuntu 16.04.6 (on travis-ci), R 3.6.2 
 * Ubuntu Linux 16.04 LTS (on r-hub), R-release
