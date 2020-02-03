@@ -11,6 +11,8 @@ There were no ERRORs or WARNINGs.
 The following NOTE was received when building the package:
 
 ```
-checking package dependencies ... NOTE
-Packages suggested but not available for checking: 'shiny' 'shinyBS'
+ New maintainer:
+    Adam Loy <loyad01@gmail.com>
+  Old maintainer(s):
+    Alexandre Almeida <almeida.xan@gmail.com>
 ```
