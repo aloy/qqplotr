@@ -5,9 +5,9 @@ output:
 html_preview: false
 ---
 
-# qqplotr
+# qqplotr <img src='man/figures/logo.png' align="right" height="139" />
 
-[![Build Status](https://travis-ci.org/aloy/qqplotr.svg?branch=master)](https://travis-ci.org/aloy/qqplotr) 
+[![R build status](https://github.com/aloy/qqplotr/workflows/R-CMD-check/badge.svg)](https://github.com/aloy/qqplotr/actions)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/qqplotr)](https://cran.r-project.org/package=qqplotr)
 ![CRAN_Downloads_Badge](http://cranlogs.r-pkg.org/badges/qqplotr)
 
@@ -20,8 +20,6 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-"
 )
 ```
-
-<img src="inst/image/qqplotr.png" width="200">
 
 The `qqplotr` package extends some `ggplot2` functionalities by permitting the 
 drawing of both quantile-quantile (Q-Q) and probability-probability (P-P) 

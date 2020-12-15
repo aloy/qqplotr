@@ -6,19 +6,26 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>An Introduction to 'qqplotr' • qqplotr</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="An Introduction to 'qqplotr'">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="qqplotr">
+<meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -64,7 +71,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/aloy/qqplotr">
+  <a href="https://github.com/aloy/qqplotr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -82,10 +89,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>An Introduction to ‘qqplotr’</h1>
+      <h1 data-toc-skip>An Introduction to ‘qqplotr’</h1>
                         <h4 class="author">Alexandre Almeida and Adam Loy</h4>
             
-            <h4 class="date">2020-02-03</h4>
+            <h4 class="date">2020-12-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/aloy/qqplotr/blob/master/vignettes/introduction.Rmd"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -100,11 +107,13 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>If you would like to install the development version of <code>qqplotr</code>, you may do so by using, for example, <code>devtools</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(devtools)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"aloy/qqplotr"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"aloy/qqplotr"</span><span class="op">)</span></code></pre></div>
 <p>If, instead, you wish to install the stable CRAN version, then simply do:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"qqplotr"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"qqplotr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="details" class="section level2">
 <h2 class="hasAnchor">
@@ -130,7 +139,7 @@
 <li>
 <code>"ks"</code> constructs simultaneous confidence bands based on an inversion of the Kolmogorov-Smirnov test;</li>
 <li>
-<code>"ts"</code> constructs tail-sensitive confidence bands, as proposed by Aldor-Noiman et al. (2013).</li>
+<code>"ts"</code> constructs tail-sensitive confidence bands, as proposed by Aldor-Noiman et al. (2013).</li>
 </ul>
 </li>
 </ul>
@@ -156,30 +165,34 @@
 <h3 class="hasAnchor">
 <a href="#q-q-plot-1" class="anchor"></a>Q-Q plot</h3>
 <p>Start by loading the <code>qqplotr</code> package:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span>(qqplotr)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/aloy/qqplotr">qqplotr</a></span><span class="op">)</span></code></pre></div>
 <p>Let’s start by simulating from a standard Normal distribution:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">smp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">norm =</span> <span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="dv">100</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>
+<span class="va">smp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>norm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Then, we use the provided <code>stat_qq_*</code> functions to construct a complete Q-Q plot with the points, reference line, and the confidence bands. As default, the standard Q-Q Normal plot with Normal confidence bands is constructed:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> smp, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> norm)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_band.html">stat_qq_band</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="dt">y =</span> <span class="st">"Sample Quantiles"</span>)</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">gg</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">smp</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">norm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/geom_qq_band.html">stat_qq_band</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Theoretical Quantiles"</span>, y <span class="op">=</span> <span class="st">"Sample Quantiles"</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>As we can see, all the points lie within the confidence bands, which is expected for the given distribution.</p>
 <p>As previously described in the Details section, three confidence bands constructs are available, which may be adjusted with the <code>bandType</code> parameter. Here, we may use the <code>geom_qq_band</code> instead of <code>stat_qq_band</code>, which permits a little more flexibility with the graphical parameters when constructing and visualizing different confidence bands.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> smp, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> norm)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_band.html">geom_qq_band</a></span>(<span class="dt">bandType =</span> <span class="st">"ks"</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="st">"KS"</span>), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_band.html">geom_qq_band</a></span>(<span class="dt">bandType =</span> <span class="st">"ts"</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="st">"TS"</span>), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_band.html">geom_qq_band</a></span>(<span class="dt">bandType =</span> <span class="st">"pointwise"</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="st">"Normal"</span>), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_band.html">geom_qq_band</a></span>(<span class="dt">bandType =</span> <span class="st">"boot"</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="st">"Bootstrap"</span>), <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="dt">y =</span> <span class="st">"Sample Quantiles"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">    </span><span class="kw">scale_fill_discrete</span>(<span class="st">"Bandtype"</span>)</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">gg</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">smp</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">norm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/geom_qq_band.html">geom_qq_band</a></span><span class="op">(</span>bandType <span class="op">=</span> <span class="st">"ks"</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"KS"</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/geom_qq_band.html">geom_qq_band</a></span><span class="op">(</span>bandType <span class="op">=</span> <span class="st">"ts"</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"TS"</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/geom_qq_band.html">geom_qq_band</a></span><span class="op">(</span>bandType <span class="op">=</span> <span class="st">"pointwise"</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Normal"</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/geom_qq_band.html">geom_qq_band</a></span><span class="op">(</span>bandType <span class="op">=</span> <span class="st">"boot"</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Bootstrap"</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Theoretical Quantiles"</span>, y <span class="op">=</span> <span class="st">"Sample Quantiles"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">scale_fill_discrete</span><span class="op">(</span><span class="st">"Bandtype"</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>To construct Q-Q plots with other theoretical distributions we may use the <code>distribution</code> parameter. Specific distributional parameters may be passed as a list to the <code>dparams</code> paramater.</p>
 <blockquote>
@@ -190,85 +203,92 @@
 <p>It is important to note that the distribution nomenclature follows that from the <code>stats</code> package. So, if you wish to provide a custom distribution, you may do so by creating the density, cumulative, quantile, and random functions following the standard nomenclature from the <code>stats</code> package, i.e., for the <code>"custom"</code> distribution, you must define <code>"dcustom"</code>, <code>"pcustom"</code>, <code>"qcustom"</code>, and <code>"rcustom"</code> functions.</p>
 </blockquote>
 <p>That being said, let’s set <code>distribution = "exp"</code> and <code>rate = 2</code> (the latter one just to exemplify the usage of <code>dparams</code>):</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">di &lt;-<span class="st"> "exp"</span> <span class="co"># exponential distribution</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">dp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">rate =</span> <span class="dv">2</span>) <span class="co"># exponential rate parameter</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> airquality, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> Ozone)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_band.html">stat_qq_band</a></span>(<span class="dt">distribution =</span> di, <span class="dt">dparams =</span> dp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span>(<span class="dt">distribution =</span> di, <span class="dt">dparams =</span> dp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span>(<span class="dt">distribution =</span> di, <span class="dt">dparams =</span> dp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="dt">y =</span> <span class="st">"Sample Quantiles"</span>)</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">gg</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">di</span> <span class="op">&lt;-</span> <span class="st">"exp"</span> <span class="co"># exponential distribution</span>
+<span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># exponential rate parameter</span>
+
+<span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">airquality</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">Ozone</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/geom_qq_band.html">stat_qq_band</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="va">di</span>, dparams <span class="op">=</span> <span class="va">dp</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="va">di</span>, dparams <span class="op">=</span> <span class="va">dp</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="va">di</span>, dparams <span class="op">=</span> <span class="va">dp</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Theoretical Quantiles"</span>, y <span class="op">=</span> <span class="st">"Sample Quantiles"</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>The <code>qqplotr</code> package also offers the option to <em>detrend</em> Q-Q and P-P plots in order to help reducing visual bias caused by the orthogonal distances from points to the reference lines (Thode, 2002). That bias may cause wrong conclusions to be drawn via visual inference of the plot. To do that we must set <code>detrend = TRUE</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">di &lt;-<span class="st"> "exp"</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">dp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">rate =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">de &lt;-<span class="st"> </span><span class="ot">TRUE</span> <span class="co"># enabling the detrend option</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> airquality, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> Ozone)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_band.html">stat_qq_band</a></span>(<span class="dt">distribution =</span> di, <span class="dt">dparams =</span> dp, <span class="dt">detrend =</span> de) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span>(<span class="dt">distribution =</span> di, <span class="dt">dparams =</span> dp, <span class="dt">detrend =</span> de) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span>(<span class="dt">distribution =</span> di, <span class="dt">dparams =</span> dp, <span class="dt">detrend =</span> de) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="dt">y =</span> <span class="st">"Sample Quantiles"</span>)</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">gg</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">di</span> <span class="op">&lt;-</span> <span class="st">"exp"</span>
+<span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="va">de</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> <span class="co"># enabling the detrend option</span>
+
+<span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">airquality</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">Ozone</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/geom_qq_band.html">stat_qq_band</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="va">di</span>, dparams <span class="op">=</span> <span class="va">dp</span>, detrend <span class="op">=</span> <span class="va">de</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="va">di</span>, dparams <span class="op">=</span> <span class="va">dp</span>, detrend <span class="op">=</span> <span class="va">de</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="va">di</span>, dparams <span class="op">=</span> <span class="va">dp</span>, detrend <span class="op">=</span> <span class="va">de</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Theoretical Quantiles"</span>, y <span class="op">=</span> <span class="st">"Sample Quantiles"</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Note that the detrend option causes to plot to “rotate”, that is, instead of being presented as a diagonal plot, we visualize the data in a horizontal manner.</p>
 <p>The Q-Q plot functions are also compatible with many <code>ggplot2</code> operators, such as Facets (sub-plots). For instance, lets consider the <em>barley</em> dataset from the <code>lattice</code> package to illustrate how Facets behave when applied to the Q-Q plot functions:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># install.packages("lattice")</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"barley"</span>, <span class="dt">package =</span> <span class="st">"lattice"</span>)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> barley, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> yield, <span class="dt">color =</span> site, <span class="dt">fill =</span> site)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_band.html">stat_qq_band</a></span>(<span class="dt">alpha=</span><span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>site) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Theoretical Quantiles"</span>, <span class="dt">y =</span> <span class="st">"Sample Quantiles"</span>)</a>
-<a class="sourceLine" id="cb9-10" data-line-number="10">gg</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("lattice")</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"barley"</span>, package <span class="op">=</span> <span class="st">"lattice"</span><span class="op">)</span>
+
+<span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">barley</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">yield</span>, color <span class="op">=</span> <span class="va">site</span>, fill <span class="op">=</span> <span class="va">site</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/geom_qq_band.html">stat_qq_band</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_line.html">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_qq_point.html">stat_qq_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">site</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Theoretical Quantiles"</span>, y <span class="op">=</span> <span class="st">"Sample Quantiles"</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="p-p-plot-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#p-p-plot-1" class="anchor"></a>P-P plot</h3>
 <p>Let’s start by plotting the previously simulated Normal data versus the standard Normal distribution:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> smp, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> norm)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_band.html">stat_pp_band</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_line.html">stat_pp_line</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_point.html">stat_pp_point</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Probability Points"</span>, <span class="dt">y =</span> <span class="st">"Cumulative Probability"</span>)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">gg</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">smp</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">norm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_band.html">stat_pp_band</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_line.html">stat_pp_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_point.html">stat_pp_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Probability Points"</span>, y <span class="op">=</span> <span class="st">"Cumulative Probability"</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Notice that the label names are different from those of the Q-Q plots. Here, the cumulative probability points (y-axis) are constructed by evaluating the theoretical CDF on sample quantiles.</p>
 <p>As discussed before, in the case of P-P plots the distributional parameters <strong>do</strong> impact the results. For instance, say we want to evaluate the same standard Normal data with a shifted and rescaled Normal(2,2) distribution:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">dp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">2</span>) <span class="co"># shifted and rescaled Normal parameters</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> smp, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> norm)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_band.html">stat_pp_band</a></span>(<span class="dt">dparams =</span> dp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_line.html">stat_pp_line</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_point.html">stat_pp_point</a></span>(<span class="dt">dparams =</span> dp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Probability Points"</span>, <span class="dt">y =</span> <span class="st">"Cumulative Probability"</span>)</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">gg</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># shifted and rescaled Normal parameters</span>
+
+<span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">smp</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">norm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_band.html">stat_pp_band</a></span><span class="op">(</span>dparams <span class="op">=</span> <span class="va">dp</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_line.html">stat_pp_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_point.html">stat_pp_point</a></span><span class="op">(</span>dparams <span class="op">=</span> <span class="va">dp</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Probability Points"</span>, y <span class="op">=</span> <span class="st">"Cumulative Probability"</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>As we already know, the plot shows that the chosen Normal distribution parameters are not appropriate for the input data.</p>
 <p>Also notice that the <code>stat_pp_line</code> function lacks the <code>dparams</code> paramater. The reason is that <code>stat_pp_line</code> draws by default the identity line and, thus, it isn’t dependent of the sample data and/or its distribution. However, if the user wishes to draw another line (different from the identity) he/she may do so by providing the intercept and slope values, respectively, as a vector of length two to the <code>ab</code> parameter:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> smp, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> norm)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_band.html">stat_pp_band</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_line.html">stat_pp_line</a></span>(<span class="dt">ab =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(.<span class="dv">2</span>, <span class="fl">.5</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># intercept = 0.2, slope = 0.5</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_point.html">stat_pp_point</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Probability Points"</span>, <span class="dt">y =</span> <span class="st">"Cumulative Probability"</span>)</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">gg</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">smp</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">norm</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_band.html">stat_pp_band</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_line.html">stat_pp_line</a></span><span class="op">(</span>ab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># intercept = 0.2, slope = 0.5</span>
+    <span class="fu"><a href="../reference/stat_pp_point.html">stat_pp_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Probability Points"</span>, y <span class="op">=</span> <span class="st">"Cumulative Probability"</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>We may also detrend the P-P plots in the same way as before. Let’s evaluate again the <em>mean ozone levels</em> from the <code>airquality</code> dataset. We had previously seen that the Exponential distribution was more appropriate than the Normal distribution, so let’s take that into account:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">di &lt;-<span class="st"> "exp"</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">dp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">rate =</span> <span class="fl">.022</span>) <span class="co"># value is based on some empirical tests</span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">de &lt;-<span class="st"> </span><span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> airquality, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">sample =</span> Ozone)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_band.html">stat_pp_band</a></span>(<span class="dt">distribution =</span> di, <span class="dt">detrend =</span> de, <span class="dt">dparams =</span> dp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_line.html">stat_pp_line</a></span>(<span class="dt">detrend =</span> de) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="st">    </span><span class="kw"><a href="../reference/stat_pp_point.html">stat_pp_point</a></span>(<span class="dt">distribution =</span> di, <span class="dt">detrend =</span> de, <span class="dt">dparams =</span> dp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"Probability Points"</span>, <span class="dt">y =</span> <span class="st">"Cumulative Probability"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="st">    </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span>.<span class="dv">5</span>, <span class="fl">.5</span>))</a>
-<a class="sourceLine" id="cb13-11" data-line-number="11">gg</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">di</span> <span class="op">&lt;-</span> <span class="st">"exp"</span>
+<span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">.022</span><span class="op">)</span> <span class="co"># value is based on some empirical tests</span>
+<span class="va">de</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
+
+<span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">airquality</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>sample <span class="op">=</span> <span class="va">Ozone</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_band.html">stat_pp_band</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="va">di</span>, detrend <span class="op">=</span> <span class="va">de</span>, dparams <span class="op">=</span> <span class="va">dp</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_line.html">stat_pp_line</a></span><span class="op">(</span>detrend <span class="op">=</span> <span class="va">de</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="../reference/stat_pp_point.html">stat_pp_point</a></span><span class="op">(</span>distribution <span class="op">=</span> <span class="va">di</span>, detrend <span class="op">=</span> <span class="va">de</span>, dparams <span class="op">=</span> <span class="va">dp</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Probability Points"</span>, y <span class="op">=</span> <span class="st">"Cumulative Probability"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">scale_y_continuous</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">.5</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span>
+<span class="va">gg</span></code></pre></div>
 <p><img src="introduction_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Based on empirical tests, we set the rate parameter to <code>rate = .022</code>. That value let the most P-P points inside the confidence bands. Even so, that group of outside the confidence bands (at the lower tail) indicate that a more appropriate distribution should be selected.</p>
 </div>
@@ -277,31 +297,24 @@
 <h2 class="hasAnchor">
 <a href="#shiny-app" class="anchor"></a>Shiny App</h2>
 <p>In this package, we also included an interactive Shiny app with which you’re able to explore this package functions and its parameters. To run the app, simply call:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/runShinyExample.html">runShinyExample</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/runShinyExample.html">runShinyExample</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
 <ul>
 <li><a href="https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136">Thode, H. (2002), Testing for Normality. CRC Press, 1st Ed.</a></li>
-<li><a href="http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865">Aldor-Noiman, S. et al. (2013). The Power to See: A New Graphical Test of Normality. The American Statistician. 67:4.</a></li>
+<li><a href="http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865">Aldor-Noiman, S. et al. (2013). The Power to See: A New Graphical Test of Normality. The American Statistician. 67:4.</a></li>
 </ul>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#installation">Installation</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#usage">Usage</a></li>
-      <li><a href="#shiny-app">Shiny App</a></li>
-      <li><a href="#references">References</a></li>
-      </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -312,7 +325,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

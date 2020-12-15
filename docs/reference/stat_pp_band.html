@@ -8,23 +8,36 @@
 
 <title>Probability-probability confidence bands — stat_pp_band • qqplotr</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -32,10 +45,11 @@
 
 
 
-<meta property="og:title" content="Probability-probability confidence bands — stat_pp_band" />
 
+<meta property="og:title" content="Probability-probability confidence bands — stat_pp_band" />
 <meta property="og:description" content="Draws probability-probability confidence bands." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:image" content="/logo.png" />
+
 
 
 
@@ -52,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -97,10 +111,9 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/aloy/qqplotr">
+  <a href="https://github.com/aloy/qqplotr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -124,16 +137,14 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Draws probability-probability confidence bands.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>stat_pp_band</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"ribbon"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>distribution</span> <span class='kw'>=</span> <span class='st'>"norm"</span>, <span class='kw'>dparams</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>bandType</span> <span class='kw'>=</span> <span class='st'>"boot"</span>, <span class='kw'>B</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>conf</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>detrend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>stat_pp_band</span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='cn'>NULL</span>, data <span class='op'>=</span> <span class='cn'>NULL</span>, geom <span class='op'>=</span> <span class='st'>"ribbon"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span>, show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>, distribution <span class='op'>=</span> <span class='st'>"norm"</span>, dparams <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  bandType <span class='op'>=</span> <span class='st'>"boot"</span>, B <span class='op'>=</span> <span class='fl'>1000</span>, conf <span class='op'>=</span> <span class='fl'>0.95</span>, detrend <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -236,54 +247,54 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.</p></td>
     </tr>
     </table>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># generate random Normal data</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>0</span>)
-<span class='no'>smp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>norm</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>), <span class='kw'>exp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Exponential.html'>rexp</a></span>(<span class='fl'>100</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
+<span class='va'>smp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>norm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>, exp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Exponential.html'>rexp</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># Normal P-P plot of Normal data</span>
-<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>smp</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'>aes</span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='no'>norm</span>)) +
- <span class='fu'>stat_pp_band</span>() +
- <span class='fu'><a href='stat_pp_line.html'>stat_pp_line</a></span>() +
- <span class='fu'><a href='stat_pp_point.html'>stat_pp_point</a></span>() +
- <span class='fu'>labs</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"Probability Points"</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Cumulative Probability"</span>)
-<span class='no'>gg</span></div><div class='img'><img src='stat_pp_band-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>smp</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>sample <span class='op'>=</span> <span class='va'>norm</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'>stat_pp_band</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'><a href='stat_pp_line.html'>stat_pp_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'><a href='stat_pp_point.html'>stat_pp_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Probability Points"</span>, y <span class='op'>=</span> <span class='st'>"Cumulative Probability"</span><span class='op'>)</span>
+<span class='va'>gg</span>
+</div><div class='img'><img src='stat_pp_band-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Shifted Normal P-P plot of Normal data</span>
-<span class='no'>dp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>1.5</span>)
-<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>smp</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'>aes</span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='no'>norm</span>)) +
- <span class='fu'>stat_pp_band</span>(<span class='kw'>dparams</span> <span class='kw'>=</span> <span class='no'>dp</span>) +
- <span class='fu'><a href='stat_pp_line.html'>stat_pp_line</a></span>() +
- <span class='fu'><a href='stat_pp_point.html'>stat_pp_point</a></span>(<span class='kw'>dparams</span> <span class='kw'>=</span> <span class='no'>dp</span>) +
- <span class='fu'>labs</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"Probability Points"</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Cumulative Probability"</span>)
-<span class='no'>gg</span></div><div class='img'><img src='stat_pp_band-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>mean <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span>
+<span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>smp</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>sample <span class='op'>=</span> <span class='va'>norm</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'>stat_pp_band</span><span class='op'>(</span>dparams <span class='op'>=</span> <span class='va'>dp</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'><a href='stat_pp_line.html'>stat_pp_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'><a href='stat_pp_point.html'>stat_pp_point</a></span><span class='op'>(</span>dparams <span class='op'>=</span> <span class='va'>dp</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Probability Points"</span>, y <span class='op'>=</span> <span class='st'>"Cumulative Probability"</span><span class='op'>)</span>
+<span class='va'>gg</span>
+</div><div class='img'><img src='stat_pp_band-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Exponential P-P plot of Exponential data</span>
-<span class='no'>di</span> <span class='kw'>&lt;-</span> <span class='st'>"exp"</span>
-<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>smp</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'>aes</span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='no'>exp</span>)) +
- <span class='fu'>stat_pp_band</span>(<span class='kw'>distribution</span> <span class='kw'>=</span> <span class='no'>di</span>) +
- <span class='fu'><a href='stat_pp_line.html'>stat_pp_line</a></span>() +
- <span class='fu'><a href='stat_pp_point.html'>stat_pp_point</a></span>(<span class='kw'>distribution</span> <span class='kw'>=</span> <span class='no'>di</span>) +
- <span class='fu'>labs</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"Probability Points"</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Cumulative Probability"</span>)
-<span class='no'>gg</span></div><div class='img'><img src='stat_pp_band-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>di</span> <span class='op'>&lt;-</span> <span class='st'>"exp"</span>
+<span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>smp</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>sample <span class='op'>=</span> <span class='va'>exp</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'>stat_pp_band</span><span class='op'>(</span>distribution <span class='op'>=</span> <span class='va'>di</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'><a href='stat_pp_line.html'>stat_pp_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'><a href='stat_pp_point.html'>stat_pp_point</a></span><span class='op'>(</span>distribution <span class='op'>=</span> <span class='va'>di</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Probability Points"</span>, y <span class='op'>=</span> <span class='st'>"Cumulative Probability"</span><span class='op'>)</span>
+<span class='va'>gg</span>
+</div><div class='img'><img src='stat_pp_band-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Normal P-P plot of mean ozone levels (airquality dataset)</span>
-<span class='no'>dp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>38</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>27</span>)
-<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>airquality</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'>aes</span>(<span class='kw'>sample</span> <span class='kw'>=</span> <span class='no'>Ozone</span>)) +
- <span class='fu'>stat_pp_band</span>(<span class='kw'>dparams</span> <span class='kw'>=</span> <span class='no'>dp</span>) +
- <span class='fu'><a href='stat_pp_line.html'>stat_pp_line</a></span>() +
-        <span class='fu'><a href='stat_pp_point.html'>stat_pp_point</a></span>(<span class='kw'>dparams</span> <span class='kw'>=</span> <span class='no'>dp</span>) +
- <span class='fu'>labs</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"Probability Points"</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Cumulative Probability"</span>)
-<span class='no'>gg</span></div><div class='img'><img src='stat_pp_band-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>dp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>mean <span class='op'>=</span> <span class='fl'>38</span>, sd <span class='op'>=</span> <span class='fl'>27</span><span class='op'>)</span>
+<span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>airquality</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>sample <span class='op'>=</span> <span class='va'>Ozone</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'>stat_pp_band</span><span class='op'>(</span>dparams <span class='op'>=</span> <span class='va'>dp</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'><a href='stat_pp_line.html'>stat_pp_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='stat_pp_point.html'>stat_pp_point</a></span><span class='op'>(</span>dparams <span class='op'>=</span> <span class='va'>dp</span><span class='op'>)</span> <span class='op'>+</span>
+ <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Probability Points"</span>, y <span class='op'>=</span> <span class='st'>"Cumulative Probability"</span><span class='op'>)</span>
+<span class='va'>gg</span>
+</div><div class='img'><img src='stat_pp_band-4.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -294,7 +305,7 @@ to the paired geom/stat.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

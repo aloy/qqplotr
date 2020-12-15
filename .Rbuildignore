@@ -1,9 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.travis\.yml$
 ^cran-comments\.md$
 ^README\.Rmd$
 ^test-qqplotr\.R$
 ^_pkgdown\.yml$
 ^docs$
 ^CRAN-RELEASE$
+^\.github$
