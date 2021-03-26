@@ -159,12 +159,12 @@ StatQqPoint <- ggplot2::ggproto(
 	compute_group = function(data,
 													 self,
 													 scales,
-													 distribution,
-													 dparams,
-													 detrend,
-													 identity,
-													 qtype,
-													 qprobs) {
+													 distribution = "norm",
+													 dparams = list(),
+													 detrend = FALSE,
+													 identity = FALSE,
+													 qtype = 7,
+													 qprobs = c(.25)) {
 		# distributional function
 		qFunc <- eval(parse(text = paste0("q", distribution)))
 
