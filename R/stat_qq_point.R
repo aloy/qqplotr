@@ -156,6 +156,8 @@ StatQqPoint <- ggplot2::ggproto(
 
 	required_aes = c("sample"),
 
+	optional_aes = c("label"),
+
 	compute_group = function(data,
 													 self,
 													 scales,
@@ -248,6 +250,7 @@ StatQqPoint <- ggplot2::ggproto(
 			out <- data.frame(sample = smp, theoretical = theoretical)
 		}
 
+		if (!is.null(data$label)) out$label <- data$label[oidx]
 		out
 	}
 )

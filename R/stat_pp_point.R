@@ -126,6 +126,8 @@ StatPpPoint <- ggplot2::ggproto(
 
 	required_aes = c("sample"),
 
+	optional_aes = c("label"),
+
 	compute_group = function(data,
 													 self,
 													 scales,
@@ -135,7 +137,8 @@ StatPpPoint <- ggplot2::ggproto(
 		# cumulative distributional function
 		pFunc <- eval(parse(text = paste0("p", distribution)))
 
-		smp <- sort(data$sample)
+		oidx <- order(data$sample)
+		smp <- data$sample[oidx]
 		n <- length(smp)
 		probs <- ppoints(n)
 
@@ -200,6 +203,7 @@ StatPpPoint <- ggplot2::ggproto(
 			out <- data.frame(sample = y, theoretical = probs)
 		}
 
+		if (!is.null(data$label)) out$label <- data$label[oidx]
 		out
 	}
 )
