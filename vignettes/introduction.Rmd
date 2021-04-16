@@ -1,5 +1,5 @@
 ---
-title: "An Introduction to 'qqplotr'"
+title: "An Introduction to qqplotr"
 author: "Alexandre Almeida and Adam Loy"
 date: "`r Sys.Date()`"
 output:
