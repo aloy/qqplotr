@@ -2,6 +2,8 @@
 
 * Updated defaults in `StatQqPoint` to allow labeling of points without hassle
 
+* Updated dependencies on rmarkdown for vignette
+
 # qqplotr 0.0.4
 
 * Changed order of arguments in `geom_*` and `stat_*` functions so that mapping is first, then data.

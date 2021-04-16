@@ -33,4 +33,5 @@ Suggests: shiny,
     devtools,
     lattice,
     shinyBS,
-    knitr
+    knitr,
+    rmarkdown
