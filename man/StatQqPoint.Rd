@@ -4,7 +4,9 @@
 \name{StatQqPoint}
 \alias{StatQqPoint}
 \title{StatQqPoint}
-\format{An object of class \code{StatQqPoint} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 4.}
+\format{
+An object of class \code{StatQqPoint} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 5.
+}
 \description{
 StatQqPoint
 }

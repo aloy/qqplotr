@@ -4,7 +4,9 @@
 \name{StatPpBand}
 \alias{StatPpBand}
 \title{StatPpBand}
-\format{An object of class \code{StatPpBand} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 4.}
+\format{
+An object of class \code{StatPpBand} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 4.
+}
 \description{
 StatPpBand
 }

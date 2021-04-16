@@ -3,7 +3,6 @@
 \docType{package}
 \name{qqplotr}
 \alias{qqplotr}
-\alias{qqplotr-package}
 \title{Q-Q and P-P plot extensions for 'ggplot2'}
 \description{
 This package extends some \code{ggplot2} functionalities by permitting the

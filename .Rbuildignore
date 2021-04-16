@@ -3,7 +3,8 @@
 ^cran-comments\.md$
 ^README\.Rmd$
 ^test-qqplotr\.R$
-^_pkgdown\.yml$
+^_pkgdown.yml$
+^pkgdown$
 ^docs$
 ^CRAN-RELEASE$
 ^\.github$

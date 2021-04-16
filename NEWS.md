@@ -1,4 +1,4 @@
-# qqplotr 0.0.4.9000
+# qqplotr 0.0.5
 
 * Updated defaults in `StatQqPoint` to allow labeling of points without hassle
 
