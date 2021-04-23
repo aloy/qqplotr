@@ -1,0 +1,164 @@
+pkgname <- "ggResidpanel"
+source(file.path(R.home("share"), "R", "examples-header.R"))
+options(warn = 1)
+library('ggResidpanel')
+
+base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+cleanEx()
+nameEx("resid_auxpanel")
+### * resid_auxpanel
+
+flush(stderr()); flush(stdout())
+
+### Name: resid_auxpanel
+### Title: Panel of Diagnostic Residual Plots.
+### Aliases: resid_auxpanel
+
+### ** Examples
+
+
+# Fit a regression tree to the penguins data
+penguin_tree <- rpart::rpart(heartrate ~ depth + duration, data = penguins)
+
+# Obtain the predictions from the model on the observed data
+penguin_tree_pred <- predict(penguin_tree)
+
+# Obtain the residuals from the model
+penguin_tree_resid <- penguins$heartrate - penguin_tree_pred
+
+# Create a panel with the residual and index plot
+resid_auxpanel(residuals = penguin_tree_resid,
+             predicted = penguin_tree_pred,
+             plots = c("resid", "index", "yvp"))
+
+
+
+cleanEx()
+nameEx("resid_compare")
+### * resid_compare
+
+flush(stderr()); flush(stdout())
+
+### Name: resid_compare
+### Title: Panel of Diagnostic Residual Plots Across Multiple Models.
+### Aliases: resid_compare
+
+### ** Examples
+
+
+# Fit two models to the penguins data
+penguin_model <- lme4::lmer(heartrate ~ depth + duration + (1|bird), data = penguins)
+penguin_model_log2 <- lme4::lmer(log(heartrate) ~ depth + duration + I(duration^2) +
+(1|bird), data = penguins)
+
+# Compare the residuals from the model
+resid_compare(list(penguin_model, penguin_model_log2))
+
+# Adjust some options in the panel of plots
+resid_compare(list(penguin_model, penguin_model_log2), plots = c("resid", "yvp"),
+smoother = TRUE, theme = "grey")
+
+
+
+cleanEx()
+nameEx("resid_interact")
+### * resid_interact
+
+flush(stderr()); flush(stdout())
+
+### Name: resid_interact
+### Title: Panel of Interactive Versions of Diagnostic Residual Plots.
+### Aliases: resid_interact
+
+### ** Examples
+
+
+# Fit a model to the penguin data
+penguin_model <- lme4::lmer(heartrate ~ depth + duration + (1|bird), data = penguins)
+
+# Create the default interactive panel
+resid_interact(penguin_model)
+
+# Select all plots to include in the panel and set the smoother option to TRUE
+resid_interact(penguin_model, plots = "all", smoother = TRUE)
+
+# Select only the residual plot and qq-plot to be included in the panel and
+# set the number of rows to 2
+resid_interact(penguin_model, plots = c("resid", "qq"), nrow = 2)
+
+# Choose the SAS panel of plots, change the theme to classic, and remove the
+# titles of the plots
+resid_interact(penguin_model, plots = "SAS", theme = "classic", title.opt = FALSE)
+
+
+
+cleanEx()
+nameEx("resid_panel")
+### * resid_panel
+
+flush(stderr()); flush(stdout())
+
+### Name: resid_panel
+### Title: Panel of Diagnostic Residual Plots.
+### Aliases: resid_panel
+
+### ** Examples
+
+
+# Fit a model to the penguin data
+penguin_model <- lme4::lmer(heartrate ~ depth + duration + (1|bird), data = penguins)
+
+# Create the default panel
+resid_panel(penguin_model)
+
+# Select all plots to include in the panel and set the smoother option to TRUE
+resid_panel(penguin_model, plots = "all", smoother = TRUE)
+
+# Select only the residual plot and qq-plot to be included in the panel,
+# request confidence bands on the qq plot, and set the number of rows to 2
+resid_panel(penguin_model, plots = c("resid", "qq"), qqbands = TRUE, nrow = 2)
+
+# Choose the SAS panel of plots, change the theme to classic, and remove the
+# titles of the plots
+resid_panel(penguin_model, plots = "SAS", theme = "classic", title.opt = FALSE)
+
+
+
+cleanEx()
+nameEx("resid_xpanel")
+### * resid_xpanel
+
+flush(stderr()); flush(stdout())
+
+### Name: resid_xpanel
+### Title: Panel of Plots of Residuals or Response Variable versus
+###   Predictor Variables.
+### Aliases: resid_xpanel
+
+### ** Examples
+
+
+# Fit a model to the penguin data
+penguin_model <- lme4::lmer(heartrate ~ depth + duration + (1|bird), data = penguins)
+
+# Create plots of the residuals versus the predictor variables
+resid_xpanel(penguin_model, theme = "classic")
+
+# Create plots of the response variable versus the predictor variables
+resid_xpanel(penguin_model, yvar = "response", theme = "classic", smoother = TRUE)
+
+
+
+### * <FOOTER>
+###
+cleanEx()
+options(digits = 7L)
+base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+grDevices::dev.off()
+###
+### Local variables: ***
+### mode: outline-minor ***
+### outline-regexp: "\\(> \\)?### [*]+" ***
+### End: ***
+quit('no')

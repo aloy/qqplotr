@@ -1,0 +1,69 @@
+* installing *source* package ‘HLMdiag’ ...
+** package ‘HLMdiag’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+clang -mmacosx-version-min=10.13 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include' -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c HLMdiag_init.c -o HLMdiag_init.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include' -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c cooksd_obs.cpp -o cooksd_obs.o
+In file included from cooksd_obs.cpp:1:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include/RcppArmadillo.h:34:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp.h:57:
+/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp/DataFrame.h:136:18: warning: unused variable 'data' [-Wunused-variable]
+            SEXP data = Parent::get__();
+                 ^
+1 warning generated.
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include' -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c cooksd_subset.cpp -o cooksd_subset.o
+In file included from cooksd_subset.cpp:1:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include/RcppArmadillo.h:34:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp.h:57:
+/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp/DataFrame.h:136:18: warning: unused variable 'data' [-Wunused-variable]
+            SEXP data = Parent::get__();
+                 ^
+1 warning generated.
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include' -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c covratio.cpp -o covratio.o
+In file included from covratio.cpp:1:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include/RcppArmadillo.h:34:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp.h:57:
+/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp/DataFrame.h:136:18: warning: unused variable 'data' [-Wunused-variable]
+            SEXP data = Parent::get__();
+                 ^
+1 warning generated.
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include' -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c covtrace.cpp -o covtrace.o
+In file included from covtrace.cpp:1:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include/RcppArmadillo.h:34:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp.h:57:
+/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp/DataFrame.h:136:18: warning: unused variable 'data' [-Wunused-variable]
+            SEXP data = Parent::get__();
+                 ^
+1 warning generated.
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include' -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c linear_algebra_fnc.cpp -o linear_algebra_fnc.o
+In file included from linear_algebra_fnc.cpp:1:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include/RcppArmadillo.h:34:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp.h:57:
+/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp/DataFrame.h:136:18: warning: unused variable 'data' [-Wunused-variable]
+            SEXP data = Parent::get__();
+                 ^
+1 warning generated.
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include' -I'/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c mdffits_subset.cpp -o mdffits_subset.o
+In file included from mdffits_subset.cpp:1:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/RcppArmadillo/include/RcppArmadillo.h:34:
+In file included from /Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp.h:57:
+/Users/aloy/r_packages/qqplotr/revdep/library.noindex/HLMdiag/Rcpp/include/Rcpp/DataFrame.h:136:18: warning: unused variable 'data' [-Wunused-variable]
+            SEXP data = Parent::get__();
+                 ^
+1 warning generated.
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress -L/Library/Frameworks/R.framework/Resources/lib -L/usr/local/lib -o HLMdiag.so HLMdiag_init.o cooksd_obs.o cooksd_subset.o covratio.o covtrace.o linear_algebra_fnc.o mdffits_subset.o -L/Library/Frameworks/R.framework/Resources/lib -lRlapack -L/Library/Frameworks/R.framework/Resources/lib -lRblas -L/usr/local/gfortran/lib/gcc/x86_64-apple-darwin18/8.2.0 -L/usr/local/gfortran/lib -lgfortran -lquadmath -lm -F/Library/Frameworks/R.framework/.. -framework R -Wl,-framework -Wl,CoreFoundation
+installing to /Users/aloy/r_packages/qqplotr/revdep/checks.noindex/HLMdiag/new/HLMdiag.Rcheck/00LOCK-HLMdiag/00new/HLMdiag/libs
+** R
+** data
+*** moving datasets to lazyload DB
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** checking absolute paths in shared objects and dynamic libraries
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (HLMdiag)

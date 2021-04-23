@@ -1,0 +1,22 @@
+* installing *source* package ‘latrend’ ...
+** package ‘latrend’ successfully unpacked and MD5 sums checked
+** using staged installation
+** R
+** data
+*** moving datasets to lazyload DB
+** inst
+** byte-compile and prepare package for lazy loading
+Warning: replacing previous import ‘data.table:::=’ by ‘ggplot2:::=’ when loading ‘latrend’
+Warning in fun(libname, pkgname) : couldn't connect to display ""
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+Warning: replacing previous import ‘data.table:::=’ by ‘ggplot2:::=’ when loading ‘latrend’
+Warning in fun(libname, pkgname) : couldn't connect to display ""
+** testing if installed package can be loaded from final location
+Warning: replacing previous import ‘data.table:::=’ by ‘ggplot2:::=’ when loading ‘latrend’
+Warning in fun(libname, pkgname) : couldn't connect to display ""
+** testing if installed package keeps a record of temporary installation path
+* DONE (latrend)

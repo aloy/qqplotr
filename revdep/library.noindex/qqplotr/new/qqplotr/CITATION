@@ -1,0 +1,19 @@
+citHeader("To cite qqplotr in publications, please use:")
+
+citEntry(entry = "manual",
+    title = "{ggplot2} Compatible Quantile-Quantile Plots in R",
+    author = personList(as.person("Alexandre Almeida"),
+                   as.person("Adam Loy"),
+                   as.person("Heike Hofmann")),
+    journal = "The R Journal",
+    url = "https://doi.org/10.32614/RJ-2018-051",
+    year = "2018",
+    pages = "248--261",
+    volume = "10",
+    number = "2",
+    textVersion =
+  paste("Almeida, Loy & Hofmann (2018).",
+        "ggplot2 Compatible Quantile-Quantile Plots in R.",
+        "The R Journal, 10(2), 248-261.",
+        "URL 248--261.")
+)

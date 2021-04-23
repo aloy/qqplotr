@@ -1,0 +1,1169 @@
+
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "psycModel"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('psycModel')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("cfa_groupwise")
+> ### * cfa_groupwise
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cfa_groupwise
+> ### Title: Confirmatory Factor Analysis (groupwise)
+> ### Aliases: cfa_groupwise
+> 
+> ### ** Examples
+> 
+> # The example is used as the illustration of the function output only.
+> # It does not imply the data is appropriate for the analysis.
+> cfa_groupwise(
++   data = lavaan::HolzingerSwineford1939,
++   group = "school",
++   x1:x3,
++   x4:x6,
++   x7:x9
++ )
+        group       cfi      rmsea       tli
+1     Pasteur 0.9031037 0.10376088 0.8546555
+2 Grant-White 0.9413704 0.08896312 0.9120556
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cfa_summary")
+> ### * cfa_summary
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cfa_summary
+> ### Title: Confirmatory Factor Analysis
+> ### Aliases: cfa_summary
+> 
+> ### ** Examples
+> 
+> # REMEMBER, YOU MUST NAMED ALL ARGUMENT EXCEPT THE CFA ITEMS ARGUMENT
+> # Fitting a multiple factor CFA model
+> fit <- cfa_summary(
++   data = lavaan::HolzingerSwineford1939,
++   x1:x3,
++   x4:x6,
++   x7:x9,
++ )
+
+ 
+[4mModel Summary[24m
+[mModel Type = Confirmatory Factor Analysis[m
+[mModel Formula = 
+. DV1 =~ x1 + x2 + x3
+  DV2 =~ x4 + x5 + x6
+  DV3 =~ x7 + x8 + x9
+ [m
+[4mFit Measure[24m
+─────────────────────────────────────────────────────────────────────────────────────
+      Χ²      DF          P    CFI  RMSEA   SRMR    TLI       AIC       BIC      BIC2
+─────────────────────────────────────────────────────────────────────────────────────
+  85.306  24.000  0.000 ***  0.931  0.092  0.065  0.896  7517.490  7595.339  7528.739
+─────────────────────────────────────────────────────────────────────────────────────
+
+ 
+[4mFactor Loadings[24m
+────────────────────────────────────────────────────────────────────────────────
+  Latent.Factor  Observed.Var  Std.Est     SE       Z          P          95% CI
+────────────────────────────────────────────────────────────────────────────────
+            DV1            x1    0.772  0.055  14.041  0.000 ***  [0.664, 0.880]
+                           x2    0.424  0.060   7.105  0.000 ***  [0.307, 0.540]
+                           x3    0.581  0.055  10.539  0.000 ***  [0.473, 0.689]
+            DV2            x4    0.852  0.023  37.776  0.000 ***  [0.807, 0.896]
+                           x5    0.855  0.022  38.273  0.000 ***  [0.811, 0.899]
+                           x6    0.838  0.023  35.881  0.000 ***  [0.792, 0.884]
+            DV3            x7    0.570  0.053  10.714  0.000 ***  [0.465, 0.674]
+                           x8    0.723  0.051  14.309  0.000 ***  [0.624, 0.822]
+                           x9    0.665  0.051  13.015  0.000 ***  [0.565, 0.765]
+────────────────────────────────────────────────────────────────────────────────
+
+ 
+[4mModel Covariances[24m
+──────────────────────────────────────────────────────────────
+  Var.1  Var.2    Est     SE      Z          P          95% CI
+──────────────────────────────────────────────────────────────
+    DV1    DV2  0.459  0.064  7.189  0.000 ***  [0.334, 0.584]
+    DV1    DV3  0.471  0.073  6.461  0.000 ***  [0.328, 0.613]
+    DV2    DV3  0.283  0.069  4.117  0.000 ***  [0.148, 0.418]
+──────────────────────────────────────────────────────────────
+
+ 
+[4mModel Variance[24m
+──────────────────────────────────────────────────────
+  Var    Est     SE       Z          P          95% CI
+──────────────────────────────────────────────────────
+   x1  0.404  0.085   4.763  0.000 ***  [0.238, 0.571]
+   x2  0.821  0.051  16.246  0.000 ***  [0.722, 0.920]
+   x3  0.662  0.064  10.334  0.000 ***  [0.537, 0.788]
+   x4  0.275  0.038   7.157  0.000 ***  [0.200, 0.350]
+   x5  0.269  0.038   7.037  0.000 ***  [0.194, 0.344]
+   x6  0.298  0.039   7.606  0.000 ***  [0.221, 0.374]
+   x7  0.676  0.061  11.160  0.000 ***  [0.557, 0.794]
+   x8  0.477  0.073   6.531  0.000 ***  [0.334, 0.620]
+   x9  0.558  0.068   8.208  0.000 ***  [0.425, 0.691]
+  DV1  1.000  0.000     NaN    NaN      [1.000, 1.000]
+  DV2  1.000  0.000     NaN    NaN      [1.000, 1.000]
+  DV3  1.000  0.000     NaN    NaN      [1.000, 1.000]
+──────────────────────────────────────────────────────
+
+ 
+[mGoodness of Fit:[m
+[33m Warning. Poor χ² fit (p < 0.05). It is common to get p < 0.05. Check other fit measure.[39m
+[32m OK. Acceptable CFI fit (CFI > 0.90)[39m
+[31m Warning. Poor RMSEA fit (RMSEA > 0.08)[39m
+[32m OK. Good SRMR fit (SRMR < 0.08)[39m
+[31m Warning. Poor TLI fit (TLI < 0.90)[39m
+[33m OK. Barely acceptable factor loadings (0.4 < some loadings < 0.7)[39m
+> 
+> # Fitting a multilevel single factor CFA model
+> 
+> 
+> # Fitting a CFA model by passing explicit lavaan model (equivalent to the above model)
+> # Note in the below function how I added `model = ` in front of the lavaan model.
+> # Similarly, the same rule apply for all arguments (e.g., `ordered = FALSE` instead of just `FALSE`)
+> ## Not run: 
+> ##D # This will fail because I did not add `model = ` in front of the lavaan model.
+> ##D # Therefore,you must add the tag in front of all arguments
+> ##D # For example, `return_result = 'model'` instaed of `model`
+> ##D cfa_summary("visual  =~ x1 + x2 + x3
+> ##D              textual =~ x4 + x5 + x6
+> ##D              speed   =~ x7 + x8 + x9 ",
+> ##D   data = lavaan::HolzingerSwineford1939
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("compare_fit")
+> ### * compare_fit
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: compare_fit
+> ### Title: Comparison of Model Fit
+> ### Aliases: compare_fit
+> 
+> ### ** Examples
+> 
+> # lme model
+> 
+> fit1 <- lm_model(
++   data = popular,
++   response_variable = popular,
++   predictor_var = c(sex, extrav)
++ )
+Fitting Model with lm:
+ Formula = popular ~ sex + extrav
+> 
+> fit2 <- lm_model(
++   data = popular,
++   response_variable = popular,
++   predictor_var = c(sex, extrav),
++   two_way_interaction_factor = c(sex, extrav)
++ )
+Fitting Model with lm:
+ Formula = popular ~ sex + extrav + sex*extrav
+> 
+> compare_fit(fit1, fit2)
+[4mModel Summary[24m
+[mModel Type = Model Comparison[m
+
+─────────────────────────────────────────────────────────────
+  Model       AIC       BIC     R2  R2_adjusted   RMSE  Sigma
+─────────────────────────────────────────────────────────────
+     lm  5977.415  5999.819  0.394        0.393  1.076  1.077
+     lm  5979.369  6007.374  0.394        0.393  1.076  1.077
+─────────────────────────────────────────────────────────────
+> 
+> # see ?measurement_invariance for measurement invariance example
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cor_test")
+> ### * cor_test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cor_test
+> ### Title: Correlation table
+> ### Aliases: cor_test
+> 
+> ### ** Examples
+> 
+> cor_test(iris, where(is.numeric))
+[4mModel Summary[24m
+[mModel Type = Correlation[m
+[mModel Method = pearson[m
+[mAdjustment Method = holm[m
+
+───────────────────────────────────────────────────────
+           Var  Sepal.Length  Sepal.Width  Petal.Length
+───────────────────────────────────────────────────────
+  Sepal.Length                                         
+   Sepal.Width    -0.118                               
+  Petal.Length     0.872 ***   -0.428 ***              
+   Petal.Width     0.818 ***   -0.366 ***     0.963 ***
+───────────────────────────────────────────────────────
+> 
+> 
+> 
+> cleanEx()
+> nameEx("descriptive_table")
+> ### * descriptive_table
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: descriptive_table
+> ### Title: Descriptive Statistics Table
+> ### Aliases: descriptive_table
+> 
+> ### ** Examples
+> 
+> descriptive_table(iris, cols = where(is.numeric)) # all numeric columns
+
+[4mModel Summary[24m
+[mModel Type = Descriptive Statistics[m
+
+─────────────────────────────────────────────────────────────────────
+           Var   mean     sd  Sepal.Length  Sepal.Width  Petal.Length
+─────────────────────────────────────────────────────────────────────
+  Sepal.Length  5.843  0.828                                         
+   Sepal.Width  3.057  0.436    -0.118                               
+  Petal.Length  3.758  1.765     0.872 ***   -0.428 ***              
+   Petal.Width  1.199  0.762     0.818 ***   -0.366 ***     0.963 ***
+─────────────────────────────────────────────────────────────────────
+
+> 
+> descriptive_table(iris,
++   cols = where(is.numeric),
++   # get missing count, non-missing count, and mean & sd & correlation table
++   descriptive_indicator = c("missing", "non_missing", "mean", "sd", "cor")
++ )
+
+[4mModel Summary[24m
+[mModel Type = Descriptive Statistics[m
+
+───────────────────────────────────────────────────────────────────────────────────────────────
+           Var  missing_n  non_missing_n   mean     sd  Sepal.Length  Sepal.Width  Petal.Length
+───────────────────────────────────────────────────────────────────────────────────────────────
+  Sepal.Length          0            150  5.843  0.828                                         
+   Sepal.Width          0            150  3.057  0.436    -0.118                               
+  Petal.Length          0            150  3.758  1.765     0.872 ***   -0.428 ***              
+   Petal.Width          0            150  1.199  0.762     0.818 ***   -0.366 ***     0.963 ***
+───────────────────────────────────────────────────────────────────────────────────────────────
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("efa_summary")
+> ### * efa_summary
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: efa_summary
+> ### Title: Exploratory Factor Analysis
+> ### Aliases: efa_summary
+> 
+> ### ** Examples
+> 
+> efa_summary(lavaan::HolzingerSwineford1939, starts_with("x"), post_hoc_cfa = TRUE)
+
+ 
+ 
+[4mModel Summary[24m
+[mModel Type = Exploratory Factor Analysis[m
+[mOptimal Factors = 3[m
+
+[4mFactor Loadings[24m
+────────────────────────────────────────────────────────────────
+  Variable  Factor 1  Factor 3  Factor 2  Complexity  Uniqueness
+────────────────────────────────────────────────────────────────
+        x1               0.613                 1.539       0.523
+        x2               0.494                 1.093       0.745
+        x3               0.660                 1.084       0.547
+        x4     0.832                           1.104       0.272
+        x5     0.859                           1.043       0.246
+        x6     0.799                           1.167       0.309
+        x7                         0.709       1.062       0.481
+        x8                         0.699       1.131       0.480
+        x9               0.415     0.521       2.046       0.540
+────────────────────────────────────────────────────────────────
+
+
+[4mExplained Variance[24m
+─────────────────────────────────────────────────────
+                    Var  Factor 1  Factor 3  Factor 2
+─────────────────────────────────────────────────────
+            SS loadings     2.187     1.342     1.329
+         Proportion Var     0.243     0.149     0.148
+         Cumulative Var     0.243     0.392     0.540
+   Proportion Explained     0.450     0.276     0.274
+  Cumulative Proportion     0.450     0.726     1.000
+─────────────────────────────────────────────────────
+
+
+[mEFA Model Assumption Test:[m
+[32mOK. Bartlett's test of sphericity suggest the data is appropriate for factor analysis. χ²(36) = 904.097, p < 0.001[39m
+[32mOK. KMO measure of sampling adequacy suggests the data is appropriate for factor analysis. KMO = 0.752[39m
+
+[4mKMO Measure of Sampling Adequacy[24m
+────────────────────
+      Var  KMO Value
+────────────────────
+  Overall      0.752
+       x1      0.805
+       x2      0.778
+       x3      0.734
+       x4      0.763
+       x5      0.739
+       x6      0.808
+       x7      0.593
+       x8      0.683
+       x9      0.788
+────────────────────
+
+
+[4mPost-hoc CFA Model Summary[24m
+
+[4mFit Measure[24m
+─────────────────────────────────────────────────────────────────────────────────────
+      Χ²      DF          P    CFI  RMSEA   SRMR    TLI       AIC       BIC      BIC2
+─────────────────────────────────────────────────────────────────────────────────────
+  85.306  24.000  0.000 ***  0.931  0.092  0.065  0.896  7517.490  7595.339  7528.739
+─────────────────────────────────────────────────────────────────────────────────────
+
+ 
+[4mFactor Loadings[24m
+────────────────────────────────────────────────────────────────────────────────
+  Latent.Factor  Observed.Var  Std.Est     SE       Z          P          95% CI
+────────────────────────────────────────────────────────────────────────────────
+       Factor.1            x4    0.852  0.023  37.776  0.000 ***  [0.807, 0.896]
+                           x5    0.855  0.022  38.273  0.000 ***  [0.811, 0.899]
+                           x6    0.838  0.023  35.881  0.000 ***  [0.792, 0.884]
+       Factor.3            x1    0.772  0.055  14.041  0.000 ***  [0.664, 0.880]
+                           x2    0.424  0.060   7.105  0.000 ***  [0.307, 0.540]
+                           x3    0.581  0.055  10.539  0.000 ***  [0.473, 0.689]
+       Factor.2            x7    0.570  0.053  10.714  0.000 ***  [0.465, 0.674]
+                           x8    0.723  0.051  14.309  0.000 ***  [0.624, 0.822]
+                           x9    0.665  0.051  13.015  0.000 ***  [0.565, 0.765]
+────────────────────────────────────────────────────────────────────────────────
+
+ 
+[mGoodness of Fit:[m
+[33m Warning. Poor χ² fit (p < 0.05). It is common to get p < 0.05. Check other fit measure.[39m
+[32m OK. Acceptable CFI fit (CFI > 0.90)[39m
+[31m Warning. Poor RMSEA fit (RMSEA > 0.08)[39m
+[32m OK. Good SRMR fit (SRMR < 0.08)[39m
+[31m Warning. Poor TLI fit (TLI < 0.90)[39m
+[33m OK. Barely acceptable factor loadings (0.4 < some loadings < 0.7)[39m
+> 
+> 
+> 
+> cleanEx()
+> nameEx("glm_model")
+> ### * glm_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: glm_model
+> ### Title: Generalized Linear Regression
+> ### Aliases: glm_model
+> 
+> ### ** Examples
+> 
+> fit <- glm_model(
++   response_variable = incidence,
++   predictor_variable = period,
++   family = "poisson", # or you can enter as poisson(link = 'log'),
++   data = lme4::cbpp
++ )
+Warning in data_check(data) :
+  The following columns are coerced into numeric: herd, period
+Fitting Model with glm:
+ Formula = incidence ~ period
+> 
+> 
+> 
+> cleanEx()
+> nameEx("glme_model")
+> ### * glme_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: glme_model
+> ### Title: Generalized Linear Mixed Effect Model
+> ### Aliases: glme_model
+> 
+> ### ** Examples
+> 
+> fit <- glme_model(
++   response_variable = incidence,
++   random_effect_factors = period,
++   family = "poisson", # or you can enter as poisson(link = 'log')
++   id = herd,
++   data = lme4::cbpp
++ )
+Warning in data_check(data) :
+  The following columns are coerced into numeric: herd, period
+Fitting Model with glmer: 
+ Formula = incidence ~ period + (1 + period | herd)
+ Family = poisson
+> 
+> 
+> 
+> cleanEx()
+> nameEx("html_to_pdf")
+> ### * html_to_pdf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: html_to_pdf
+> ### Title: Convert HTML to PDF
+> ### Aliases: html_to_pdf
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D html_to_pdf(file_path = "html_name.html")
+> ##D # all HTML files in the my_html_folder will be converted
+> ##D html_to_pdf(dir = "Users/Desktop/my_html_folder")
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("integrated_model_summary")
+> ### * integrated_model_summary
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: integrated_model_summary
+> ### Title: Integrated Function for Linear Regression
+> ### Aliases: integrated_model_summary
+> 
+> ### ** Examples
+> 
+> fit <- integrated_model_summary(
++   data = iris,
++   response_variable = "Sepal.Length",
++   predictor_variable = tidyselect::everything(),
++   two_way_interaction_factor = c(Sepal.Width, Species)
++ )
+Warning in data_check(data) :
+  The following columns are coerced into numeric: Species
+
+ 
+[4mModel Summary[24m
+[mModel Type = Linear regression[m
+[mOutcome = Sepal.Length[m
+[mPredictors = Sepal.Width, Petal.Length, Petal.Width, Species[m
+
+[4mModel Estimates[24m
+───────────────────────────────────────────────────────────────────────────────────
+            Parameter  Coefficient       t   df     SE          p            95% CI
+───────────────────────────────────────────────────────────────────────────────────
+          (Intercept)        1.552   2.649  144  0.586  0.009 **   [ 0.394,  2.711]
+          Sepal.Width        0.795   4.401  144  0.181  0.000 ***  [ 0.438,  1.152]
+         Petal.Length        0.750  12.662  144  0.059  0.000 ***  [ 0.633,  0.867]
+          Petal.Width       -0.364  -2.370  144  0.154  0.019 *    [-0.668, -0.060]
+              Species        0.029   0.105  144  0.278  0.917      [-0.520,  0.578]
+  Sepal.Width:Species       -0.097  -1.013  144  0.096  0.313      [-0.287,  0.092]
+───────────────────────────────────────────────────────────────────────────────────
+
+[4mGoodness of Fit[24m
+───────────────────────────────────────────────────
+     AIC      BIC     R²  R²_adjusted   RMSE      σ
+───────────────────────────────────────────────────
+  83.729  104.803  0.863        0.858  0.305  0.312
+───────────────────────────────────────────────────
+
+[4mModel Assumption Check[24m
+[32mOK: Residuals appear to be independent and not autocorrelated (p = 0.968).[39m
+[32mOK: residuals appear as normally distributed (p = 0.949).
+[39m[34mUnable to check autocorrelation. Try changing na.action to na.omit.[39m
+[31mWarning: Heteroscedasticity (non-constant error variance) detected (p = 0.036).
+[39mWarning: Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms.
+[31mWarning: Severe multicolinearity detected (VIF > 10). Please inspect the following table to identify high correlation factors.[39m
+[4mMulticollinearity Table [24m
+────────────────────────────────────────
+                 Term     VIF  SE_factor
+────────────────────────────────────────
+          Sepal.Width   9.518      3.085
+         Petal.Length  16.785      4.097
+          Petal.Width  21.093      4.593
+              Species  79.480      8.915
+  Sepal.Width:Species  79.743      8.930
+────────────────────────────────────────
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("integrated_multilevel_model_summary")
+> ### * integrated_multilevel_model_summary
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: integrated_multilevel_model_summary
+> ### Title: Integrated Function for Mixed Effect Model
+> ### Aliases: integrated_multilevel_model_summary
+> 
+> ### ** Examples
+> 
+> fit <- integrated_multilevel_model_summary(
++   data = popular,
++   response_variable = popular,
++   random_effect_factors = c(extrav),
++   non_random_effect_factors = texp,
++   two_way_interaction_factor = c(extrav, texp),
++   graph_label_name = c("popular", "extraversion", "teacher experience"),
++   id = class
++ )
+boundary (singular) fit: see ?isSingular
+Warning in model_summary(model = model, streamline = streamline, digits = digits,  :
+  Random effect variances not available. Returned R2 does not account for random effects.
+
+ 
+[4mModel Summary[24m
+[mModel Type = Linear Mixed Effect Model (fitted using lme4 or lmerTest)[m
+[mOutcome = popular[m
+[mPredictors = extrav, texp, extrav:texp[m
+
+[4mModel Estimates[24m
+─────────────────────────────────────────────────────────────────────────────────────
+    Parameter  Effects  Coefficient       t    df     SE          p            95% CI
+─────────────────────────────────────────────────────────────────────────────────────
+  (Intercept)    fixed       -1.211  -3.772  1992  0.321  0.000 ***  [-1.840, -0.582]
+       extrav    fixed        0.891  19.822  1992  0.045  0.000 ***  [ 0.803,  0.979]
+         texp    fixed        0.252  12.758  1992  0.020  0.000 ***  [ 0.213,  0.291]
+  extrav:texp    fixed       -0.027  -9.563  1992  0.003  0.000 ***  [-0.033, -0.022]
+─────────────────────────────────────────────────────────────────────────────────────
+
+[4mGoodness of Fit[24m
+───────────────────────────────────────────────────────────────
+       AIC       BIC  R²_conditional  R²_marginal   RMSE      σ
+───────────────────────────────────────────────────────────────
+  5710.769  5755.576             NaN        0.415  0.921  0.943
+───────────────────────────────────────────────────────────────
+
+[4mModel Assumption Check[24m
+[32mOK: Model is converged[39m
+[31mWarning: Singularity is detected. See ?lme4::isSingular()[39m
+[31mWarning: Autocorrelated residuals detected (p < .001).[39m
+[31mWarning: Non-normality of residuals detected (p = 0.003).
+[39m[34mUnable to check autocorrelation. Try changing na.action to na.omit.[39m
+[32mOK: Error variance appears to be homoscedastic (p = 0.846).
+[39m[33mCautious: Moderate multicolinearity detected  (5 < VIF < 10). Please inspect the following table to identify high correlation factors.[39m
+[4mMulticollinearity Table [24m
+───────────────────────────────
+         Term    VIF  SE_factor
+───────────────────────────────
+       extrav  5.281      2.298
+         texp  3.900      1.975
+  extrav:texp  7.082      2.661
+───────────────────────────────
+
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("knit_to_Rmd")
+> ### * knit_to_Rmd
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: knit_to_Rmd
+> ### Title: Knit Rmd Files Instruction
+> ### Aliases: knit_to_Rmd
+> 
+> ### ** Examples
+> 
+> knit_to_Rmd()
+[32mOK. Required package "fansi" is installed[39m
+
+[mNote: To knit Rmd to HTML, add the following line to the setup chunk of your Rmd file: 
+ "old.hooks <- fansi::set_knit_hooks(knitr::knit_hooks)"[m
+
+[mNote: Use html_to_pdf to convert it to PDF. See ?html_to_pdf for more info[m
+> 
+> 
+> 
+> cleanEx()
+> nameEx("lm_model")
+> ### * lm_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: lm_model
+> ### Title: Linear Regressions / ANOVA / ANCOVA
+> ### Aliases: lm_model
+> 
+> ### ** Examples
+> 
+> fit <- lm_model(
++   data = iris,
++   response_variable = "Sepal.Length",
++   predictor_variable = tidyselect::everything(),
++   two_way_interaction_factor = c(Sepal.Width, Species)
++ )
+Warning in data_check(data) :
+  The following columns are coerced into numeric: Species
+Fitting Model with lm:
+ Formula = Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + Species + Sepal.Width*Species
+> 
+> 
+> 
+> cleanEx()
+> nameEx("lme_model")
+> ### * lme_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: lme_model
+> ### Title: Linear Mixed Effect Model
+> ### Aliases: lme_model
+> 
+> ### ** Examples
+> 
+> # two-level model with level-1 and level-2 variable with random intercept and random slope
+> fit1 <- lme_model(
++   data = popular,
++   response_variable = popular,
++   random_effect_factors = c(extrav, sex),
++   non_random_effect_factors = texp,
++   id = class
++ )
+Fitting Model with lmer:
+ Formula = popular ~ extrav + sex + texp + (1 + extrav + sex | class)
+boundary (singular) fit: see ?isSingular
+> 
+> 
+> # added two-way interaction factor
+> fit2 <- lme_model(
++   data = popular,
++   response_variable = popular,
++   random_effect_factors = c(extrav, sex),
++   non_random_effect_factors = texp,
++   two_way_interaction_factor = c(extrav, texp),
++   id = class
++ )
+Fitting Model with lmer:
+ Formula = popular ~ extrav + sex + texp + extrav*texp + (1 + extrav + sex | class)
+boundary (singular) fit: see ?isSingular
+> 
+> # pass a explicit lme model (I don't why you want to do that, but you can)
+> lme_fit <- lme_model(
++   model = "popular ~ extrav*texp + (1 + extrav | class)",
++   data = popular
++ )
+boundary (singular) fit: see ?isSingular
+> 
+> 
+> 
+> cleanEx()
+> nameEx("measurement_invariance")
+> ### * measurement_invariance
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: measurement_invariance
+> ### Title: Measurement Invariance
+> ### Aliases: measurement_invariance
+> 
+> ### ** Examples
+> 
+> # REMEMBER, YOU MUST NAMED ALL ARGUMENT EXCEPT THE CFA ITEMS ARGUMENT
+> # Fitting a multiple-factor measurement invariance model by passing items.
+> measurement_invariance(
++   x1:x3,
++   x4:x6,
++   x7:x9,
++   data = lavaan::HolzingerSwineford1939,
++   group = "school",
++   invariance_level = "scalar" # you can change this to metric
++ )
+Computing CFA using:
+  DV1 =~ x1 + x2 + x3
+  DV2 =~ x4 + x5 + x6
+  DV3 =~ x7 + x8 + x9
+ [1] "Computing for configural model"
+[1] "Computing for metric model"
+[1] "Computing for scalar model"
+
+
+[4mModel Summary[24m
+[mModel Type = Measurement Invariance[m
+[mComparsion Type = Configural-Metric-Scalar Comparsion[m
+[mGroup = school[m
+[mModel Formula = 
+. DV1 =~ x1 + x2 + x3
+  DV2 =~ x4 + x5 + x6
+  DV3 =~ x7 + x8 + x9
+ [m
+
+
+[4mFit Measure Summary[24m
+─────────────────────────────────────────────────────────────────────────────────────────
+       Χ²      DF          P     CFI   RMSEA   SRMR     TLI       AIC       BIC      BIC2
+─────────────────────────────────────────────────────────────────────────────────────────
+  115.851  48.000  0.000 ***   0.923   0.097  0.068   0.885  7484.395  7706.822  7516.536
+  124.044  54.000  0.000 ***   0.921   0.093  0.072   0.895  7480.587  7680.771  7509.514
+  164.103  60.000  0.000 ***   0.882   0.107  0.082   0.859  7508.647  7686.588  7534.359
+                                                                                         
+    8.192   6.000  0.000 ***  -0.002  -0.004  0.004   0.009    -3.808   -26.050    -7.022
+   40.059   6.000  0.000 ***  -0.038   0.015  0.011  -0.036    28.059     5.817    24.845
+─────────────────────────────────────────────────────────────────────────────────────────
+
+[mGoodness of Fit:[m
+[32m OK. Excellent measurement metric-invariance based on |ΔCFI| < 0.005[39m
+[32m OK. Excellent measurement metric-invariance based on |ΔRMSEA| < 0.01[39m
+[32m OK. Good measurement metric-invariance based on ΔSRMR < 0.03[39m
+[31m Warning. Unacceptable measurement scalar-invariance based on |ΔCFI| > 0.01[39m
+[31m Warning. Unacceptable measurement scalar-invariance based on |ΔRMSEA| > 0.015.[39m
+[32mOK. Good measurement scalar-invariance based on ΔSRMR < 0.015[39m
+> 
+> # Fitting measurement invariance model by passing explicit lavaan model
+> # I am also going to only test for metric invariance instead of the default scalar invariance
+> 
+> ## Not run: 
+> ##D # This will fail because I did not add `model = ` in front of the lavaan model.
+> ##D # Therefore,you must add the tag in front of all arguments
+> ##D # For example, `return_result = 'model'` instaed of `model`
+> ##D measurement_invariance(
+> ##D   "visual  =~ x1 + x2 + x3;
+> ##D              textual =~ x4 + x5 + x6;
+> ##D              speed   =~ x7 + x8 + x9",
+> ##D   data = lavaan::HolzingerSwineford1939
+> ##D )
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("mediation_summary")
+> ### * mediation_summary
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mediation_summary
+> ### Title: Mediation Analysis
+> ### Aliases: mediation_summary
+> 
+> ### ** Examples
+> 
+> mediation_summary(
++   data = lmerTest::carrots,
++   response_variable = Preference,
++   mediator = Sweetness,
++   predictor_variable = Crisp
++ )
+[4mModel Summary[24m
+[mModel Type = Mediation Analysis (fitted using lavaan)[m
+
+[4mEffect Summary[24m
+────────────────────────────────────────────────────────────────
+  Effect Type  Est.Std     SE       z          p          95% CI
+────────────────────────────────────────────────────────────────
+       direct    0.197  0.029   6.880  0.000 ***  [0.141, 0.253]
+     indirect    0.219  0.017  12.656  0.000 ***  [0.185, 0.253]
+        total    0.416  0.023  18.444  0.000 ***  [0.372, 0.460]
+────────────────────────────────────────────────────────────────
+
+[4mRegression Summary[24m
+────────────────────────────────────────────────────────────────────────────────────
+    Response  Operator    Predict  Est.Std     SE       z          p          95% CI
+────────────────────────────────────────────────────────────────────────────────────
+   Sweetness         ~      Crisp    0.558  0.018  30.893  0.000 ***  [0.523, 0.593]
+  Preference         ~  Sweetness    0.392  0.028  14.177  0.000 ***  [0.338, 0.446]
+  Preference         ~      Crisp    0.197  0.029   6.880  0.000 ***  [0.141, 0.253]
+────────────────────────────────────────────────────────────────────────────────────
+> 
+> 
+> 
+> cleanEx()
+> nameEx("model_summary")
+> ### * model_summary
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: model_summary
+> ### Title: Model Summary for Regression Models
+> ### Aliases: model_summary
+> 
+> ### ** Examples
+> 
+> # I am going to show the more generic usage of this function
+> # You can also use this package's built in function to fit the models
+> # I recommend using the integrated_multilevel_model_summary to get everything
+> 
+> # lme example
+> lme_fit <- lme4::lmer("popular ~ texp  + (1 | class)",
++   data = popular
++ )
+> 
+> model_summary(lme_fit)
+
+ 
+[4mModel Summary[24m
+[mModel Type = Linear Mixed Effect Model (fitted using lme4 or lmerTest)[m
+[mOutcome = popular[m
+[m class[m
+
+[4mModel Estimates[24m
+───────────────────────────────────────────────────────────────────────────────────
+    Parameter  Effects  Coefficient       t    df     SE          p          95% CI
+───────────────────────────────────────────────────────────────────────────────────
+  (Intercept)    fixed        4.197  22.552  1996  0.186  0.000 ***  [3.832, 4.561]
+         texp    fixed        0.062   5.212  1996  0.012  0.000 ***  [0.038, 0.085]
+───────────────────────────────────────────────────────────────────────────────────
+
+[4mGoodness of Fit[24m
+──────────────────────────────────────────────────────────────────────
+       AIC       BIC  R²_conditional  R²_marginal    ICC   RMSE      σ
+──────────────────────────────────────────────────────────────────────
+  6321.320  6343.724           0.366        0.085  0.308  1.080  1.105
+──────────────────────────────────────────────────────────────────────
+
+[4mModel Assumption Check[24m
+[32mOK: Model is converged[39m
+[32mOK: No singularity is detected[39m
+[31mWarning: Autocorrelated residuals detected (p < .001).[39m
+[32mOK: residuals appear as normally distributed (p = 0.236).
+[39m[34mUnable to check autocorrelation. Try changing na.action to na.omit.[39m
+[32mOK: Error variance appears to be homoscedastic (p = 0.198).
+[39mWarning: Not enough model terms in the conditional part of the model to check for multicollinearity.
+
+[32mOK: No multicolinearity detected (VIF < 5)[39m
+
+> 
+> # lm example
+> 
+> lm_fit <- lm(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width,
++   data = iris
++ )
+> 
+> model_summary(lm_fit, assumption_plot = TRUE)
+
+ 
+[4mModel Summary[24m
+[mModel Type = Linear regression[m
+[mOutcome = Sepal.Length[m
+[mPredictors = Sepal.Width, Petal.Length, Petal.Width[m
+
+[4mModel Estimates[24m
+────────────────────────────────────────────────────────────────────────────
+     Parameter  Coefficient       t   df     SE          p            95% CI
+────────────────────────────────────────────────────────────────────────────
+   (Intercept)        1.856   7.401  146  0.251  0.000 ***  [ 1.360,  2.352]
+   Sepal.Width        0.651   9.765  146  0.067  0.000 ***  [ 0.519,  0.783]
+  Petal.Length        0.709  12.502  146  0.057  0.000 ***  [ 0.597,  0.821]
+   Petal.Width       -0.556  -4.363  146  0.128  0.000 ***  [-0.809, -0.304]
+────────────────────────────────────────────────────────────────────────────
+
+[4mGoodness of Fit[24m
+──────────────────────────────────────────────────
+     AIC     BIC     R²  R²_adjusted   RMSE      σ
+──────────────────────────────────────────────────
+  84.643  99.696  0.859        0.856  0.310  0.315
+──────────────────────────────────────────────────
+
+[4mModel Assumption Check[24m
+[32mOK: Residuals appear to be independent and not autocorrelated (p = 0.800).[39m
+[32mOK: residuals appear as normally distributed (p = 0.943).
+[39m[34mUnable to check autocorrelation. Try changing na.action to na.omit.[39m
+[31mWarning: Heteroscedasticity (non-constant error variance) detected (p = 0.035).
+[39m[31mWarning: Severe multicolinearity detected (VIF > 10). Please inspect the following table to identify high correlation factors.[39m
+[4mMulticollinearity Table [24m
+─────────────────────────────────
+          Term     VIF  SE_factor
+─────────────────────────────────
+   Sepal.Width   1.271      1.127
+  Petal.Length  15.098      3.886
+   Petal.Width  14.234      3.773
+─────────────────────────────────
+Loading required namespace: qqplotr
+Loading required namespace: see
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("reliability_summary")
+> ### * reliability_summary
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: reliability_summary
+> ### Title: Reliability Analysis
+> ### Aliases: reliability_summary
+> 
+> ### ** Examples
+> 
+> 
+> fit <- reliability_summary(data = lavaan::HolzingerSwineford1939, cols = x1:x3)
+[4mModel Summary[24m
+[mModel Type = Reliability Analysis[m
+[mDimensionality = uni-dimensionality[m
+
+[4mComposite Reliability Measures[24m
+────────────────────────────
+  Alpha  Alpha.Std  G6 (smc)
+────────────────────────────
+  0.626      0.627     0.535
+────────────────────────────
+
+[4mItem Reliability (item dropped)[24m
+─────────────────────────────────
+  Var  Alpha  Alpha.Std  G6 (smc)
+─────────────────────────────────
+   x1  0.507      0.507     0.340
+   x2  0.612      0.612     0.441
+   x3  0.458      0.458     0.297
+─────────────────────────────────
+
+[mCFA Model:[m
+[4mFit Measure[24m
+─────────────────────────────────────────────────────────────────────────────────
+     Χ²     DF        P    CFI  RMSEA   SRMR    TLI       AIC       BIC      BIC2
+─────────────────────────────────────────────────────────────────────────────────
+  0.000  0.000  NaN      1.000  0.000  0.000  1.000  2725.955  2748.197  2729.169
+─────────────────────────────────────────────────────────────────────────────────
+
+ 
+[4mFactor Loadings[24m
+───────────────────────────────────────────────────────────────────────────────
+  Latent.Factor  Observed.Var  Std.Est     SE      Z          P          95% CI
+───────────────────────────────────────────────────────────────────────────────
+            DV1            x1    0.621  0.067  9.223  0.000 ***  [0.489, 0.753]
+                           x2    0.479  0.063  7.645  0.000 ***  [0.356, 0.602]
+                           x3    0.710  0.071  9.936  0.000 ***  [0.570, 0.850]
+───────────────────────────────────────────────────────────────────────────────
+
+ 
+[mGoodness of Fit:[m
+[32m OK. Excellent χ² fit (p > 0.05)[39m
+[32m OK. Excellent CFI fit (CFI > 0.95)[39m
+[32m OK. Excellent RMSEA fit (RMSEA < 0.05)[39m
+[32m OK. Good SRMR fit (SRMR < 0.08)[39m
+[32m OK. Excellent TLI fit (TLI > 0.95)[39m
+[33m OK. Barely acceptable factor loadings (0.4 < some loadings < 0.7)[39m
+
+[4mDescriptive Statistics Table:[24m
+
+─────────────────────────────────────────
+  Var   mean     sd         x1         x2
+─────────────────────────────────────────
+   x1  4.936  1.167                      
+   x2  6.088  1.177  0.297 ***           
+   x3  2.250  1.131  0.441 ***  0.340 ***
+─────────────────────────────────────────
+
+> fit <- reliability_summary(data = lavaan::HolzingerSwineford1939, cols = x1:x9)
+[4mModel Summary[24m
+[mModel Type = Reliability Analysis[m
+[mDimensionality = multi-dimensionality[m
+
+[4mComposite Reliability Measures[24m
+──────────────────────────────────────────────────────────
+  Alpha  Alpha.Std    G.6  Omega.Hierarchical  Omega.Total
+──────────────────────────────────────────────────────────
+   0.76       0.76  0.808               0.449        0.851
+──────────────────────────────────────────────────────────
+
+[4mItem Reliability (item dropped)[24m
+─────────────────────────────────
+  Var  Alpha  Alpha.Std  G6 (smc)
+─────────────────────────────────
+   x1  0.725      0.725     0.780
+   x2  0.764      0.763     0.811
+   x3  0.749      0.748     0.796
+   x4  0.715      0.719     0.761
+   x5  0.724      0.726     0.764
+   x6  0.714      0.717     0.764
+   x7  0.766      0.765     0.800
+   x8  0.748      0.747     0.789
+   x9  0.731      0.728     0.782
+─────────────────────────────────
+
+[4mDescriptive Statistics Table:[24m
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Var   mean     sd          x1          x2          x3          x4          x5          x6          x7          x8
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   x1  4.936  1.167                                                                                                
+   x2  6.088  1.177   0.297 ***                                                                                    
+   x3  2.250  1.131   0.441 ***   0.340 ***                                                                        
+   x4  3.061  1.164   0.373 ***   0.153       0.159                                                                
+   x5  4.341  1.290   0.293 ***   0.139       0.077       0.733 ***                                                
+   x6  2.186  1.096   0.357 ***   0.193   *   0.198  **   0.704 ***   0.720 ***                                    
+   x7  4.186  1.090   0.067      -0.076       0.072       0.174   *   0.102       0.121                            
+   x8  5.527  1.013   0.224  **   0.092       0.186   *   0.107       0.139       0.150       0.487 ***            
+   x9  5.374  1.009   0.390 ***   0.206  **   0.329 ***   0.208  **   0.227  **   0.214  **   0.341 ***   0.449 ***
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("simple_slope")
+> ### * simple_slope
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simple_slope
+> ### Title: Slope Estimate at Varying Level of Moderators
+> ### Aliases: simple_slope
+> 
+> ### ** Examples
+> 
+> fit <- lm_model(
++   data = iris,
++   response_variable = Sepal.Length,
++   predictor_variable = tidyselect::everything(),
++   three_way_interaction_factor = c(Sepal.Width, Petal.Width, Petal.Length)
++ )
+Warning in data_check(data) :
+  The following columns are coerced into numeric: Species
+Fitting Model with lm:
+ Formula = Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + Species + Sepal.Width*Petal.Width*Petal.Length
+> 
+> simple_slope_fit <- simple_slope(
++   data = iris,
++   model = fit,
++   three_way_interaction_factor = c("Sepal.Width", "Petal.Width", "Petal.Length")
++ )
+> 
+> 
+> 
+> cleanEx()
+> nameEx("three_way_interaction_plot")
+> ### * three_way_interaction_plot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: three_way_interaction_plot
+> ### Title: Three-way Interaction Plot
+> ### Aliases: three_way_interaction_plot
+> 
+> ### ** Examples
+> 
+> # I am going to show the more generic usage of this function
+> # You can also use this package's built in function to fit the models
+> # I recommend using the integrated_multilevel_model_summary to get everything
+> 
+> # lme example
+> lme_fit <- lme4::lmer("popular ~ extrav + sex + texp + extrav:sex:texp +
++ (1 + extrav + sex | class)", data = popular)
+boundary (singular) fit: see ?isSingular
+> 
+> three_way_interaction_plot(lme_fit, data = popular)
+> 
+> # lm example
+> 
+> lm_fit <- lm(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width +
++   Sepal.Width:Petal.Length:Petal.Width, data = iris)
+> 
+> three_way_interaction_plot(lm_fit, data = iris)
+Warning in data_check(data) :
+  The following columns are coerced into numeric: Species
+> 
+> 
+> 
+> cleanEx()
+> nameEx("two_way_interaction_plot")
+> ### * two_way_interaction_plot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: two_way_interaction_plot
+> ### Title: Two-way Interaction Plot
+> ### Aliases: two_way_interaction_plot
+> 
+> ### ** Examples
+> 
+> # If you pass the model directly, it can't extract the data-frame from fit object
+> # Therefore, for now, you must pass the data frame to the function.
+> # You don't need pass the data if you use `lm_model` or `lme_model`.
+> 
+> # lme example
+> lme_fit <- lme4::lmer("popular ~ extrav*texp + (1 + extrav | class)",
++   data = popular
++ )
+boundary (singular) fit: see ?isSingular
+> 
+> two_way_interaction_plot(lme_fit,
++   graph_label_name = c("popular", "extraversion", "teacher experience"),
++   data = popular
++ )
+> 
+> lm_fit <- lm(Sepal.Length ~ Sepal.Width * Petal.Width,
++   data = iris
++ )
+> 
+> two_way_interaction_plot(lm_fit, data = iris)
+Warning in data_check(data) :
+  The following columns are coerced into numeric: Species
+> 
+> # For more advanced users
+> label_name <- function(var_name) {
++   var_name_processed <- switch(var_name,
++     "extrav" = "Extroversion",
++     "texp" = "Teacher Experience",
++     "popular" = "popular"
++   )
++   if (is.null(var_name_processed)) {
++     var_name_processed <- var_name
++   }
++   return(var_name_processed)
++ }
+> 
+> two_way_interaction_plot(lme_fit, data = popular, graph_label_name = label_name)
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  15.611 0.534 16.622 0.005 0.01 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

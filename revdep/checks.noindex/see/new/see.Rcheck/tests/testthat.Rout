@@ -1,0 +1,41 @@
+
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(see)
+> 
+> osx <- tryCatch(
++   {
++     si <- Sys.info()
++     if (!is.null(si["sysname"])) {
++       si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
++     } else {
++       FALSE
++     }
++   },
++   error = function(e) {
++     FALSE
++   }
++ )
+> 
+> if (!osx) {
++   test_check("see")
++ }
+> 
+> proc.time()
+   user  system elapsed 
+  0.941   0.113   1.042 

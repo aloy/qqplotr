@@ -1,0 +1,1834 @@
+
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "MKpower"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('MKpower')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("histSimPower")
+> ### * histSimPower
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: hist
+> ### Title: Histograms
+> ### Aliases: hist hist.sim.power.ttest hist.sim.power.wtest
+> ### Keywords: hplot
+> 
+> ### ** Examples
+> 
+> res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
++                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
++                         ry.H0 = function(x) rnorm(x, sd = 3))
+> hist(res1)
+> res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
++                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
++                       ry.H0 = rnorm)
+> hist(res2)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("power.diagnostic.test")
+> ### * power.diagnostic.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.diagnostic.test
+> ### Title: Power calculations for a diagnostic test
+> ### Aliases: power.diagnostic.test
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## see n2 on page 1202 of Chu and Cole (2007)
+> power.diagnostic.test(sens = 0.99, delta = 0.14, power = 0.95) # 40
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.99
+              n = 40
+             n1 = 40
+          delta = 0.14
+      sig.level = 0.05
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> power.diagnostic.test(sens = 0.99, delta = 0.13, power = 0.95) # 43
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.99
+              n = 43
+             n1 = 43
+          delta = 0.13
+      sig.level = 0.05
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> power.diagnostic.test(sens = 0.99, delta = 0.12, power = 0.95) # 47
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.99
+              n = 47
+             n1 = 47
+          delta = 0.12
+      sig.level = 0.05
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> 
+> power.diagnostic.test(sens = 0.98, delta = 0.13, power = 0.95) # 50
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.98
+              n = 50
+             n1 = 50
+          delta = 0.13
+      sig.level = 0.05
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> power.diagnostic.test(sens = 0.98, delta = 0.11, power = 0.95) # 58
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.98
+              n = 58
+             n1 = 58
+          delta = 0.11
+      sig.level = 0.05
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> 
+> ## see page 1201 of Chu and Cole (2007)
+> power.diagnostic.test(sens = 0.95, delta = 0.1, n = 93) ## 0.957
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.95
+              n = 93
+             n1 = 93
+          delta = 0.1
+      sig.level = 0.05
+          power = 0.956769
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> power.diagnostic.test(sens = 0.95, delta = 0.1, n = 93, power = 0.95, 
++                       sig.level = NULL) ## 0.0496
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.95
+              n = 93
+             n1 = 93
+          delta = 0.1
+      sig.level = 0.04963266
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> power.diagnostic.test(sens = 0.95, delta = 0.1, n = 102) ## 0.968
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.95
+              n = 102
+             n1 = 102
+          delta = 0.1
+      sig.level = 0.05
+          power = 0.9682165
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> power.diagnostic.test(sens = 0.95, delta = 0.1, n = 102, power = 0.95, 
++                       sig.level = NULL) ## 0.0471
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.95
+              n = 102
+             n1 = 102
+          delta = 0.1
+      sig.level = 0.04708589
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> ## yields 102 not 93!
+> power.diagnostic.test(sens = 0.95, delta = 0.1, power = 0.95)
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.95
+              n = 102
+             n1 = 102
+          delta = 0.1
+      sig.level = 0.05
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("power.hsu.t.test")
+> ### * power.hsu.t.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.hsu.t.test
+> ### Title: Power calculations for two sample Hsu t test
+> ### Aliases: power.hsu.t.test
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+>  ## more conservative than classical or Welch t-test
+>  power.hsu.t.test(n = 20, delta = 1)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 20
+          delta = 1
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.8506046
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+>  power.hsu.t.test(power = .90, delta = 1)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 23.02186
+          delta = 1
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+>  power.hsu.t.test(power = .90, delta = 1, alternative = "one.sided")
+
+     Two-sample Hsu t test power calculation 
+
+              n = 18.5674
+          delta = 1
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.9
+    alternative = one.sided
+
+NOTE: n is number in *each* group
+
+> 
+>  ## sd1 = 0.5, sd2 = 1
+>  power.welch.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
+
+     Two-sample Welch t test power calculation 
+
+              n = 53.86822
+          delta = 0.5
+            sd1 = 0.5
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+>  power.hsu.t.test(delta = 0.5, sd1 = 0.5, sd2 = 1, power = 0.9)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 54.49421
+          delta = 0.5
+            sd1 = 0.5
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("power.nb.test")
+> ### * power.nb.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.nb.test
+> ### Title: Power calculation for comparing two negative binomial rates
+> ### Aliases: power.nb.test
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## examples from Table I in Zhu and Lakkis (2014)
+> ## theta = 1/k, RR = rr, mu0 = r0, duration = mu_t
+> power.nb.test(mu0 = 0.8, RR = 0.85, theta = 1/0.4, duration = 0.75, power = 0.8, approach = 1)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 1254.229
+             n1 = 1254.229
+            mu0 = 0.8
+             RR = 0.85
+          theta = 2.5
+       duration = 0.75
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 0.8, RR = 0.85, theta = 1/0.4, duration = 0.75, power = 0.8, approach = 2)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 1315.69
+             n1 = 1315.69
+            mu0 = 0.8
+             RR = 0.85
+          theta = 2.5
+       duration = 0.75
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 0.8, RR = 0.85, theta = 1/0.4, duration = 0.75, power = 0.8, approach = 3)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 1310.73
+             n1 = 1310.73
+            mu0 = 0.8
+             RR = 0.85
+          theta = 2.5
+       duration = 0.75
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> 
+> power.nb.test(mu0 = 1.4, RR = 1.15, theta = 1/1.5, duration = 0.75, power = 0.8, approach = 1)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 1955.761
+             n1 = 1955.761
+            mu0 = 1.4
+             RR = 1.15
+          theta = 0.6666667
+       duration = 0.75
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 1.4, RR = 1.15, theta = 1/1.5, duration = 0.75, power = 0.8, approach = 2)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 1920.908
+             n1 = 1920.908
+            mu0 = 1.4
+             RR = 1.15
+          theta = 0.6666667
+       duration = 0.75
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 1.4, RR = 1.15, theta = 1/1.5, duration = 0.75, power = 0.8, approach = 3)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 1918.472
+             n1 = 1918.472
+            mu0 = 1.4
+             RR = 1.15
+          theta = 0.6666667
+       duration = 0.75
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> 
+> 
+> ## examples from Table II in Zhu and Lakkis (2014) - seem to be total sample sizes
+> ## can reproduce the results with mu_t = 1.0 (not 0.7!)
+> power.nb.test(mu0 = 2.0, RR = 0.5, theta = 1, duration = 1.0, ssize.ratio = 1,
++               power = 0.8, approach = 1)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 51.39692
+             n1 = 51.39692
+            mu0 = 2
+             RR = 0.5
+          theta = 1
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 2.0, RR = 0.5, theta = 1, duration = 1.0, ssize.ratio = 1,
++               power = 0.8, approach = 2)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 57.17745
+             n1 = 57.17745
+            mu0 = 2
+             RR = 0.5
+          theta = 1
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 2.0, RR = 0.5, theta = 1, duration = 1.0, ssize.ratio = 1,
++               power = 0.8, approach = 3)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 55.26567
+             n1 = 55.26567
+            mu0 = 2
+             RR = 0.5
+          theta = 1
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> 
+> power.nb.test(mu0 = 10.0, RR = 1.5, theta = 1/5, duration = 1.0, ssize.ratio = 3/2,
++               power = 0.8, approach = 1)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 405.4882
+             n1 = 608.2323
+            mu0 = 10
+             RR = 1.5
+          theta = 0.2
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 10.0, RR = 1.5, theta = 1/5, duration = 1.0, ssize.ratio = 3/2,
++               power = 0.8, approach = 2)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 404.7462
+             n1 = 607.1192
+            mu0 = 10
+             RR = 1.5
+          theta = 0.2
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 10.0, RR = 1.5, theta = 1/5, duration = 1.0, ssize.ratio = 3/2,
++               power = 0.8, approach = 3)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 404.2037
+             n1 = 606.3055
+            mu0 = 10
+             RR = 1.5
+          theta = 0.2
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> 
+> 
+> ## examples from Table III in Zhu and Lakkis (2014)
+> power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, approach = 1)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 22.37386
+             n1 = 22.37386
+            mu0 = 5
+             RR = 2
+          theta = 2
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, approach = 2)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 21.23734
+             n1 = 21.23734
+            mu0 = 5
+             RR = 2
+          theta = 2
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 5.0, RR = 2.0, theta = 1/0.5, duration = 1, power = 0.8, approach = 3)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 20.85564
+             n1 = 20.85564
+            mu0 = 5
+             RR = 2
+          theta = 2
+       duration = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> 
+> 
+> ## examples from Table IV in Zhu and Lakkis (2014)
+> power.nb.test(mu0 = 5.9/3, RR = 0.4, theta = 0.49, duration = 3, power = 0.9, approach = 1)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 56.57115
+             n1 = 56.57115
+            mu0 = 1.966667
+             RR = 0.4
+          theta = 0.49
+       duration = 3
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 5.9/3, RR = 0.4, theta = 0.49, duration = 3, power = 0.9, approach = 2)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 58.50562
+             n1 = 58.50562
+            mu0 = 1.966667
+             RR = 0.4
+          theta = 0.49
+       duration = 3
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 5.9/3, RR = 0.4, theta = 0.49, duration = 3, power = 0.9, approach = 3)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 57.6792
+             n1 = 57.6792
+            mu0 = 1.966667
+             RR = 0.4
+          theta = 0.49
+       duration = 3
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> 
+> power.nb.test(mu0 = 13/6, RR = 0.2, theta = 0.52, duration = 6, power = 0.9, approach = 1)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 16.71379
+             n1 = 16.71379
+            mu0 = 2.166667
+             RR = 0.2
+          theta = 0.52
+       duration = 6
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 13/6, RR = 0.2, theta = 0.52, duration = 6, power = 0.9, approach = 2)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 17.474
+             n1 = 17.474
+            mu0 = 2.166667
+             RR = 0.2
+          theta = 0.52
+       duration = 6
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> power.nb.test(mu0 = 13/6, RR = 0.2, theta = 0.52, duration = 6, power = 0.9, approach = 3)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 16.96846
+             n1 = 16.96846
+            mu0 = 2.166667
+             RR = 0.2
+          theta = 0.52
+       duration = 6
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> 
+> 
+> ## see Section 5 of Zhu and Lakkis (2014)
+> power.nb.test(mu0 = 0.66, RR = 0.8, theta = 1/0.8, duration = 0.9, power = 0.9)
+
+     Power calculation for comparing two negative binomial rates 
+
+              n = 1130.989
+             n1 = 1130.989
+            mu0 = 0.66
+             RR = 0.8
+          theta = 1.25
+       duration = 0.9
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n = sample size of control group, n1 = sample size of treatment group
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("power.prop1.test")
+> ### * power.prop1.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.prop1.test
+> ### Title: Power Calculations for One-Sample Test for Proportions
+> ### Aliases: power.prop1.test
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> power.prop1.test(p1 = 0.4, power = 0.8)
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 203.7246
+          delta = 0.1
+             p1 = 0.4
+             p0 = 0.5
+      sig.level = 0.05
+exact.sig.level = 0.04205139
+          power = 0.8
+    exact.power = 0.8008049
+    alternative = two.sided
+
+NOTE: n = total sample size
+
+> power.prop1.test(p1 = 0.4, power = 0.8, cont.corr = FALSE)
+
+     Power calculation for testing a given proportion 
+
+              n = 193.8473
+          delta = 0.1
+             p1 = 0.4
+             p0 = 0.5
+      sig.level = 0.05
+exact.sig.level = 0.05228312
+          power = 0.8
+    exact.power = 0.8067065
+    alternative = two.sided
+
+NOTE: n = total sample size
+
+> power.prop1.test(p1 = 0.6, power = 0.8)
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 203.7246
+          delta = 0.1
+             p1 = 0.6
+             p0 = 0.5
+      sig.level = 0.05
+exact.sig.level = 0.04205139
+          power = 0.8
+    exact.power = 0.8008049
+    alternative = two.sided
+
+NOTE: n = total sample size
+
+> power.prop1.test(n = 204, power = 0.8)
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 204
+          delta = 0.09990315
+             p1 = 0.5999032
+             p0 = 0.5
+      sig.level = 0.05
+exact.sig.level = 0.04205139
+          power = 0.8
+    exact.power = 0.8000115
+    alternative = two.sided
+
+NOTE: n = total sample size
+
+> power.prop1.test(n = 204, p1 = 0.4, power = 0.8, sig.level = NULL)
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 204
+          delta = 0.1
+             p1 = 0.4
+             p0 = 0.5
+      sig.level = 0.04976943
+exact.sig.level = 0.04205139
+          power = 0.8
+    exact.power = 0.8008049
+    alternative = two.sided
+
+NOTE: n = total sample size
+
+> power.prop1.test(n = 194, p1 = 0.4, power = 0.8, sig.level = NULL, 
++                  cont.corr = FALSE)
+
+     Power calculation for testing a given proportion 
+
+              n = 194
+          delta = 0.1
+             p1 = 0.4
+             p0 = 0.5
+      sig.level = 0.04987195
+exact.sig.level = 0.05228312
+          power = 0.8
+    exact.power = 0.8067065
+    alternative = two.sided
+
+NOTE: n = total sample size
+
+> 
+> power.prop1.test(p1 = 0.1, p0 = 0.3, power = 0.8, alternative = "less")
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 30.10603
+          delta = 0.2
+             p1 = 0.1
+             p0 = 0.3
+      sig.level = 0.05
+exact.sig.level = 0.02390343
+          power = 0.8
+    exact.power = 0.8067985
+    alternative = less
+
+NOTE: n = total sample size
+
+> power.prop1.test(p1 = 0.1, p0 = 0.3, power = 0.8, alternative = "less", 
++                  cont.corr = FALSE)
+
+     Power calculation for testing a given proportion 
+
+              n = 25.31363
+          delta = 0.2
+             p1 = 0.1
+             p0 = 0.3
+      sig.level = 0.05
+exact.sig.level = 0.02595652
+          power = 0.8
+    exact.power = 0.7409416
+    alternative = less
+
+NOTE: n = total sample size
+
+> power.prop1.test(n = 31, p0 = 0.3, power = 0.8, alternative = "less")
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 31
+          delta = 0.2269786
+             p1 = 0.07302137
+             p0 = 0.3
+      sig.level = 0.05
+exact.sig.level = 0.02390343
+          power = 0.8
+    exact.power = 0.9280065
+    alternative = less
+
+NOTE: n = total sample size
+
+> power.prop1.test(n = 31, p1 = 0.1, p0 = 0.3, power = 0.8, sig.level = NULL, 
++                  alternative = "less")
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 31
+          delta = 0.2
+             p1 = 0.1
+             p0 = 0.3
+      sig.level = 0.04618409
+exact.sig.level = 0.02390343
+          power = 0.8
+    exact.power = 0.8067985
+    alternative = less
+
+NOTE: n = total sample size
+
+> 
+> 
+> power.prop1.test(p1 = 0.5, p0 = 0.3, power = 0.8, alternative = "greater")
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 39.33189
+          delta = 0.2
+             p1 = 0.5
+             p0 = 0.3
+      sig.level = 0.05
+exact.sig.level = 0.01477705
+          power = 0.8
+    exact.power = 0.682086
+    alternative = greater
+
+NOTE: n = total sample size
+
+> power.prop1.test(p1 = 0.5, p0 = 0.3, power = 0.8, alternative = "greater", 
++                  cont.corr = FALSE)
+
+     Power calculation for testing a given proportion 
+
+              n = 34.49079
+          delta = 0.2
+             p1 = 0.5
+             p0 = 0.3
+      sig.level = 0.05
+exact.sig.level = 0.03588222
+          power = 0.8
+    exact.power = 0.7502201
+    alternative = greater
+
+NOTE: n = total sample size
+
+> power.prop1.test(n = 40, p0 = 0.3, power = 0.8, alternative = "greater")
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 40
+          delta = 0.1982163
+             p1 = 0.4982163
+             p0 = 0.3
+      sig.level = 0.05
+exact.sig.level = 0.01477705
+          power = 0.8
+    exact.power = 0.6739502
+    alternative = greater
+
+NOTE: n = total sample size
+
+> power.prop1.test(n = 40, p1 = 0.5, p0 = 0.3, power = 0.8, sig.level = NULL, 
++                  alternative = "greater")
+
+     Power calculation for testing a given proportion (with continuity correction) 
+
+              n = 40
+          delta = 0.2
+             p1 = 0.5
+             p0 = 0.3
+      sig.level = 0.04751295
+exact.sig.level = 0.01477705
+          power = 0.8
+    exact.power = 0.682086
+    alternative = greater
+
+NOTE: n = total sample size
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("power.welch.t.test")
+> ### * power.welch.t.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.welch.t.test
+> ### Title: Power calculations for two sample Welch t test
+> ### Aliases: power.welch.t.test
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+>  ## identical results as power.t.test, since sd = sd1 = sd2 = 1
+>  power.welch.t.test(n = 20, delta = 1)
+
+     Two-sample Welch t test power calculation 
+
+              n = 20
+          delta = 1
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.8689528
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+>  power.welch.t.test(power = .90, delta = 1)
+
+     Two-sample Welch t test power calculation 
+
+              n = 22.0211
+          delta = 1
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+>  power.welch.t.test(power = .90, delta = 1, alternative = "one.sided")
+
+     Two-sample Welch t test power calculation 
+
+              n = 17.84713
+          delta = 1
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.9
+    alternative = one.sided
+
+NOTE: n is number in *each* group
+
+> 
+>   ## sd1 = 0.5, sd2 = 1
+>  power.welch.t.test(delta = 2, sd1 = 0.5, sd2 = 1, power = 0.9)
+
+     Two-sample Welch t test power calculation 
+
+              n = 4.888383
+          delta = 2
+            sd1 = 0.5
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.9
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("qqunifSimPower")
+> ### * qqunifSimPower
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: qqunif
+> ### Title: qq - Plots for Uniform Distribution
+> ### Aliases: qqunif qqunif.default qqunif.sim.power.ttest
+> ###   qqunif.sim.power.wtest
+> ### Keywords: hplot
+> 
+> ### ** Examples
+> 
+> ## default
+> qqunif(runif(100))
+> 
+> ## visualization of empirical power and type-I-error
+> res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
++                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
++                         ry.H0 = function(x) rnorm(x, sd = 3))
+> qqunif(res1, alpha = 0.1)
+> 
+> res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
++                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
++                       ry.H0 = rnorm)
+> qqunif(res2)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sim.power.t.test")
+> ### * sim.power.t.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sim.power.t.test
+> ### Title: Monte Carlo Simulations for Empirical Power of Two-sample
+> ###   t-Tests
+> ### Aliases: sim.power.t.test
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## Equal variance, small sample size
+> power.t.test(n = 5, delta = 2)
+
+     Two-sample t test power calculation 
+
+              n = 5
+          delta = 2
+             sd = 1
+      sig.level = 0.05
+          power = 0.7905416
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.welch.t.test(n = 5, delta = 2)
+
+     Two-sample Welch t test power calculation 
+
+              n = 5
+          delta = 2
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.7905416
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.hsu.t.test(n = 5, delta = 2)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 5
+          delta = 2
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.662509
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm,
++                  ny = 5, ry = function(x) rnorm(x, mean = 2), ry.H0 = rnorm)
+
+    Simulation Set-up
+             nx = 5
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 5
+             ry = function (x) , rnorm(x, mean = 2)
+          ry.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.7899
+emp.type.I.error = 0.0538
+
+    Welch Two-sample t-Test
+       emp.power = 0.7650
+emp.type.I.error = 0.0467
+
+    Hsu Two-sample t-Test
+       emp.power = 0.6488
+emp.type.I.error = 0.0266
+
+> 
+> ## Equal variance, moderate sample size
+> power.t.test(n = 25, delta = 0.8)
+
+     Two-sample t test power calculation 
+
+              n = 25
+          delta = 0.8
+             sd = 1
+      sig.level = 0.05
+          power = 0.7914502
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.welch.t.test(n = 25, delta = 0.8)
+
+     Two-sample Welch t test power calculation 
+
+              n = 25
+          delta = 0.8
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.7914502
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.hsu.t.test(n = 25, delta = 0.8)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 25
+          delta = 0.8
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.7745063
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> sim.power.t.test(nx = 25, rx = rnorm, rx.H0 = rnorm,
++                  ny = 25, ry = function(x) rnorm(x, mean = 0.8), ry.H0 = rnorm)
+
+    Simulation Set-up
+             nx = 25
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 25
+             ry = function (x) , rnorm(x, mean = 0.8)
+          ry.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.7959
+emp.type.I.error = 0.0517
+
+    Welch Two-sample t-Test
+       emp.power = 0.7954
+emp.type.I.error = 0.0513
+
+    Hsu Two-sample t-Test
+       emp.power = 0.7802
+emp.type.I.error = 0.0453
+
+> 
+> ## Equal variance, high sample size
+> power.t.test(n = 100, delta = 0.4)
+
+     Two-sample t test power calculation 
+
+              n = 100
+          delta = 0.4
+             sd = 1
+      sig.level = 0.05
+          power = 0.8036466
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.welch.t.test(n = 100, delta = 0.4)
+
+     Two-sample Welch t test power calculation 
+
+              n = 100
+          delta = 0.4
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.8036466
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.hsu.t.test(n = 100, delta = 0.4)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 100
+          delta = 0.4
+            sd1 = 1
+            sd2 = 1
+      sig.level = 0.05
+          power = 0.7998052
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> sim.power.t.test(nx = 100, rx = rnorm, rx.H0 = rnorm,
++                  ny = 100, ry = function(x) rnorm(x, mean = 0.4), ry.H0 = rnorm)
+
+    Simulation Set-up
+             nx = 100
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 100
+             ry = function (x) , rnorm(x, mean = 0.4)
+          ry.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.8033
+emp.type.I.error = 0.0512
+
+    Welch Two-sample t-Test
+       emp.power = 0.8033
+emp.type.I.error = 0.0512
+
+    Hsu Two-sample t-Test
+       emp.power = 0.8008
+emp.type.I.error = 0.0497
+
+> 
+> ## Unequal variance, small sample size
+> power.welch.t.test(n = 5, delta = 5, sd1 = 1, sd2 = 3)
+
+     Two-sample Welch t test power calculation 
+
+              n = 5
+          delta = 5
+            sd1 = 1
+            sd2 = 3
+      sig.level = 0.05
+          power = 0.7996606
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.hsu.t.test(n = 5, delta = 5, sd1 = 1, sd2 = 3)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 5
+          delta = 5
+            sd1 = 1
+            sd2 = 3
+      sig.level = 0.05
+          power = 0.7528383
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
++                  ny = 5, ry = function(x) rnorm(x, mean = 5, sd = 3), 
++                  ry.H0 = function(x) rnorm(x, sd = 3))
+
+    Simulation Set-up
+             nx = 5
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 5
+             ry = function (x) , rnorm(x, mean = 5, sd = 3)
+          ry.H0 = function (x) , rnorm(x, sd = 3)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.8641
+emp.type.I.error = 0.0612
+
+    Welch Two-sample t-Test
+       emp.power = 0.7922
+emp.type.I.error = 0.0470
+
+    Hsu Two-sample t-Test
+       emp.power = 0.7592
+emp.type.I.error = 0.0336
+
+>                  
+> ## Unequal variance, moderate sample size
+> power.welch.t.test(n = 25, delta = 1.8, sd1 = 1, sd2 = 3)
+
+     Two-sample Welch t test power calculation 
+
+              n = 25
+          delta = 1.8
+            sd1 = 1
+            sd2 = 3
+      sig.level = 0.05
+          power = 0.7857111
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.hsu.t.test(n = 25, delta = 1.8, sd1 = 1, sd2 = 3)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 25
+          delta = 1.8
+            sd1 = 1
+            sd2 = 3
+      sig.level = 0.05
+          power = 0.7795434
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> sim.power.t.test(nx = 25, rx = rnorm, rx.H0 = rnorm, 
++                  ny = 25, ry = function(x) rnorm(x, mean = 1.8, sd = 3), 
++                  ry.H0 = function(x) rnorm(x, sd = 3))
+
+    Simulation Set-up
+             nx = 25
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 25
+             ry = function (x) , rnorm(x, mean = 1.8, sd = 3)
+          ry.H0 = function (x) , rnorm(x, sd = 3)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.8036
+emp.type.I.error = 0.0525
+
+    Welch Two-sample t-Test
+       emp.power = 0.7938
+emp.type.I.error = 0.0496
+
+    Hsu Two-sample t-Test
+       emp.power = 0.7894
+emp.type.I.error = 0.0470
+
+>                  
+> ## Unequal variance, high sample size
+> power.welch.t.test(n = 100, delta = 0.9, sd1 = 1, sd2 = 3)
+
+     Two-sample Welch t test power calculation 
+
+              n = 100
+          delta = 0.9
+            sd1 = 1
+            sd2 = 3
+      sig.level = 0.05
+          power = 0.8060351
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> power.hsu.t.test(n = 100, delta = 0.9, sd1 = 1, sd2 = 3)
+
+     Two-sample Hsu t test power calculation 
+
+              n = 100
+          delta = 0.9
+            sd1 = 1
+            sd2 = 3
+      sig.level = 0.05
+          power = 0.8046573
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> sim.power.t.test(nx = 100, rx = rnorm, rx.H0 = rnorm, 
++                  ny = 100, ry = function(x) rnorm(x, mean = 0.9, sd = 3), 
++                  ry.H0 = function(x) rnorm(x, sd = 3))
+
+    Simulation Set-up
+             nx = 100
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 100
+             ry = function (x) , rnorm(x, mean = 0.9, sd = 3)
+          ry.H0 = function (x) , rnorm(x, sd = 3)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.8049
+emp.type.I.error = 0.0496
+
+    Welch Two-sample t-Test
+       emp.power = 0.8036
+emp.type.I.error = 0.0492
+
+    Hsu Two-sample t-Test
+       emp.power = 0.8025
+emp.type.I.error = 0.0487
+
+>                  
+> ## Unequal variance, unequal sample sizes
+> ## small sample sizes
+> sim.power.t.test(nx = 10, rx = rnorm, rx.H0 = rnorm, 
++                  ny = 5, ry = function(x) rnorm(x, mean = 5, sd = 3), 
++                  ry.H0 = function(x) rnorm(x, sd = 3))
+
+    Simulation Set-up
+             nx = 10
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 5
+             ry = function (x) , rnorm(x, mean = 5, sd = 3)
+          ry.H0 = function (x) , rnorm(x, sd = 3)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.9714
+emp.type.I.error = 0.1586
+
+    Welch Two-sample t-Test
+       emp.power = 0.7929
+emp.type.I.error = 0.0568
+
+    Hsu Two-sample t-Test
+       emp.power = 0.7705
+emp.type.I.error = 0.0410
+
+> sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
++                  ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
++                  ry.H0 = function(x) rnorm(x, sd = 3))
+
+    Simulation Set-up
+             nx = 5
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 10
+             ry = function (x) , rnorm(x, mean = 3, sd = 3)
+          ry.H0 = function (x) , rnorm(x, sd = 3)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.5189
+emp.type.I.error = 0.0171
+
+    Welch Two-sample t-Test
+       emp.power = 0.7392
+emp.type.I.error = 0.0506
+
+    Hsu Two-sample t-Test
+       emp.power = 0.5553
+emp.type.I.error = 0.0172
+
+> 
+> ## Unequal variance, unequal sample sizes
+> ## moderate sample sizes
+> sim.power.t.test(nx = 25, rx = rnorm, rx.H0 = rnorm, 
++                  ny = 50, ry = function(x) rnorm(x, mean = 1.5, sd = 3), 
++                  ry.H0 = function(x) rnorm(x, sd = 3))
+
+    Simulation Set-up
+             nx = 25
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 50
+             ry = function (x) , rnorm(x, mean = 1.5, sd = 3)
+          ry.H0 = function (x) , rnorm(x, sd = 3)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.7152
+emp.type.I.error = 0.0124
+
+    Welch Two-sample t-Test
+       emp.power = 0.8860
+emp.type.I.error = 0.0509
+
+    Hsu Two-sample t-Test
+       emp.power = 0.8702
+emp.type.I.error = 0.0448
+
+> 
+> ## Unequal variance, unequal sample sizes
+> ## high sample sizes
+> sim.power.t.test(nx = 100, rx = rnorm, rx.H0 = rnorm, 
++                  ny = 200, ry = function(x) rnorm(x, mean = 0.6, sd = 3), 
++                  ry.H0 = function(x) rnorm(x, sd = 3))
+
+    Simulation Set-up
+             nx = 100
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 200
+             ry = function (x) , rnorm(x, mean = 0.6, sd = 3)
+          ry.H0 = function (x) , rnorm(x, sd = 3)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+
+    Classical Two-sample t-Test
+       emp.power = 0.4819
+emp.type.I.error = 0.0118
+
+    Welch Two-sample t-Test
+       emp.power = 0.7170
+emp.type.I.error = 0.0505
+
+    Hsu Two-sample t-Test
+       emp.power = 0.7110
+emp.type.I.error = 0.0483
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sim.power.wilcox.test")
+> ### * sim.power.wilcox.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sim.power.wilcox.test
+> ### Title: Monte Carlo Simulations for Empirical Power of
+> ###   Wilcoxon-Mann-Whitney Tests
+> ### Aliases: sim.power.wilcox.test
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## Equal variance, small sample size
+> power.t.test(n = 5, power = 0.8)
+
+     Two-sample t test power calculation 
+
+              n = 5
+          delta = 2.024438
+             sd = 1
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> sim.ssize.wilcox.test(rx = rnorm, ry = function(x) rnorm(x, mean = 2), 
++                       power = 0.8, n.min = 3, n.max = 10, step.size = 1)
+
+     Wilcoxon rank sum test 
+
+              n = 4, 5, 6
+             rx = .Call(C_rnorm, n, mean, sd)
+             ry = rnorm(x, mean = 2)
+      sig.level = 0.05
+      emp.power = 0.4929, 0.6803, 0.8263
+    alternative = two.sided
+
+NOTE: n is number in *each* group
+
+> sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
++                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
++                       ry.H0 = rnorm)
+
+    Simulation Set-up
+             nx = 6
+             rx = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+          rx.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+             ny = 6
+             ry = function (x) , rnorm(x, mean = 2)
+          ry.H0 = function (n, mean = 0, sd = 1) , .Call(C_rnorm, n, mean, sd)
+      sig.level = 0.05
+             mu = 0
+    alternative = two.sided
+           iter = 10000
+       conf.int = FALSE
+    approximate = FALSE
+           ties = FALSE
+
+    Exact Wilcoxon-Mann-Whitney Test
+       emp.power = 0.8267
+emp.type.I.error = 0.0406
+
+    Asymptotic Wilcoxon-Mann-Whitney Test
+       emp.power = 0.8267
+emp.type.I.error = 0.0406
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sim.ssize.wilcox.test")
+> ### * sim.ssize.wilcox.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sim.ssize.wilcox.test
+> ### Title: Sample Size for Wilcoxon Rank Sum and Signed Rank Tests
+> ### Aliases: sim.ssize.wilcox.test
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ssize.pcc")
+> ### * ssize.pcc
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ssize.pcc
+> ### Title: Sample Size Planning for Developing Classifiers Using High
+> ###   Dimensional Data
+> ### Aliases: ssize.pcc
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## see Table 2 of Dobbin et al. (2008)
+> g <- 0.1
+> fc <- 1.6
+> ssize.pcc(gamma = g, stdFC = fc, nrFeatures = 22000)
+
+     Sample Size Planning for Developing Classifiers Using High Dimensional Data 
+
+          gamma = 0.1
+           prev = 0.5
+     nrFeatures = 22000
+             n1 = 21
+             n2 = 21
+
+NOTE: n1 is number of cases, n2 is number of controls
+
+> 
+> ## see Table 3 of Dobbin et al. (2008)
+> g <- 0.05
+> fc <- 1.1
+> ssize.pcc(gamma = g, stdFC = fc, nrFeatures = 22000)
+
+     Sample Size Planning for Developing Classifiers Using High Dimensional Data 
+
+          gamma = 0.05
+           prev = 0.5
+     nrFeatures = 22000
+             n1 = 47
+             n2 = 47
+
+NOTE: n1 is number of cases, n2 is number of controls
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ssize.propCI")
+> ### * ssize.propCI
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ssize.propCI
+> ### Title: Sample Size Calculation for Confidence Interval of a Proportion
+> ### Aliases: ssize.propCI
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ssize.propCI(prop = 0.1, width = 0.1)
+
+     Sample size calculation by method of wald-cc 
+
+              n = 157.6582
+           prop = 0.1
+          width = 0.1
+     conf.level = 0.95
+
+NOTE: Two-sided confidence interval
+
+> ssize.propCI(prop = 0.3, width = 0.1)
+
+     Sample size calculation by method of wald-cc 
+
+              n = 342.3905
+           prop = 0.3
+          width = 0.1
+     conf.level = 0.95
+
+NOTE: Two-sided confidence interval
+
+> ssize.propCI(prop = 0.3, width = 0.1, method = "wald")
+
+     Sample size calculation by method of wald 
+
+              n = 322.6825
+           prop = 0.3
+          width = 0.1
+     conf.level = 0.95
+
+NOTE: Two-sided confidence interval
+
+> ssize.propCI(prop = 0.3, width = 0.1, method = "jeffreys")
+
+     Sample size calculation by method of jeffreys 
+
+              n = 322.6825
+           prop = 0.3
+          width = 0.1
+     conf.level = 0.95
+
+NOTE: Two-sided confidence interval
+
+> ssize.propCI(prop = 0.3, width = 0.1, method = "clopper-pearson")
+
+     Sample size calculation by method of clopper-pearson 
+
+              n = 343
+           prop = 0.3
+          width = 0.1
+     conf.level = 0.95
+
+NOTE: Two-sided confidence interval
+
+> ssize.propCI(prop = 0.3, width = 0.1, method = "wilson")
+
+     Sample size calculation by method of wilson 
+
+              n = 327.2541
+           prop = 0.3
+          width = 0.1
+     conf.level = 0.95
+
+NOTE: Two-sided confidence interval
+
+> ssize.propCI(prop = 0.3, width = 0.1, method = "agresti-coull")
+
+     Sample size calculation by method of agresti-coull 
+
+              n = 318.8411
+           prop = 0.3
+          width = 0.1
+     conf.level = 0.95
+
+NOTE: Two-sided confidence interval
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("volcanoSimPower")
+> ### * volcanoSimPower
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: volcano
+> ### Title: Volcano Plots
+> ### Aliases: volcano volcano.sim.power.ttest volcano.sim.power.wtest
+> ### Keywords: hplot
+> 
+> ### ** Examples
+> 
+> res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
++                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
++                         ry.H0 = function(x) rnorm(x, sd = 3))
+> volcano(res1)
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  10.765 0.921 11.749 0.002 0.004 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

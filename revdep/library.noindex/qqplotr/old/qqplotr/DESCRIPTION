@@ -1,0 +1,30 @@
+Package: qqplotr
+Type: Package
+Version: 0.0.4
+Title: Quantile-Quantile Plot Extensions for 'ggplot2'
+Description: Extensions of 'ggplot2' Q-Q plot functionalities.
+Authors@R: c(person("Alexandre", "Almeida", email = "almeida.xan@gmail.com", role = c("aut")),
+		person("Adam", "Loy", email = "loyad01@gmail.com", role = c("aut", "cre")),
+    person("Heike", "Hofmann", role = "aut"))
+URL: https://github.com/aloy/qqplotr
+BugReports: https://github.com/aloy/qqplotr/issues
+License: GPL-3 | file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Collate: 'data.R' 'geom_qq_band.R' 'qqplotr.R' 'runShinyExample.R'
+        'stat_pp_band.R' 'stat_pp_line.R' 'stat_pp_point.R'
+        'stat_qq_line.R' 'stat_qq_band.R' 'stat_qq_point.R'
+VignetteBuilder: knitr
+Depends: R (>= 3.1), ggplot2 (>= 2.2)
+Imports: dplyr, robustbase, knitr, MASS
+Suggests: shiny, devtools, lattice, shinyBS
+NeedsCompilation: no
+Packaged: 2020-02-03 20:33:23 UTC; aloy
+Author: Alexandre Almeida [aut],
+  Adam Loy [aut, cre],
+  Heike Hofmann [aut]
+Maintainer: Adam Loy <loyad01@gmail.com>
+Repository: CRAN
+Date/Publication: 2020-02-04 07:40:02 UTC
+Built: R 4.0.2; ; 2020-07-17 00:49:00 UTC; unix

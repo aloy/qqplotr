@@ -1,0 +1,50 @@
+
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(latrend)
+Warning message:
+In fun(libname, pkgname) : couldn't connect to display ""
+> library(data.table)
+> library(kml)
+Loading required package: clv
+Loading required package: cluster
+Loading required package: class
+Loading required package: longitudinalData
+Loading required package: rgl
+Loading required package: misc3d
+> 
+> test_check('latrend')
+Loading required namespace: lcmm
+Loading required namespace: flexmix
+Loading required namespace: crimCV
+Loading required namespace: funFEM
+Loading required namespace: lme4
+Loading required namespace: longclust
+Loading required namespace: mixtools
+Loading required namespace: mixAK
+Failed with error:  'there is no package called 'mixAK''
+══ Skipped tests ═══════════════════════════════════════════════════════════════
+● On CRAN (5)
+● mixAK cannot be loaded (1)
+● skipping MixTVEM tests because the TVEMMixNormal() function is not loaded (1)
+
+[ FAIL 0 | WARN 0 | SKIP 7 | PASS 2774 ]
+> 
+> proc.time()
+   user  system elapsed 
+ 30.228   5.552  35.912 

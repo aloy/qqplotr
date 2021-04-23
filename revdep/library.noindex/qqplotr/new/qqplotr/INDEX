@@ -1,0 +1,9 @@
+geom_qq_band            Quantile-quantile confidence bands
+iowa                    2012 BRFSS sample for the state of Iowa
+longjump                Men's Olympic Long Jump Qualifiers 2012
+qqplotr                 Q-Q and P-P plot extensions for 'ggplot2'
+stat_pp_band            Probability-probability confidence bands
+stat_pp_line            Probability-probability lines
+stat_pp_point           Probability-probability points
+stat_qq_line            Quantile-quantile lines
+stat_qq_point           Quantile-quantile points

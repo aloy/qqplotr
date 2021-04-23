@@ -1,10 +1,9 @@
-qqplotr <img src='man/figures/logo.png' align="right" height="139" />
-=====================================================================
+# qqplotr <img src='man/figures/logo.png' align="right" height="139" />
 
 [![R build
 status](https://github.com/aloy/qqplotr/workflows/R-CMD-check/badge.svg)](https://github.com/aloy/qqplotr/actions)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/qqplotr)](https://cran.r-project.org/package=qqplotr)
-![CRAN\_Downloads\_Badge](http://cranlogs.r-pkg.org/badges/qqplotr)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/qqplotr)](https://cran.r-project.org/package=qqplotr)
+![CRAN_Downloads_Badge](http://cranlogs.r-pkg.org/badges/qqplotr)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -15,8 +14,7 @@ functions of this package also allow a detrend adjustment of the plots,
 proposed by Thode (2002) to help reduce visual bias when assessing the
 results.
 
-Installation
-------------
+## Installation
 
 If you would like to install the development version of `qqplotr`, you
 may do so by using, for example, `devtools`:
@@ -34,8 +32,7 @@ do:
 install.packages("qqplotr")
 ```
 
-Details
--------
+## Details
 
 The functions of this package, implemeneted as Stats from `ggplot2`, are
 divided into two groups: (1) Q-Q and (2) P-P plots.
@@ -78,8 +75,7 @@ will be illustrated further below.
 -   `stat_pp_band` Draws confidence bands. For now, only the bootstrap
     version (`"boot"`) is available.
 
-Usage
------
+## Usage
 
 ### Q-Q plot
 
@@ -306,8 +302,7 @@ That value let the most P-P points inside the confidence bands. Even so,
 that group of outside the confidence bands (at the lower tail) indicate
 that a more appropriate distribution should be selected.
 
-Shiny App
----------
+## Shiny App
 
 In this package, we also included an interactive Shiny app with which
 you’re able to explore this package functions and its parameters. To run
@@ -317,11 +312,10 @@ the app, simply call:
 runShinyExample()
 ```
 
-References
-----------
+## References
 
 -   [Thode, H. (2002), Testing for Normality. CRC Press, 1st
-    Ed.](https://www.crcpress.com/Testing-For-Normality/Thode/p/book/9780824796136)
+    Ed.](https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136)
 -   [Aldor-Noiman, S. et al. (2013). The Power to See: A New Graphical
     Test of Normality. The American Statistician.
-    67:4.](http://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865)
+    67:4.](https://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865)
