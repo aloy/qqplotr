@@ -18,7 +18,7 @@ There were no ERRORs, WARNINGs, or NOTEs.
 
 ## Downstream dependencies
 I have also run R CMD check on downstream dependencies of qqplotr 
-(https://github.com/wch/checkresults/blob/master/httr/r-release). 
+(https://github.com/aloy/qqplotr/tree/master/revdep). 
 All packages that I could install passed except:
 
 * latrend: I received Warning: replacing previous import ‘data.table:::=’ by ‘ggplot2:::=’ when loading ‘latrend’. This isn't related to changes to qqplotr.
