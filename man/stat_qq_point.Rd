@@ -15,6 +15,8 @@ stat_qq_point(
   distribution = "norm",
   dparams = list(),
   detrend = FALSE,
+  downsample = FALSE,
+  downf = 0.001,
   identity = FALSE,
   qtype = 7,
   qprobs = c(0.25, 0.75),
@@ -80,6 +82,13 @@ appropriate \code{dparams} in that case.}
 the objects will be detrended according to the reference Q-Q line. This
 procedure was described by Thode (2002), and may help reducing visual bias
 caused by the orthogonal distances from Q-Q points to the reference line.}
+
+\item{downsample}{Logical. Only used if \code{downsample = TRUE}.
+Should the number of data points in the figure be, reduced? If \code{TRUE},
+datapoints will be removed based on proximity quantified by downf.}
+
+\item{downf}{Double. Fraction of maximum distance in quantile data within
+which data points will be discarded during down sampling.}
 
 \item{identity}{Logical. Only used if \code{detrend = TRUE}. Should an
 identity line be used as the reference line for the plot detrending? If
