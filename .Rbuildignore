@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^cran-comments\.md$
 ^README\.Rmd$
+^README\.md$
 ^test-qqplotr\.R$
 ^_pkgdown.yml$
 ^pkgdown$
