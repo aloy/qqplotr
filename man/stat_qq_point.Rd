@@ -18,6 +18,7 @@ stat_qq_point(
   identity = FALSE,
   qtype = 7,
   qprobs = c(0.25, 0.75),
+  down.sample = NULL,
   ...
 )
 }
@@ -94,6 +95,10 @@ intercepts two data quantiles specified in \code{qprobs} is used.}
 \item{qprobs}{Numeric vector of length two. Only used if \code{detrend =
 TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
 \code{\link[stats]{quantile}} function to construct the Q-Q line.}
+
+\item{down.sample}{Integer specifying how many points you want to sample
+in a reduced sample (i.e., a down sample). The default value is \code{NULL}
+indicating no downsampling.}
 
 \item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like

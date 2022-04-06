@@ -4,6 +4,7 @@
 #'
 #' @import ggplot2
 #' @importFrom MASS fitdistr
+#' @importFrom opdisDownsampling opdisDownsampling
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_point
@@ -36,6 +37,9 @@
 #' @param qprobs Numeric vector of length two. Only used if \code{detrend =
 #'   TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
 #'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
+#' @param down.sample Integer specifying how many points you want to sample
+#'   in a reduced sample (i.e., a down sample). The default value is \code{NULL}
+#'   indicating no downsampling.
 #'
 #' @references
 #' \itemize{
@@ -77,6 +81,7 @@ stat_qq_point <- function(
 	identity = FALSE,
 	qtype = 7,
 	qprobs = c(.25, .75),
+	down.sample = NULL,
 	...
 ) {
 	# error handling
@@ -135,6 +140,7 @@ stat_qq_point <- function(
 			identity = identity,
 			qtype = qtype,
 			qprobs = qprobs,
+			down.sample = down.sample,
 			...
 		)
 	)
@@ -166,12 +172,20 @@ StatQqPoint <- ggplot2::ggproto(
 													 detrend = FALSE,
 													 identity = FALSE,
 													 qtype = 7,
-													 qprobs = c(.25)) {
+													 qprobs = c(.25),
+													 down.sample = NULL) {
 		# distributional function
 		qFunc <- eval(parse(text = paste0("q", distribution)))
 
-		oidx <- order(data$sample)
-		smp <- data$sample[oidx]
+		samp <- data$sample
+		if(!is.null(down.sample)) {
+			ds <- opdisDownsampling::opdisDownsampling(samp, Size = down.sample,
+																								nTrials = 500, MaxCores = 1)
+			samp <- ds$ReducedData$Data
+		}
+
+		oidx <- order(samp)
+		smp <- samp[oidx]
 		n <- length(smp)
 		quantiles <- ppoints(n)
 
