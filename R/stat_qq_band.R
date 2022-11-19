@@ -244,6 +244,8 @@ StatQqBand <- ggplot2::ggproto(
 	),
 
 	required_aes = c("sample"),
+	
+	dropped_aes = c("sample"),
 
 	compute_group = {
 		function(data,

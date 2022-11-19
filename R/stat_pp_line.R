@@ -86,6 +86,8 @@ StatPpLine <- ggplot2::ggproto(
 	default_aes = ggplot2::aes(x = ..xline.., y = ..yline..),
 
 	required_aes = c("sample"),
+	
+	dropped_aes = c("sample"),
 
 	compute_group = {
 		function(data,
