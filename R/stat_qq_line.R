@@ -161,6 +161,8 @@ StatQqLine <- ggplot2::ggproto(
 
 	required_aes = c("sample"),
 
+	dropped_aes = c("sample"),
+	
 	default_aes = ggplot2::aes(
 		x = ..xline..,
 		y = ..yline..
