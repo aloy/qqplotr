@@ -1,15 +1,14 @@
 context('LM-KM')
 rngReset()
+tests = c(DEFAULT_LATREND_TESTS)
 
-test_that('default', {
-  set.seed(1)
-  m = lcMethodTestLMKM()
-  model = latrend(m, testLongData)
-  expect_valid_lcModel(model)
-})
+make.lmkm = function(id, time, response, ...) {
+  form = as.formula(sprintf('%s ~ 1', response))
+  lcMethodLMKM(formula = form, time = time, id = id, ..., seed = 1) %>% evaluate()
+}
 
-test_that('single cluster', {
-  m = lcMethodTestLMKM(nClusters=1)
-  model = latrend(m, testLongData)
-  expect_valid_lcModel(model)
+test_that('tests', {
+  expect_true({
+    test.latrend('lcMethodLMKM', instantiator = make.lmkm, tests = tests)
+  })
 })

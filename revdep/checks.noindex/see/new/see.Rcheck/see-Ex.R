@@ -32,8 +32,10 @@ flush(stderr()); flush(stdout())
 ##D result <- hdi(model, ci = c(0.5, 0.75, 0.9, 0.95))
 ##D data <- data_plot(result, data = model)
 ##D 
-##D p <- data %>%
-##D   ggplot(aes(x = x, y = y, height = height, group = y, fill = fill)) +
+##D p <- ggplot(
+##D   data,
+##D   aes(x = x, y = y, height = height, group = y, fill = fill)
+##D ) +
 ##D   ggridges::geom_ridgeline_gradient()
 ##D 
 ##D p
@@ -73,15 +75,16 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # Create a radar/spider chart with ggplot:
-if (require("dplyr") && require("tidyr") && require("ggplot2")) {
-  data <- iris %>%
-    group_by(Species) %>%
-    summarise_all(mean) %>%
-    pivot_longer(-Species)
+if (require("datawizard") && require("ggplot2")) {
+  data(iris)
+  data <- aggregate(iris[-5], list(Species = iris$Species), mean)
+  data <- data_to_long(
+    data,
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
 
-  data %>%
-    ggplot(aes(x = name, y = value, color = Species, group = Species)) +
-    geom_polygon(fill = NA, size = 2) +
+  ggplot(data, aes(x = name, y = value, color = Species, group = Species)) +
+    geom_polygon(fill = NA, linewidth = 2) +
     coord_radar(start = -pi / 4)
 }
 
@@ -99,40 +102,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-## Not run: 
-##D library(bayestestR)
-##D if (require("rstanarm")) {
-##D   model <- stan_glm(
-##D     Sepal.Length ~ Petal.Width * Species,
-##D     data = iris,
-##D     chains = 2, iter = 200, refresh = 0
-##D   )
-##D 
-##D   x <- rope(model)
-##D   plot(x)
-##D 
-##D   x <- hdi(model)
-##D   plot(x) + theme_modern()
-##D 
-##D   data <- rnorm(1000, 1)
-##D   x <- p_direction(data)
-##D   plot(x)
-##D 
-##D   x <- p_direction(model)
-##D   plot(x)
-##D 
-##D   model <- stan_glm(
-##D     mpg ~ wt + gear + cyl + disp,
-##D     chains = 2,
-##D     iter = 200,
-##D     refresh = 0,
-##D     data = mtcars
-##D   )
-##D   x <- equivalence_test(model)
-##D   plot(x)
-##D }
-## End(Not run)
-
+## Don't show: 
+if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -155,6 +130,187 @@ flat_colors("dark red", "teal")
 
 
 cleanEx()
+nameEx("geom_binomdensity")
+### * geom_binomdensity
+
+flush(stderr()); flush(stdout())
+
+### Name: geom_binomdensity
+### Title: Add dot-densities for binary 'y' variables
+### Aliases: geom_binomdensity
+
+### ** Examples
+
+## Don't show: 
+if (require("ggdist")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+library(ggplot2)
+library(see)
+
+data <- iris[1:100, ]
+
+ggplot() +
+  geom_binomdensity(data,
+    x = "Sepal.Length",
+    y = "Species",
+    fill = "red",
+    color = NA
+  )
+
+# Different scales
+data[1:70, "Species"] <- "setosa" # Create unbalanced proportions
+
+ggplot() +
+  geom_binomdensity(data, x = "Sepal.Length", y = "Species", scale = "auto")
+ggplot() +
+  geom_binomdensity(data, x = "Sepal.Length", y = "Species", scale = "density")
+ggplot() +
+  geom_binomdensity(data, x = "Sepal.Length", y = "Species", scale = "proportion")
+ggplot() +
+  geom_binomdensity(data,
+    x = "Sepal.Length", y = "Species",
+    scale = list("setosa" = 0.4, "versicolor" = 0.6)
+  )
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
+
+
+
+cleanEx()
+nameEx("geom_from_list")
+### * geom_from_list
+
+flush(stderr()); flush(stdout())
+
+### Name: geom_from_list
+### Title: Create ggplot2 geom(s) from a list
+### Aliases: geom_from_list geoms_from_list
+
+### ** Examples
+
+## Don't show: 
+if (require("ggside") && require("ggplot2")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+library(ggplot2)
+
+# Example 1 (basic geoms and labels) --------------------------
+l1 <- list(
+  geom = "point",
+  data = mtcars,
+  aes = list(x = "mpg", y = "wt", size = "hp", color = "hp"),
+  show.legend = c("size" = FALSE)
+)
+l2 <- list(
+  geom = "labs",
+  title = "A Title"
+)
+
+ggplot() +
+  geom_from_list(l1) +
+  geom_from_list(l2)
+
+ggplot() +
+  geoms_from_list(list(l1 = l1, l2 = l2))
+
+# Example 2 (Violin, boxplots, ...) --------------------------
+l1 <- list(
+  geom = "violin",
+  data = iris,
+  aes = list(x = "Species", y = "Sepal.Width")
+)
+l2 <- list(
+  geom = "boxplot",
+  data = iris,
+  aes = list(x = "Species", y = "Sepal.Width"),
+  outlier.shape = NA
+)
+l3 <- list(
+  geom = "jitter",
+  data = iris,
+  width = 0.1,
+  aes = list(x = "Species", y = "Sepal.Width")
+)
+
+ggplot() +
+  geom_from_list(l1) +
+  geom_from_list(l2) +
+  geom_from_list(l3)
+
+# Example 3 (2D density) --------------------------
+ggplot() +
+  geom_from_list(list(
+    geom = "density_2d", data = iris,
+    aes = list(x = "Sepal.Width", y = "Petal.Length")
+  ))
+ggplot() +
+  geom_from_list(list(
+    geom = "density_2d_filled", data = iris,
+    aes = list(x = "Sepal.Width", y = "Petal.Length")
+  ))
+ggplot() +
+  geom_from_list(list(
+    geom = "density_2d_polygon", data = iris,
+    aes = list(x = "Sepal.Width", y = "Petal.Length")
+  ))
+ggplot() +
+  geom_from_list(list(
+    geom = "density_2d_raster", data = iris,
+    aes = list(x = "Sepal.Width", y = "Petal.Length")
+  )) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
+
+# Example 4 (facet and coord flip) --------------------------
+
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Width)) +
+  geom_point() +
+  geom_from_list(list(geom = "hline", yintercept = 2)) +
+  geom_from_list(list(geom = "coord_flip")) +
+  geom_from_list(list(geom = "facet_wrap", facets = "~ Species", scales = "free"))
+
+# Example 5 (theme and scales) --------------------------
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Width, color = Species)) +
+  geom_point() +
+  geom_from_list(list(geom = "scale_color_viridis_d", option = "inferno")) +
+  geom_from_list(list(geom = "theme", legend.position = "top"))
+
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Width, color = Species)) +
+  geom_point() +
+  geom_from_list(list(geom = "scale_color_material_d", palette = "rainbow")) +
+  geom_from_list(list(geom = "theme_void"))
+
+# Example 5 (Smooths and side densities) --------------------------
+
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Width)) +
+  geom_from_list(list(geom = "point")) +
+  geom_from_list(list(geom = "smooth", color = "red")) +
+  geom_from_list(list(aes = list(x = "Sepal.Length"), geom = "ggside::geom_xsidedensity")) +
+  geom_from_list(list(geom = "ggside::scale_xsidey_continuous", breaks = NULL))
+
+# Example 6 (ggraph) --------------------------
+if (require("tidygraph", quietly = TRUE) &&
+  require("ggraph", quietly = TRUE)) {
+  # Prepare graph
+  nodes <- data.frame(name = c("Dom", "Mattan", "Daniel", "Brenton"))
+  edges <- data.frame(
+    from = c(1, 1, 1, 2, 3, 3, 4, 4, 4),
+    to = c(2, 3, 4, 1, 1, 2, 1, 2, 3)
+  )
+  data <- tidygraph::tbl_graph(nodes = nodes, edges = edges)
+
+  ggraph(data, layout = "kk") +
+    geom_from_list(list(geom = "ggraph::geom_edge_arc")) +
+    geom_from_list(list(geom = "ggraph::geom_node_point", size = 10)) +
+    geom_from_list(list(geom = "ggraph::geom_node_label", aes = list(label = "name")))
+}
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
+
+
+
+cleanEx()
 nameEx("geom_point2")
 ### * geom_point2
 
@@ -168,6 +324,9 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (requireNamespace("patchwork", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
 library(ggplot2)
 library(see)
 
@@ -188,6 +347,9 @@ ggplot(iris, aes(x = Petal.Width, y = Sepal.Length, fill = Species)) +
 theme_set(theme_abyss())
 ggplot(iris, aes(x = Petal.Width, y = Sepal.Length, fill = Species)) +
   geom_point_borderless(size = 4)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -260,6 +422,19 @@ ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   theme_modern() +
   scale_fill_material_d()
 
+# To flip all half-violin geoms, use `flip = TRUE`:
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violinhalf(flip = TRUE) +
+  theme_modern() +
+  scale_fill_material_d()
+
+# To flip the half-violin geoms for the first and third groups only
+# by passing a numeric vector
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violinhalf(flip = c(1, 3)) +
+  theme_modern() +
+  scale_fill_material_d()
+
 
 
 cleanEx()
@@ -312,6 +487,28 @@ flush(stderr()); flush(stdout())
 metro_colors()
 
 metro_colors("dark red", "teal")
+
+
+
+cleanEx()
+nameEx("okabeito_colors")
+### * okabeito_colors
+
+flush(stderr()); flush(stdout())
+
+### Name: okabeito_colors
+### Title: Extract Okabe-Ito colors as hex codes
+### Aliases: okabeito_colors oi_colors
+
+### ** Examples
+
+okabeito_colors()
+
+okabeito_colors(c("red", "light blue", "orange"))
+
+okabeito_colors(original_names = TRUE)
+
+okabeito_colors(black_first = TRUE)
 
 
 
@@ -377,11 +574,6 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(performance)
-m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
-result <- check_distribution(m)
-result
-plot(result)
 
 
 
@@ -469,24 +661,6 @@ plot(check_outliers(model))
 
 
 cleanEx()
-nameEx("plot.see_cluster_analysis")
-### * plot.see_cluster_analysis
-
-flush(stderr()); flush(stdout())
-
-### Name: plot.see_cluster_analysis
-### Title: Plot method for computing cluster analysis
-### Aliases: plot.see_cluster_analysis
-
-### ** Examples
-
-library(parameters)
-groups <- cluster_analysis(iris[, 1:4], 3)
-plot(groups)
-
-
-
-cleanEx()
 nameEx("plot.see_compare_parameters")
 ### * plot.see_compare_parameters
 
@@ -531,47 +705,6 @@ lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
 result <- compare_performance(lm1, lm2, lm3)
 result
 plot(result)
-
-
-
-cleanEx()
-nameEx("plot.see_easycormatrix")
-### * plot.see_easycormatrix
-
-flush(stderr()); flush(stdout())
-
-### Name: plot.see_easycormatrix
-### Title: Plot method for correlation matrices
-### Aliases: plot.see_easycormatrix
-
-### ** Examples
-
-library(correlation)
-data(mtcars)
-result <- correlation(mtcars[, -c(8:9)])
-s <- summary(result)
-plot(s)
-
-
-
-cleanEx()
-nameEx("plot.see_easycorrelation")
-### * plot.see_easycorrelation
-
-flush(stderr()); flush(stdout())
-
-### Name: plot.see_easycorrelation
-### Title: Plot method for Gaussian Graphical Models
-### Aliases: plot.see_easycorrelation
-
-### ** Examples
-
-## Not run: 
-##D library(correlation)
-##D library(ggraph)
-##D result <- correlation(mtcars, partial = TRUE)
-##D plot(result)
-## End(Not run)
 
 
 
@@ -626,6 +759,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("modelbased") && require("rstanarm") && require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -641,6 +780,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -656,6 +801,19 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("rstanarm") && FALSE) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+library(rstanarm)
+library(bayestestR)
+set.seed(123)
+m <<- stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0)
+result <- hdi(m)
+result
+plot(result)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -693,6 +851,34 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
+
+
+
+cleanEx()
+nameEx("plot.see_p_function")
+### * plot.see_p_function
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.see_p_function
+### Title: Plot method for plotting p-functions (aka consonance functions)
+### Aliases: plot.see_p_function
+
+### ** Examples
+
+library(parameters)
+model <- lm(Sepal.Length ~ Species + Sepal.Width + Petal.Length, data = iris)
+result <- p_function(model)
+plot(result, n_columns = 2, show_labels = FALSE)
+
+result <- p_function(model, keep = "Sepal.Width")
+plot(result)
 
 
 
@@ -708,6 +894,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -723,34 +915,39 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("brms") && require("metafor")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
 ## Not run: 
-##D if (require("bayestestR") && require("brms") && require("metafor")) {
-##D   +
-##D     # data
-##D     data(dat.bcg)
-##D   dat <- escalc(
-##D     measure = "RR",
-##D     ai = tpos,
-##D     bi = tneg,
-##D     ci = cpos,
-##D     di = cneg,
-##D     data = dat.bcg
-##D   )
-##D   dat$author <- make.unique(dat$author)
+##D library(brms)
+##D library(metafor)
+##D data(dat.bcg)
 ##D 
-##D   # model
-##D   set.seed(123)
-##D   priors <- c(
-##D     prior(normal(0, 1), class = Intercept),
-##D     prior(cauchy(0, 0.5), class = sd)
-##D   )
-##D   model <- brm(yi | se(vi) ~ 1 + (1 | author), data = dat)
+##D dat <- escalc(
+##D   measure = "RR",
+##D   ai = tpos,
+##D   bi = tneg,
+##D   ci = cpos,
+##D   di = cneg,
+##D   data = dat.bcg
+##D )
+##D dat$author <- make.unique(dat$author)
 ##D 
-##D   # result
-##D   mp <- model_parameters(model)
-##D   plot(mp)
-##D }
+##D # model
+##D set.seed(123)
+##D priors <- c(
+##D   prior(normal(0, 1), class = Intercept),
+##D   prior(cauchy(0, 0.5), class = sd)
+##D )
+##D model <- brm(yi | se(vi) ~ 1 + (1 | author), data = dat)
+##D 
+##D # result
+##D mp <- model_parameters(model)
+##D plot(mp)
 ## End(Not run)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -828,7 +1025,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 library(parameters)
-m <- lm(mpg ~ wt + cyl + gear, data = mtcars)
+m <<- lm(mpg ~ wt + cyl + gear, data = mtcars)
 result <- simulate_parameters(m)
 result
 plot(result)
@@ -847,21 +1044,19 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-if (packageVersion("performance") > "0.7.0") {
-  library(performance)
-  data(iris)
-  set.seed(123)
-  iris$y <- rbinom(nrow(iris), size = 1, .3)
+library(performance)
+data(iris)
+set.seed(123)
+iris$y <- rbinom(nrow(iris), size = 1, .3)
 
-  folds <- sample(nrow(iris), size = nrow(iris) / 8, replace = FALSE)
-  test_data <- iris[folds, ]
-  train_data <- iris[-folds, ]
+folds <- sample(nrow(iris), size = nrow(iris) / 8, replace = FALSE)
+test_data <- iris[folds, ]
+train_data <- iris[-folds, ]
 
-  model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomial")
-  result <- performance_roc(model, new_data = test_data)
-  result
-  plot(result)
-}
+model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomial")
+result <- performance_roc(model, new_data = test_data)
+result
+plot(result)
 
 
 
@@ -877,6 +1072,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -892,6 +1093,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -907,6 +1114,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -922,17 +1135,30 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (requireNamespace("patchwork", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
 library(ggplot2)
 library(see)
 
-p1 <- ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
+p1 <- ggplot(mtcars, aes(x = disp, y = mpg)) +
   geom_point()
-p2 <- ggplot(iris, aes(x = Petal.Length)) +
+p2 <- ggplot(mtcars, aes(x = mpg)) +
   geom_density()
+p3 <- ggplot(mtcars, aes(x = factor(cyl))) +
+  geom_bar() +
+  scale_x_discrete("cyl")
 
 plots(p1, p2)
-plots(p1, p2, n_columns = 2, tags = TRUE)
-plots(p1, p2, n_columns = 2, tags = c("Fig. 1", "Fig. 2"))
+plots(p1, p2, n_columns = 2, tags = "A")
+plots(
+  p1, p2, p3,
+  n_columns = 1, tags = c("Fig. 1", "Fig. 2", "Fig. 3"),
+  title = "The surprising truth about mtcars"
+)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -950,7 +1176,7 @@ flush(stderr()); flush(stdout())
 
 if (require("performance")) {
   model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
-  pp_check(model)
+  check_posterior_predictions(model)
 }
 
 
@@ -977,6 +1203,41 @@ ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_boxplot() +
   theme_modern() +
   scale_fill_bluebrown_d()
+
+
+
+cleanEx()
+nameEx("scale_color_colorhex")
+### * scale_color_colorhex
+
+flush(stderr()); flush(stdout())
+
+### Name: scale_color_colorhex
+### Title: Color palettes from color-hex
+### Aliases: scale_color_colorhex scale_color_colorhex_d
+###   scale_color_colorhex_c scale_colour_colorhex scale_colour_colorhex_c
+###   scale_colour_colorhex_d scale_fill_colorhex scale_fill_colorhex_d
+###   scale_fill_colorhex_c
+
+### ** Examples
+
+library(ggplot2)
+library(see)
+
+ggplot(iris, aes(x = Species, y = Sepal.Length, color = Species)) +
+  geom_boxplot() +
+  theme_modern() +
+  scale_color_colorhex_d(palette = 1014416)
+
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violin() +
+  theme_modern() +
+  scale_fill_colorhex_d(palette = 1014416)
+
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
+  geom_point() +
+  theme_modern() +
+  scale_color_colorhex_c(palette = 1014416)
 
 
 
@@ -1080,6 +1341,39 @@ ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
   geom_point() +
   theme_modern() +
   scale_color_metro_c(palette = "rainbow")
+
+
+
+cleanEx()
+nameEx("scale_color_okabeito")
+### * scale_color_okabeito
+
+flush(stderr()); flush(stdout())
+
+### Name: scale_color_okabeito
+### Title: Okabe-Ito color palette
+### Aliases: scale_color_okabeito scale_fill_okabeito scale_colour_okabeito
+###   scale_fill_oi
+
+### ** Examples
+
+library(ggplot2)
+library(see)
+
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_boxplot() +
+  theme_modern() +
+  scale_fill_okabeito()
+
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violin() +
+  theme_modern() +
+  scale_fill_oi(palette = "black_first")
+
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violin() +
+  theme_modern() +
+  scale_fill_oi(order = c(1, 5, 6, 2, 4, 3, 7))
 
 
 
@@ -1312,11 +1606,10 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-if (require("ggplot2") && require("dplyr") && require("tidyr")) {
-  data <- iris %>%
-    group_by(Species) %>%
-    summarise_all(mean) %>%
-    pivot_longer(-Species)
+if (require("ggplot2") && require("poorman")) {
+  data <- iris[-5] %>%
+    aggregate(list(Species = iris$Species), mean) %>%
+    datawizard::reshape_longer(c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"))
 
   data %>%
     ggplot(aes(
@@ -1326,7 +1619,7 @@ if (require("ggplot2") && require("dplyr") && require("tidyr")) {
       group = Species,
       fill = Species
     )) +
-    geom_polygon(size = 1, alpha = .1) +
+    geom_polygon(linewidth = 1, alpha = 0.1) +
     coord_radar() +
     theme_radar()
 }

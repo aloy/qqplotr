@@ -1,6 +1,6 @@
 
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin17.0 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -41,6 +41,10 @@ Type 'q()' to quit R.
 +                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
 +                         ry.H0 = function(x) rnorm(x, sd = 3))
 > hist(res1)
+Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+ℹ Please use `after_stat(density)` instead.
+ℹ The deprecated feature was likely used in the MKpower package.
+  Please report the issue to the authors.
 > res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
 +                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
 +                       ry.H0 = rnorm)
@@ -1033,17 +1037,77 @@ NOTE: n is number in *each* group
 > 
 > ## default
 > qqunif(runif(100))
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
 > 
 > ## visualization of empirical power and type-I-error
 > res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
 +                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
 +                         ry.H0 = function(x) rnorm(x, sd = 3))
 > qqunif(res1, alpha = 0.1)
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
 > 
 > res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
 +                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
 +                       ry.H0 = rnorm)
 > qqunif(res2)
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation: sample
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
 > 
 > 
 > 
@@ -1822,7 +1886,7 @@ NOTE: Two-sided confidence interval
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  11.152 0.908 12.442 0.002 0.004 
+Time elapsed:  14.713 1.396 16.45 0 0 
 > grDevices::dev.off()
 null device 
           1 

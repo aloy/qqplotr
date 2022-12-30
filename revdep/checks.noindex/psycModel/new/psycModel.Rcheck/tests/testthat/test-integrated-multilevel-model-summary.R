@@ -1,68 +1,91 @@
-testthat::test_that(desc = "simple_slope test", {
-  testthat::skip_on_cran()
-  fit1 <- integrated_multilevel_model_summary(
+testthat::test_that("lme_multilevel_model_summary: lme4 model", {
+  suppressWarnings(
+    summary <- lme_multilevel_model_summary(
     data = popular,
     response_variable = popular,
-    non_random_effect_factors = c(extrav, texp, sex),
-    three_way_interaction_factor = c(extrav, sex, texp), # three-way interaction
+    random_effect_factors = extrav,
+    non_random_effect_factors = c(sex, texp),
+    two_way_interaction_factor = c(sex, extrav),
     id = class,
-    simple_slope = TRUE, # you can request simple slope
-    model_summary = TRUE,
-    quite = T,
-    interaction_plot = FALSE,
-    return_result = TRUE
-  )
-
-  fit2 <- integrated_multilevel_model_summary(
-    data = popular,
-    response_variable = popular,
-    non_random_effect_factors = c(texp, sex),
-    two_way_interaction_factor = c(sex, texp), # three-way interaction
-    id = class,
-    simple_slope = TRUE, # you can request simple slope
-    model_summary = TRUE,
-    interaction_plot = FALSE,
-    quite = T,
-    return_result = TRUE
-  )
-  expect_false(any(fit1$simple_slope_df[2] == "Mean"))
-  expect_true(!is.null(fit1$simple_slope$jn_plot))
-})
-
-testthat::test_that(desc = "", {
-  testthat::skip_on_cran()
-  fit <- integrated_multilevel_model_summary(
-    data = popular,
-    response_variable = popular,
-    non_random_effect_factors = c(texp, sex),
-    two_way_interaction_factor = c(sex, texp), # three-way interaction
-    id = class,
-    simple_slope = TRUE, # you can request simple slope
-    model_summary = TRUE,
-    interaction_plot = FALSE,
+    use_package = "lme4",
     quite = TRUE,
+    assumption_plot = TRUE,
+    simple_slope = TRUE,
     return_result = TRUE
-  )
-  expect_false(any(fit$simple_slope$simple_slope_df[2] == "Mean"))
-  expect_true(!is.null(fit$simple_slope$jn_plot))
+  ))
+  # model
+  expect_false(is.null(summary$model))
+
+  # summary
+  expect_false(is.null(summary$summary$model_summary))
+  expect_false(is.null(summary$summary$model_performance_df))
+  expect_false(is.null(summary$summary$assumption_plot))
+
+  # interaction plot
+  expect_false(is.null(summary$interaction_plot))
+
+  # simple slope
+  expect_false(is.null(summary$simple_slope$simple_slope_df))
+  expect_false(is.null(summary$simple_slope$jn_plot))
 })
 
-testthat::test_that(desc = "", {
-  testthat::skip_on_cran()
-  fit <- expect_warning(expect_warning(
-    integrated_multilevel_model_summary(
-      response_variable = incidence,
-      random_effect_factors = period,
-      family = "poisson", # or you can enter as poisson(link = 'log')
-      id = herd,
-      data = lme4::cbpp,
-      model_summary = TRUE,
-      quite = TRUE,
-      return_result = TRUE
-    ),
-    regexp = "coerced"
-  ), regexp = "interaction_plot")
+testthat::test_that("lme_multilevel_model_summary: lmerTest model", {
+  suppressWarnings(summary <- lme_multilevel_model_summary(
+    data = popular,
+    response_variable = popular,
+    random_effect_factors = extrav,
+    non_random_effect_factors = c(sex, texp),
+    two_way_interaction_factor = c(sex, extrav),
+    id = class,
+    use_package = "lmerTest",
+    quite = TRUE,
+    assumption_plot = TRUE,
+    simple_slope = TRUE,
+    return_result = TRUE
+  ))
+  # model
+  expect_false(is.null(summary$model))
 
-  expect_false(any(fit$simple_slope$simple_slope_df[2] == "Mean"))
-  expect_equal(fit$simple_slope$jn_plot, NULL)
+  # summary
+  expect_false(is.null(summary$summary$model_summary))
+  expect_false(is.null(summary$summary$model_performance_df))
+  expect_false(is.null(summary$summary$assumption_plot))
+
+  # interaction plot
+  expect_false(is.null(summary$interaction_plot))
+
+  # simple slope
+  expect_false(is.null(summary$simple_slope$simple_slope_df))
+  expect_false(is.null(summary$simple_slope$jn_plot))
+})
+
+
+testthat::test_that("lme_multilevel_model_summary: nlme model", {
+  suppressWarnings(summary <- lme_multilevel_model_summary(
+    data = popular,
+    response_variable = popular,
+    random_effect_factors = extrav,
+    non_random_effect_factors = c(sex, texp),
+    two_way_interaction_factor = c(sex, extrav),
+    id = class,
+    use_package = "nlme",
+    opt_control = "optim",
+    quite = TRUE,
+    assumption_plot = TRUE,
+    return_result = TRUE
+  ))
+  # model
+  expect_false(is.null(summary$model))
+
+  # summary
+  expect_false(is.null(summary$summary$model_summary))
+  expect_false(is.null(summary$summary$model_performance_df))
+  expect_false(is.null(summary$summary$assumption_plot))
+
+  # interaction plot
+  expect_false(is.null(summary$interaction_plot))
+
+  # simple slope
+  expect_true(is.null(summary$simple_slope$simple_slope_df)) # unable to compute simple slope
+  expect_true(is.null(summary$simple_slope$jn_plot))
 })

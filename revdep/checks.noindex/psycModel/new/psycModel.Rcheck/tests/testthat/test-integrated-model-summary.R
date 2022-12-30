@@ -1,48 +1,52 @@
-testthat::test_that(desc = "checking model correctness", {
-  return_list <- expect_warning(expect_warning(
-    integrated_model_summary(
-      data = iris,
-      response_variable = "Sepal.Length",
-      predictor_variable = where(is.numeric),
-      two_way_interaction_factor = c(Sepal.Width, Petal.Length),
-      interaction_plot = TRUE,
-      simple_slope = TRUE, # you can request simple slope
-      model_summary = TRUE,
-      return_result = TRUE,
-      assumption_plot = FALSE,
-      quite = TRUE
-    )
-  ))
-  expect_equal(return_list$summary$assumption_plot, NULL)
-  expect_false(is.null(return_list$interaction_plot))
-  expect_false(is.null(return_list$simple_slope$jn_plot))
-})
-
-testthat::test_that(desc = "test quite", {
-  quite_output <- capture_output(expect_warning(integrated_model_summary(
-    data = iris,
+testthat::test_that("lm_model_summary: lm model", {
+  suppressWarnings(summary <- lm_model_summary(
+    data = iris[1:4],
     response_variable = "Sepal.Length",
-    predictor_variable = where(is.numeric),
-    two_way_interaction_factor = c(Sepal.Width, Petal.Length),
+    predictor_variable = c(Sepal.Width, Petal.Width),
+    two_way_interaction_factor = c(Sepal.Width, Petal.Width),
+    quite = TRUE,
     simple_slope = TRUE,
-    interaction_plot = FALSE,
-    quite = TRUE
-  ), regexp = "Species"))
-  expect_equal(quite_output, "")
+    assumption_plot = TRUE,
+    return_result = TRUE
+  ))
+  # model
+  expect_false(is.null(summary$model))
+
+  # summary
+  expect_false(is.null(summary$summary$model_summary))
+  expect_false(is.null(summary$summary$model_performance_df))
+  expect_false(is.null(summary$summary$assumption_plot))
+
+  # interaction plot
+  expect_false(is.null(summary$interaction_plot))
+
+  # simple slope
+  expect_false(is.null(summary$simple_slope$simple_slope_df))
+  expect_false(is.null(summary$simple_slope$jn_plot))
 })
 
-testthat::test_that(desc = "test glm", {
-  return_list <- expect_warning(expect_warning(integrated_model_summary(
+testthat::test_that(desc = "lm_model_summary: glm model", {
+  suppressWarnings(summary <- lm_model_summary(
     response_variable = incidence,
     predictor_variable = period,
-    family = "poisson", # or you can enter as poisson(link = 'log'),
+    family = "poisson",
     data = lme4::cbpp,
     assumption_plot = TRUE,
     quite = TRUE,
     return_result = TRUE
-  )))
-  expect_false(is.null(return_list$summary$assumption_plot))
-  expect_equal(return_list$simple_slope$jn_plot, NULL)
-  expect_equal(return_list$simple_slope$simple_slope_df, NULL)
-  expect_equal(return_list$interaction_plot, NULL)
+  ))
+  # model
+  expect_false(is.null(summary$model))
+
+  # summary
+  expect_false(is.null(summary$summary$model_summary))
+  expect_false(is.null(summary$summary$model_performance_df))
+  expect_false(is.null(summary$summary$assumption_plot))
+
+  # interaction plot
+  expect_true(is.null(summary$interaction_plot)) # no interaction plot
+
+  # simple slope
+  expect_true(is.null(summary$simple_slope$simple_slope_df))
+  expect_true(is.null(summary$simple_slope$jn_plot))
 })

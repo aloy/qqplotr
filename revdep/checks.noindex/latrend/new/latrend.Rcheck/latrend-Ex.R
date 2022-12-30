@@ -6,6 +6,36 @@ library('latrend')
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
 cleanEx()
+nameEx("PAP.adh")
+### * PAP.adh
+
+flush(stderr()); flush(stdout())
+
+### Name: PAP.adh
+### Title: Biweekly Mean Therapy Adherence of OSA Patients over 1 Year
+### Aliases: PAP.adh PAP.adh1y
+### Keywords: datasets
+
+### ** Examples
+
+data(PAP.adh)
+
+if (require("ggplot2")) {
+  plotTrajectories(PAP.adh, id = "Patient", time = "Biweek", response = "UsageHours")
+
+  # plot according to cluster ground truth
+  plotTrajectories(
+    PAP.adh,
+    id = "Patient",
+    time = "Biweek",
+    response = "UsageHours",
+    cluster = "Group"
+  )
+}
+
+
+
+cleanEx()
 nameEx("as.list.lcMethod")
 ### * as.list.lcMethod
 
@@ -18,33 +48,21 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 as.list(method)
 
-as.list(method, args = c('id', 'time'))
+as.list(method, args = c("id", "time"))
 
-# select arguments used by kml()
-as.list(method, args = kml::kml)
+if (require("kml")) {
+  method <- lcMethodKML("Y", id = "Id", time = "Time")
+  as.list(method)
 
-# select arguments used by either kml() or parALGO()
-as.list(method, args = c(kml::kml, kml::parALGO))
+  # select arguments used by kml()
+  as.list(method, args = kml::kml)
 
-
-
-cleanEx()
-nameEx("cash")
-### * cash
-
-flush(stderr()); flush(stdout())
-
-### Name: $,lcMethod-method
-### Title: Retrieve and evaluate a lcMethod argument by name
-### Aliases: $,lcMethod-method
-
-### ** Examples
-
-m <- lcMethodKML(nClusters = 3)
-m$nClusters # 3
+  # select arguments used by either kml() or parALGO()
+  as.list(method, args = c(kml::kml, kml::parALGO))
+}
 
 
 
@@ -61,7 +79,8 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 2)
 clusterNames(model) <- c("Group 1", "Group 2")
 
 
@@ -79,7 +98,8 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 clusterNames(model) # A, B
 
 
@@ -97,7 +117,8 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 2)
 clusterProportions(model)
 
 
@@ -109,12 +130,14 @@ nameEx("clusterSizes")
 flush(stderr()); flush(stdout())
 
 ### Name: clusterSizes
-### Title: Number of strata per cluster
+### Title: Number of trajectories per cluster
 ### Aliases: clusterSizes
 
 ### ** Examples
 
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 2)
 clusterSizes(model)
 
 
@@ -131,11 +154,31 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-model <- latrend(method = lcMethodLcmmGMM(fixed = Y ~ Time, mixture = fixed),
-  id = "Id", time = "Time", data = latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+
 clusterTrajectories(model)
 
 clusterTrajectories(model, at = c(0, .5, 1))
+
+
+
+cleanEx()
+nameEx("coef.lcModel")
+### * coef.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: coef.lcModel
+### Title: Extract lcModel coefficients
+### Aliases: coef.lcModel
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 2)
+coef(model)
 
 
 
@@ -152,11 +195,37 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-model = latrend(lcMethodLcmmGMM(
-  fixed = Y ~ Time, mixture = ~ Time, random = ~ 1,
-  id = "Id", time = "Time"),
-  data=latrendData)
-confusionMatrix(model)
+
+if (rlang::is_installed("lcmm")) {
+  method <- lcMethodLcmmGMM(
+    fixed = Y ~ Time,
+    mixture = ~ Time,
+    random = ~ 1,
+    id = "Id",
+    time = "Time"
+  )
+  model <- latrend(method, latrendData)
+  confusionMatrix(model)
+}
+
+
+
+cleanEx()
+nameEx("converged")
+### * converged
+
+flush(stderr()); flush(stdout())
+
+### Name: converged
+### Title: Check model convergence
+### Aliases: converged converged,lcModel-method
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 2)
+converged(model)
 
 
 
@@ -173,8 +242,11 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-trainDataList <- createTrainDataFolds(latrendData, id = "Id", folds = 10)
-testData1 <- createTestDataFold(latrendData, trainDataList[[1]], id = "Id")
+
+if (require("caret")) {
+  trainDataList <- createTrainDataFolds(latrendData, id = "Id", folds = 10)
+  testData1 <- createTestDataFold(latrendData, trainDataList[[1]], id = "Id")
+}
 
 
 
@@ -191,8 +263,11 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-trainDataList <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
-testDataList <- createTestDataFolds(latrendData, trainDataList)
+
+if (require("caret")) {
+  trainDataList <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
+  testDataList <- createTestDataFolds(latrendData, trainDataList)
+}
 
 
 
@@ -210,9 +285,58 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 
-trainFolds <- createTrainDataFolds(latrendData, folds = 10, id = "Id", seed = 1)
+if (require("caret")) {
+  trainFolds <- createTrainDataFolds(latrendData, folds = 5, id = "Id", seed = 1)
+
+  foldModels <- latrendBatch(method, data = trainFolds)
+  testDataFolds <- createTestDataFolds(latrendData, trainFolds)
+}
+
+
+
+cleanEx()
+nameEx("defineInternalMetric")
+### * defineInternalMetric
+
+flush(stderr()); flush(stdout())
+
+### Name: defineInternalMetric
+### Title: Define an internal metric for lcModels
+### Aliases: defineInternalMetric
+
+### ** Examples
+
+defineInternalMetric("BIC", fun = BIC)
+
+mae <- function(object) {
+  mean(abs(residuals(object)))
+}
+defineInternalMetric("MAE", fun = mae)
+
+
+
+cleanEx()
+nameEx("estimationTime")
+### * estimationTime
+
+flush(stderr()); flush(stdout())
+
+### Name: estimationTime
+### Title: Get the model estimation time
+### Aliases: estimationTime estimationTime,lcModel-method
+###   estimationTime,lcModels-method estimationTime,list-method
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+
+estimationTime(model)
+estimationTime(model, unit = 'mins')
+estimationTime(model, unit = 'days')
 
 
 
@@ -234,10 +358,55 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-model1 <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-model2 <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
-ari <- externalMetric(model1, model2, 'adjustedRand')
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model2 <- latrend(method, latrendData, nClusters = 2)
+model3 <- latrend(method, latrendData, nClusters = 3)
+
+if (require("mclustcomp")) {
+  externalMetric(model2, model3, "adjustedRand")
+}
+
+
+
+cleanEx()
+nameEx("fitted.lcModel")
+### * fitted.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: fitted.lcModel
+### Title: Extract lcModel fitted values
+### Aliases: fitted.lcModel
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+fitted(model)
+
+
+
+cleanEx()
+nameEx("fittedTrajectories")
+### * fittedTrajectories
+
+flush(stderr()); flush(stdout())
+
+### Name: fittedTrajectories
+### Title: Extract the fitted trajectories for all strata
+### Aliases: fittedTrajectories fittedTrajectories,lcModel-method
+
+### ** Examples
+
+data(latrendData)
+# Note: not a great example because the fitted trajectories
+# are identical to the respective cluster trajectory
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+fittedTrajectories(model)
+
+fittedTrajectories(model, at = time(model)[c(1, 2)])
 
 
 
@@ -253,8 +422,27 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-m <- lcMethodMixtoolsGMM(formula = Y ~ Time + (1 | Id))
-formula(m) # Y ~ Time + (1 | Id)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+formula(method) # Y ~ Time
+
+
+
+cleanEx()
+nameEx("formula.lcModel")
+### * formula.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: formula.lcModel
+### Title: Extract the formula of a lcModel
+### Aliases: formula.lcModel
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
+formula(model) # Y ~ Time
 
 
 
@@ -270,10 +458,54 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-longdata <- generateLongData(sizes = c(40, 70), id = "Id",
-                            cluster = ~poly(Time, 2, raw = TRUE),
-                            clusterCoefs = cbind(c(1, 2, 5), c(-3, 4, .2)))
-plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
+longdata <- generateLongData(
+  sizes = c(40, 70), id = "Id",
+  cluster = ~poly(Time, 2, raw = TRUE),
+  clusterCoefs = cbind(c(1, 2, 5), c(-3, 4, .2))
+)
+
+if (require("ggplot2")) {
+  plotTrajectories(longdata, response = "Value", id = "Id", time = "Time")
+}
+
+
+
+cleanEx()
+nameEx("getCall.lcModel")
+### * getCall.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: getCall.lcModel
+### Title: Get the model call
+### Aliases: getCall.lcModel
+### Keywords: internal
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+getCall(model)
+
+
+
+cleanEx()
+nameEx("getLabel")
+### * getLabel
+
+flush(stderr()); flush(stdout())
+
+### Name: getLabel
+### Title: Extract the method label.
+### Aliases: getLabel getLabel,lcMethod-method getLabel,lcModel-method
+
+### ** Examples
+
+method <- lcMethodLMKM(Y ~ Time, time = "Time")
+getLabel(method) # ""
+
+getLabel(update(method, label = "v2")) # "v2"
 
 
 
@@ -285,12 +517,34 @@ flush(stderr()); flush(stdout())
 
 ### Name: getLcMethod
 ### Title: Get the method specification of a lcModel
-### Aliases: getLcMethod
+### Aliases: getLcMethod getLcMethod,lcModel-method
 
 ### ** Examples
 
-model = latrend(method=lcMethodKML("Y", id = "Id", time = "Time"), data=latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 getLcMethod(model)
+
+
+
+cleanEx()
+nameEx("getName")
+### * getName
+
+flush(stderr()); flush(stdout())
+
+### Name: getName
+### Title: Get the (short) name of the lcMethod or Model
+### Aliases: getName getName,lcMethod-method getShortName
+###   getShortName,lcMethod-method getName,lcModel-method
+###   getShortName,lcModel-method
+
+### ** Examples
+
+method <- lcMethodLMKM(Y ~ Time)
+getName(method) # "lm-kmeans"
+method <- lcMethodLMKM(Y ~ Time)
+getShortName(method) # "LMKM"
 
 
 
@@ -307,12 +561,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-method <- lcMethodKML(id = "Traj")
+method <- lcMethodLMKM(Y ~ Time, id = "Traj")
 idVariable(method) # "Traj"
 
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 idVariable(model) # "Id"
-
 
 
 
@@ -323,13 +577,15 @@ nameEx("ids")
 flush(stderr()); flush(stdout())
 
 ### Name: ids
-### Title: Get the unique ids included in this model
+### Title: Get the trajectory ids on which the model was fitted
 ### Aliases: ids
 
 ### ** Examples
 
-model = latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-ids(model) # S1, S2, ..., S500
+data(latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+ids(model) # 1, 2, ..., 200
 
 
 
@@ -341,16 +597,49 @@ flush(stderr()); flush(stdout())
 
 ### Name: [[,lcMethod-method
 ### Title: Retrieve and evaluate a lcMethod argument by name
-### Aliases: [[,lcMethod-method
+### Aliases: [[,lcMethod-method $,lcMethod-method
 
 ### ** Examples
 
-m = lcMethodKML(nClusters = 5)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+method$nClusters # 3
+m = lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 5)
 m[["nClusters"]] # 5
 
 k = 2
-m = lcMethodKML(nClusters = k)
+m = lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = k)
 m[["nClusters", eval=FALSE]] # k
+
+
+
+cleanEx()
+nameEx("initialize-lcMethod-method")
+### * initialize-lcMethod-method
+
+flush(stderr()); flush(stdout())
+
+### Name: initialize,lcMethod-method
+### Title: lcMethod initialization
+### Aliases: initialize,lcMethod-method
+
+### ** Examples
+
+new("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time")
+
+
+
+cleanEx()
+nameEx("latrend-parallel")
+### * latrend-parallel
+
+flush(stderr()); flush(stdout())
+
+### Name: latrend-parallel
+### Title: Parallel computing using latrend
+### Aliases: latrend-parallel
+
+### ** Examples
+
 
 
 
@@ -367,9 +656,11 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
+model <- latrend(lcMethodLMKM(Y ~ Time, id = "Id", time = "Time"), data = latrendData)
 
-method <- lcMethodKML("Y", id = "Id", time = "Time")
+model <- latrend("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time", data = latrendData)
+
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 model <- latrend(method, data = latrendData, nClusters = 3)
 
 model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
@@ -383,18 +674,24 @@ nameEx("latrendBatch")
 flush(stderr()); flush(stdout())
 
 ### Name: latrendBatch
-### Title: Cluster longitudinal data for a list of model specifications
+### Title: Cluster longitudinal data for a list of method specifications
 ### Aliases: latrendBatch
 
 ### ** Examples
 
 data(latrendData)
-methods <- lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:3)
+refMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+methods <- lcMethods(refMethod, nClusters = 1:2)
 models <- latrendBatch(methods, data = latrendData)
 
-models <- latrendBatch(lcMethods(lcMethodKML("Y", id = "Id", time = "Time"), nClusters = 1:2),
-   data = .(subset(latrendData, Time > .5),
-            subset(latrendData, Time < .5))) # different data per method
+# different dataset per method
+models <- latrendBatch(
+   methods,
+   data = .(
+     subset(latrendData, Time > .5),
+     subset(latrendData, Time < .5)
+   )
+)
 
 
 
@@ -412,8 +709,12 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time")
-model <- latrendBoot(method, latrendData, samples = 10)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+bootModels <- latrendBoot(method, latrendData, samples = 10)
+
+bootMAE <- metric(bootModels, name = "MAE")
+mean(bootMAE)
+sd(bootMAE)
 
 
 
@@ -430,10 +731,37 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time")
-model <- latrendCV(method, latrendData, folds = 5)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 
-model <- latrendCV(method, subset(latrendData, Time < .5), folds = 5, seed = 1)
+if (require("caret")) {
+  model <- latrendCV(method, latrendData, folds = 5, seed = 1)
+
+  model <- latrendCV(method, subset(latrendData, Time < .5), folds = 5)
+}
+
+
+
+cleanEx()
+nameEx("latrendData")
+### * latrendData
+
+flush(stderr()); flush(stdout())
+
+### Name: latrendData
+### Title: Artificial longitudinal dataset comprising three classes
+### Aliases: latrendData
+### Keywords: datasets
+
+### ** Examples
+
+data(latrendData)
+
+if (require("ggplot2")) {
+  plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y")
+
+  # plot according to the reference class
+  plotTrajectories(latrendData, id = "Id", time = "Time", response = "Y", cluster = "Class")
+}
 
 
 
@@ -450,10 +778,42 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 models <- latrendRep(method, data = latrendData, .rep = 5) # 5 repeated runs
 
 models <- latrendRep(method, data = latrendData, .seed = 1, .rep = 3)
+
+
+
+cleanEx()
+nameEx("lcFitMethods")
+### * lcFitMethods
+
+flush(stderr()); flush(stdout())
+
+### Name: lcFitMethods
+### Title: Method fit modifiers
+### Aliases: lcFitMethods lcFitConverged-class lcFitConverged
+###   lcFitRep-class lcFitRep lcFitRepMin lcFitRepMax
+
+### ** Examples
+
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 2)
+metaMethod <- lcFitConverged(method, maxRep = 10)
+metaMethod
+model <- latrend(metaMethod, latrendData)
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 2)
+repMethod <- lcFitRep(method, rep = 10, metric = "RSS", maximize = FALSE)
+repMethod
+model <- latrend(repMethod, latrendData)
+
+minMethod <- lcFitRepMin(method, rep = 10, metric = "RSS")
+
+maxMethod <- lcFitRepMax(method, rep = 10, metric = "ASW")
 
 
 
@@ -465,42 +825,23 @@ flush(stderr()); flush(stdout())
 
 ### Name: lcMethod-class
 ### Title: lcMethod class
-### Aliases: lcMethod-class compose compose,lcMethod-method fit
-###   fit,lcMethod-method getLabel getLabel,lcMethod-method getName
-###   getName,lcMethod-method getShortName getShortName,lcMethod-method
-###   length,lcMethod-method names,lcMethod-method preFit
-###   preFit,lcMethod-method prepareData prepareData,lcMethod-method
-###   postFit postFit,lcMethod-method validate validate,lcMethod-method
+### Aliases: lcMethod-class lcMethod
 
 ### ** Examples
 
-getName(lcMethodKML("Y")) # "longitudinal k-means"
-getShortName(lcMethodKML("Y")) # "KML"
-m = lcMethodKML("Y")
-names(m)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 2)
+method
 
+method <- new("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time", nClusters = 2)
 
+# get argument names
+names(method)
 
-cleanEx()
-nameEx("lcMethod.call")
-### * lcMethod.call
+# evaluate argument
+method$nClusters
 
-flush(stderr()); flush(stdout())
-
-### Name: lcMethod.call
-### Title: Create a lcMethod object from a call
-### Aliases: lcMethod.call
-
-### ** Examples
-
-data(latrendData)
-lcMethodKML2 <- function(response = "Y", id = "Id", time = "Time", nClusters = 2, ...) {
-  lcMethod.call("lcMethodKML", call = stackoverflow::match.call.defaults(),
-    defaults = c(kml::kml, kml::parALGO),
-    excludeArgs = c("object", "nbClusters", "parAlgo", "toPlot", "saveFreq"))
-}
-method <- lcMethodKML2(nClusters = 3)
-latrend(method, data = latrendData)
+# create a copy with updated nClusters argument
+method3 <- update(method, nClusters = 3)
 
 
 
@@ -516,10 +857,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(akmedoids)
 data(latrendData)
-method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
-model <- latrend(method, data = latrendData)
+if (require("akmedoids")) {
+  method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
+  model <- latrend(method, data = latrendData)
+}
 
 
 
@@ -535,33 +877,24 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-
-
-
-cleanEx()
-nameEx("lcMethodCustom")
-### * lcMethodCustom
-
-flush(stderr()); flush(stdout())
-
-### Name: lcMethodCustom
-### Title: Specify a custom method based on a model function
-### Aliases: lcMethodCustom
-
-### ** Examples
-
-data(latrendData)
-# Stratification based on the mean response level
-clusfun <- function(data, response, id, time, ...) {
-   clusters <- data.table::as.data.table(data)[, mean(Y) > 0, by = Id]$V1
-   lcModelCustom(data = data,
-     trajectoryAssignments = factor(clusters, levels = c(FALSE, TRUE), labels = c("Low", "High")),
-     response = response,
-     time = time,
-     id = id)
-}
-method <- lcMethodCustom(response = "Y", fun = clusfun, id = "Id", time = "Time")
-model <- latrend(method, data = latrendData)
+# This example is not tested because crimCV sometimes fails
+# to converge and throws the error "object 'Frtr' not found"
+## Not run: 
+##D data(latrendData)
+##D if (require("crimCV")) {
+##D   method <- lcMethodCrimCV("Y", id = "Id", time = "Time", nClusters = 3, dpolyp = 1, init = 2)
+##D   model <- latrend(method, data = subset(latrendData, Time > .5))
+##D 
+##D   if (require("ggplot2")) {
+##D     plot(model)
+##D   }
+##D 
+##D   data(TO1adj)
+##D   method <- lcMethodCrimCV(response = "Offenses", time = "Offense", id = "Subject",
+##D     nClusters = 2, dpolyp = 1, init = 2)
+##D   model <- latrend(method, data = TO1adj[1:100, ])
+##D }
+## End(Not run)
 
 
 
@@ -577,10 +910,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(dtwclust)
 data(latrendData)
-method <- lcMethodDtwclust("Y", id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+
+if (require("dtwclust")) {
+  method <- lcMethodDtwclust("Y", id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 
 
 
@@ -596,10 +931,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(flexmix)
 data(latrendData)
-method <- lcMethodFlexmix(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+if (require("flexmix")) {
+  method <- lcMethodFlexmix(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 
 
 
@@ -615,10 +951,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(flexmix)
 data(latrendData)
-method <- lcMethodFlexmixGBTM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+if (require("flexmix")) {
+  method <- lcMethodFlexmixGBTM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 
 
 
@@ -634,17 +971,51 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(funFEM)
-library(fda)
 data(latrendData)
-method <- lcMethodFunFEM("Y", id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
 
-method <- lcMethodFunFEM("Y",
+if (require("funFEM") && require("fda")) {
+  method <- lcMethodFunFEM("Y", id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+
+  method <- lcMethodFunFEM("Y",
    basis = function(time) {
-      create.bspline.basis(time,
-        nbasis = 10, norder = 4)
-})
+      create.bspline.basis(time, nbasis = 10, norder = 4)
+   }
+  )
+}
+
+
+
+cleanEx()
+nameEx("lcMethodFunction")
+### * lcMethodFunction
+
+flush(stderr()); flush(stdout())
+
+### Name: lcMethodFunction
+### Title: Specify a custom method based on a function
+### Aliases: lcMethodFunction
+
+### ** Examples
+
+data(latrendData)
+# Stratification based on the mean response level
+clusfun <- function(data, response, id, time, ...) {
+  clusters <- data.table::as.data.table(data)[, mean(Y) > 0, by = Id]$V1
+  lcModelPartition(
+    data = data,
+    trajectoryAssignments = factor(
+      clusters,
+      levels = c(FALSE, TRUE),
+      labels = c("Low", "High")
+    ),
+    response = response,
+    time = time,
+    id = id
+  )
+}
+method <- lcMethodFunction(response = "Y", fun = clusfun, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
 
 
 
@@ -655,15 +1026,18 @@ nameEx("lcMethodGCKM")
 flush(stderr()); flush(stdout())
 
 ### Name: lcMethodGCKM
-### Title: Two-step clustering through linear mixed modeling and k-means
+### Title: Two-step clustering through latent growth curve modeling and
+###   k-means
 ### Aliases: lcMethodGCKM
 
 ### ** Examples
 
-library(lme4)
 data(latrendData)
-method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+
+if (require("lme4")) {
+  method <- lcMethodGCKM(Y ~ (Time | Id), id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 
 
 
@@ -679,10 +1053,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(kml)
 data(latrendData)
-method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+
+if (require("kml")) {
+  method <- lcMethodKML("Y", id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 
 
 
@@ -718,13 +1094,25 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ 1,
-   id = "Id", time = "Time", nClusters = 3)
-gbtm <- latrend(method, data = latrendData)
-summary(gbtm)
+if (rlang::is_installed("lcmm")) {
+  method <- lcMethodLcmmGBTM(
+    fixed = Y ~ Time,
+    mixture = ~ 1,
+   id = "Id",
+   time = "Time",
+   nClusters = 3
+  )
+  gbtm <- latrend(method, data = latrendData)
+  summary(gbtm)
 
-method <- lcMethodLcmmGBTM(fixed = Y ~ Time, mixture = ~ Time,
-    id = "Id", time = "Time", nClusters = 3)
+  method <- lcMethodLcmmGBTM(
+    fixed = Y ~ Time,
+    mixture = ~ Time,
+    id = "Id",
+    time = "Time",
+    nClusters = 3
+  )
+}
 
 
 
@@ -741,34 +1129,28 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-method <- lcMethodLcmmGMM(fixed = Y ~ Time,
-   mixture = ~ Time, random = ~ 1,
-   id = "Id", time = "Time", , nClusters = 3)
-gmm <- latrend(method, data = latrendData)
-summary(gmm)
 
-method <- lcMethodLcmmGMM(fixed = Y ~ Time,
-    mixture = ~ Time, random = ~ Time,
-    id = "Id", time = "Time", nClusters = 3)
+if (rlang::is_installed("lcmm")) {
+  method <- lcMethodLcmmGMM(
+    fixed = Y ~ Time,
+    mixture = ~ Time,
+    random = ~ 1,
+    id = "Id",
+    time = "Time", ,
+    nClusters = 2
+  )
+  gmm <- latrend(method, data = latrendData)
+  summary(gmm)
 
-
-
-cleanEx()
-nameEx("lcMethodLongclust")
-### * lcMethodLongclust
-
-flush(stderr()); flush(stdout())
-
-### Name: lcMethodLongclust
-### Title: Specify Longclust method
-### Aliases: lcMethodLongclust
-
-### ** Examples
-
-library(longclust)
-data(latrendData)
-method <- lcMethodLongclust("Y", id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+  method <- lcMethodLcmmGMM(
+    fixed = Y ~ Time,
+    mixture = ~ Time,
+    random = ~ Time,
+    id = "Id",
+    time = "Time",
+    nClusters = 3
+  )
+}
 
 
 
@@ -784,10 +1166,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(mclust)
 data(latrendData)
-method <- lcMethodMclustLLPA("Y", id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+if (require("mclust")) {
+  method <- lcMethodMclustLLPA("Y", id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 
 
 
@@ -857,10 +1240,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(mixtools)
 data(latrendData)
-method <- lcMethodMixtoolsNPRM("Y", id = "Id", time = "Time", nClusters = 3)
-model <- latrend(method, latrendData)
+
+if (require("mixtools")) {
+  method <- lcMethodMixtoolsNPRM("Y", id = "Id", time = "Time", nClusters = 3)
+  model <- latrend(method, latrendData)
+}
 
 
 
@@ -881,11 +1266,22 @@ method <- lcMethodRandom(response = "Y", id = "Id", time = "Time")
 model <- latrend(method, latrendData)
 
 # uniform clusters
-method <- lcMethodRandom(alpha = 1e3, nClusters = 3, response = "Y", id = "Id", time = "Time")
+method <- lcMethodRandom(
+  alpha = 1e3,
+  nClusters = 3,
+  response = "Y",
+  id = "Id",
+  time = "Time"
+)
 
 # single large cluster
-method <- lcMethodRandom(alpha = c(100, 1, 1, 1), nClusters = 4,
-  response = "Y", id = "Id", time = "Time")
+method <- lcMethodRandom(
+  alpha = c(100, 1, 1, 1),
+  nClusters = 4,
+  response = "Y",
+  id = "Id",
+  time = "Time"
+)
 
 
 
@@ -903,26 +1299,35 @@ flush(stderr()); flush(stdout())
 
 data(latrendData)
 # Stratification based on the mean response level
-method <- lcMethodStratify("Y", mean(Y) > 0,
-   clusterNames = c("Low", "High"), id = "Id", time = "Time")
+method <- lcMethodStratify(
+  "Y",
+  mean(Y) > 0,
+  clusterNames = c("Low", "High"),
+  id = "Id",
+  time = "Time"
+)
 model <- latrend(method, latrendData)
 summary(model)
 
 # Stratification function
 stratfun <- function(trajdata) {
    trajmean <- mean(trajdata$Y)
-   factor(trajmean > 1.7,
-      levels = c(FALSE, TRUE),
-      labels = c("Low", "High"))
+   factor(
+     trajmean > 1.7,
+     levels = c(FALSE, TRUE),
+     labels = c("Low", "High")
+   )
 }
 method <- lcMethodStratify("Y", stratfun, id = "Id", time = "Time")
 
 # Multiple clusters
 stratfun3 <- function(trajdata) {
    trajmean <- mean(trajdata$Y)
-   cut(trajmean,
-      c(-Inf, .5, 2, Inf),
-      labels = c("Low", "Medium", "High"))
+   cut(
+     trajmean,
+     c(-Inf, .5, 2, Inf),
+     labels = c("Low", "Medium", "High")
+   )
 }
 method <- lcMethodStratify("Y", stratfun3, id = "Id", time = "Time")
 
@@ -941,17 +1346,43 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-baseMethod <- lcMethodKML("Y", id = "Id", time = "Time")
+baseMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 methods <- lcMethods(baseMethod, nClusters = 1:6)
 
 nclus <- 1:6
 methods <- lcMethods(baseMethod, nClusters = nclus)
 
-methods <- lcMethods(baseMethod, nClusters = 3, center = .(mean, mean, median))
+# list notation, useful for providing functions
+methods <- lcMethods(baseMethod, nClusters = .(1, 3, 5))
 length(methods) # 3
 
-methods <- lcMethods(baseMethod, nClusters = 1:3, center = .(mean, mean, median))
-length(methods) # 9
+
+
+cleanEx()
+nameEx("lcModelPartition")
+### * lcModelPartition
+
+flush(stderr()); flush(stdout())
+
+### Name: lcModelPartition
+### Title: Create a lcModel with pre-defined partitioning
+### Aliases: lcModelPartition
+
+### ** Examples
+
+# comparing a model to the ground truth using the adjusted Rand index
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
+
+# extract the reference class from the Class column
+trajLabels <- aggregate(Class ~ Id, head, 1, data = latrendData)
+trajLabels$Cluster <- trajLabels$Class
+refModel <- lcModelPartition(latrendData, response = "Y", trajectoryAssignments = trajLabels)
+
+if (require("mclustcomp")) {
+  externalMetric(model, refModel, "adjustedRand")
+}
 
 
 
@@ -963,17 +1394,47 @@ flush(stderr()); flush(stdout())
 
 ### Name: lcModels
 ### Title: Construct a flat (named) list of lcModel objects
-### Aliases: lcModels
+### Aliases: lcModels lcModels-class
 
 ### ** Examples
 
 data(latrendData)
-kml <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-gmm <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
-lcModels(kml, gmm)
+lmkmMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+lmkmModel <- latrend(lmkmMethod, latrendData)
+rngMethod <- lcMethodRandom("Y", id = "Id", time = "Time")
+rngModel <- latrend(rngMethod, latrendData)
 
-lcModels(defaults = c(kml, gmm))
+lcModels(lmkmModel, rngModel)
+
+lcModels(defaults = c(lmkmModel, rngModel))
+
+
+
+cleanEx()
+nameEx("logLik.lcModel")
+### * logLik.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: logLik.lcModel
+### Title: Extract the log-likelihood of a lcModel
+### Aliases: logLik.lcModel
+
+### ** Examples
+
+data(latrendData)
+
+if (rlang::is_installed("lcmm")) {
+  method <- lcMethodLcmmGBTM(
+    fixed = Y ~ Time,
+    mixture = ~ 1,
+    id = "Id",
+    time = "Time",
+    nClusters = 3
+  )
+  gbtm <- latrend(method, data = latrendData)
+  logLik(gbtm)
+}
 
 
 
@@ -990,12 +1451,17 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
-kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
-kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
-models <- lcModels(kml1, kml2, kml3)
-max(models, 'WRSS')
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+
+model1 <- latrend(method, latrendData, nClusters = 1)
+model2 <- latrend(method, latrendData, nClusters = 2)
+model3 <- latrend(method, latrendData, nClusters = 3)
+
+models <- lcModels(model1, model2, model3)
+
+if (require("clusterCrit")) {
+  max(models, "Dunn")
+}
 
 
 
@@ -1013,11 +1479,13 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
-bic <- metric(model, "BIC")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+metric(model, "WMAE")
 
-ic <- metric(model, c("AIC", "BIC"))
+if (require("clusterCrit")) {
+  metric(model, c("WMAE", "Dunn"))
+}
 
 
 
@@ -1034,12 +1502,212 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
-kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
-kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
-models <- lcModels(kml1, kml2, kml3)
-min(models, 'WRSS')
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+
+model1 <- latrend(method, latrendData, nClusters = 1)
+model2 <- latrend(method, latrendData, nClusters = 2)
+model3 <- latrend(method, latrendData, nClusters = 3)
+
+models <- lcModels(model1, model2, model3)
+
+min(models, "WMAE")
+
+
+
+cleanEx()
+nameEx("model.data.lcModel")
+### * model.data.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: model.data.lcModel
+### Title: Extract the model data that was used for fitting
+### Aliases: model.data.lcModel
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+model.data(model)
+
+
+
+cleanEx()
+nameEx("model.frame.lcModel")
+### * model.frame.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: model.frame.lcModel
+### Title: Extract model training data
+### Aliases: model.frame.lcModel
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
+model.frame(model)
+
+
+
+cleanEx()
+nameEx("nClusters")
+### * nClusters
+
+flush(stderr()); flush(stdout())
+
+### Name: nClusters
+### Title: Number of clusters
+### Aliases: nClusters
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time", nClusters = 3)
+model <- latrend(method, latrendData)
+nClusters(model) # 3
+
+
+
+cleanEx()
+nameEx("nIds")
+### * nIds
+
+flush(stderr()); flush(stdout())
+
+### Name: nIds
+### Title: Number of trajectories
+### Aliases: nIds
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+nIds(model)
+
+
+
+cleanEx()
+nameEx("names-lcMethod-method")
+### * names-lcMethod-method
+
+flush(stderr()); flush(stdout())
+
+### Name: names,lcMethod-method
+### Title: lcMethod argument names
+### Aliases: names,lcMethod-method length,lcMethod-method
+
+### ** Examples
+
+method <- lcMethodLMKM(Y ~ Time)
+names(method)
+length(method)
+
+
+
+cleanEx()
+nameEx("nobs.lcModel")
+### * nobs.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: nobs.lcModel
+### Title: Number of observations used for the lcModel fit
+### Aliases: nobs.lcModel
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+nobs(model)
+
+
+
+cleanEx()
+nameEx("plot-lcModel-method")
+### * plot-lcModel-method
+
+flush(stderr()); flush(stdout())
+
+### Name: plot-lcModel-method
+### Title: Plot a lcModel
+### Aliases: plot-lcModel-method plot,lcModel,ANY-method
+###   plot,lcModel-method
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
+
+if (require("ggplot2")) {
+  plot(model)
+}
+
+
+
+cleanEx()
+nameEx("plotClusterTrajectories")
+### * plotClusterTrajectories
+
+flush(stderr()); flush(stdout())
+
+### Name: plotClusterTrajectories
+### Title: Plot cluster trajectories
+### Aliases: plotClusterTrajectories
+###   plotClusterTrajectories,data.frame-method
+###   plotClusterTrajectories,lcModel-method
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
+
+if (require("ggplot2")) {
+  plotClusterTrajectories(model)
+
+  # show assigned trajectories
+  plotClusterTrajectories(model, trajectories = TRUE)
+
+  # show 95th percentile observation interval
+  plotClusterTrajectories(model, trajectories = "95pct")
+
+  # show observation standard deviation
+  plotClusterTrajectories(model, trajectories = "sd")
+
+  # show observation standard error
+  plotClusterTrajectories(model, trajectories = "se")
+
+  # show observation range
+  plotClusterTrajectories(model, trajectories = "range")
+}
+
+
+
+cleanEx()
+nameEx("plotFittedTrajectories")
+### * plotFittedTrajectories
+
+flush(stderr()); flush(stdout())
+
+### Name: plotFittedTrajectories
+### Title: Plot fitted trajectories of a lcModel
+### Aliases: plotFittedTrajectories plotFittedTrajectories,lcModel-method
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
+
+if (require("ggplot2")) {
+  plotFittedTrajectories(model)
+}
 
 
 
@@ -1056,12 +1724,17 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-baseMethod <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-kml1 <- latrend(baseMethod, nClusters = 1, latrendData)
-kml2 <- latrend(baseMethod, nClusters = 2, latrendData)
-kml3 <- latrend(baseMethod, nClusters = 3, latrendData)
-models <- lcModels(kml1, kml2, kml3)
-plotMetric(models, "BIC", by = "nClusters", group = ".name")
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+methods <- lcMethods(method, nClusters = 1:3)
+models <- latrendBatch(methods, latrendData)
+
+if (require("ggplot2")) {
+  plotMetric(models, "WMAE")
+}
+
+if (require("ggplot2") && require("clusterCrit")) {
+  plotMetric(models, c("WMAE", "Dunn"))
+}
 
 
 
@@ -1072,16 +1745,49 @@ nameEx("plotTrajectories")
 flush(stderr()); flush(stdout())
 
 ### Name: plotTrajectories
-### Title: Plot trajectories
+### Title: Plot the data trajectories
 ### Aliases: plotTrajectories plotTrajectories,data.frame-method
-###   plotTrajectories,lcModel-method
+###   plotTrajectories,ANY-method plotTrajectories,lcModel-method
 
 ### ** Examples
 
 data(latrendData)
-plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
 
-plotTrajectories(latrendData, response = quote(exp(Y)), id = "Id", time = "Time")
+if (require("ggplot2")) {
+  plotTrajectories(latrendData, response = "Y", id = "Id", time = "Time")
+
+  plotTrajectories(
+    latrendData,
+    response = quote(exp(Y)),
+    id = "Id",
+    time = "Time"
+  )
+
+  plotTrajectories(
+    latrendData,
+    response = "Y",
+    id = "Id",
+    time = "Time",
+    cluster = "Class"
+  )
+
+  # compute cluster membership based on the mean being below 0
+  assignments <- aggregate(Y ~ Id, latrendData, mean)$Y < 0
+  plotTrajectories(
+    latrendData,
+    response = "Y",
+    id = "Id",
+    time = "Time",
+    cluster = assignments
+  )
+}
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData, nClusters = 3)
+
+if (require("ggplot2")) {
+  plotTrajectories(model)
+}
 
 
 
@@ -1092,15 +1798,29 @@ nameEx("postprob")
 flush(stderr()); flush(stdout())
 
 ### Name: postprob
-### Title: Posterior probability per fitted id
+### Title: Posterior probability per fitted trajectory
 ### Aliases: postprob postprob,lcModel-method
 
 ### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), data = latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+
 postprob(model)
+
+if (rlang::is_installed("lcmm")) {
+  gmmMethod = lcMethodLcmmGMM(
+    fixed = Y ~ Time,
+    mixture = ~ Time,
+    id = "Id",
+    time = "Time",
+    idiag = TRUE,
+    nClusters = 2
+  )
+  gmmModel <- latrend(gmmMethod, data = latrendData)
+  postprob(gmmModel)
+}
 
 
 
@@ -1117,9 +1837,9 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodLcmmGMM(
-   fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+
 predFitted <- predict(model) # same result as fitted(model)
 
 # Cluster trajectory of cluster A
@@ -1130,6 +1850,77 @@ predId <- predict(model, newdata = data.frame(Cluster = "A", Id = "S1", Time = t
 
 # Prediction matrix for id S1 for all clusters
 predIdAll <- predict(model, newdata = data.frame(Id = "S1", Time = time(model)))
+
+
+
+cleanEx()
+nameEx("predictAssignments")
+### * predictAssignments
+
+flush(stderr()); flush(stdout())
+
+### Name: predictAssignments
+### Title: Predict the cluster assignments for new trajectories
+### Aliases: predictAssignments predictAssignments,lcModel-method
+
+### ** Examples
+
+## Not run: 
+##D data(latrendData)
+##D if (require("kml")) {
+##D   model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+##D   predictAssignments(model, newdata = data.frame(Id = 999, Y = 0, Time = 0))
+##D }
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("predictForCluster")
+### * predictForCluster
+
+flush(stderr()); flush(stdout())
+
+### Name: predictForCluster
+### Title: lcModel prediction conditional on a cluster
+### Aliases: predictForCluster predictForCluster,lcModel-method
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+
+predictForCluster(
+  model,
+  newdata = data.frame(Time = c(0, 1)),
+  cluster = "B"
+)
+
+# all fitted values under cluster B
+predictForCluster(model, cluster = "B")
+
+
+
+cleanEx()
+nameEx("qqPlot")
+### * qqPlot
+
+flush(stderr()); flush(stdout())
+
+### Name: qqPlot
+### Title: Quantile-quantile plot
+### Aliases: qqPlot qqPlot,lcModel-method
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time", nClusters = 3)
+model <- latrend(method, latrendData)
+
+if (require("ggplot2") && require("qqplotr")) {
+  qqPlot(model)
+}
 
 
 
@@ -1146,15 +1937,32 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-method <- lcMethodKML("Value")
-responseVariable(method) # "Value"
+method <- lcMethodLMKM(Y ~ Time)
+responseVariable(method) # "Y"
+data(latrendData)
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+responseVariable(model) # "Y"
 
-method <- lcMethodLcmmGBTM(fixed = Value ~ Time, mixture = ~ Time)
-responseVariable(method) # "Value"
+
+
+cleanEx()
+nameEx("strip")
+### * strip
+
+flush(stderr()); flush(stdout())
+
+### Name: strip
+### Title: Reduce the lcModel memory footprint for serialization
+### Aliases: strip strip,lcMethod-method strip,ANY-method
+###   strip,lcModel-method
+
+### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-responseVariable(model) # "Value"
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+newModel <- strip(model)
 
 
 
@@ -1171,15 +1979,56 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-mKML <- lcMethodKML(response = "Y", id = "Id", time = "Time")
-kml1 <- latrend(mKML, nClusters = 1, latrendData)
-kml2 <- latrend(mKML, nClusters = 2, latrendData)
-kml3 <- latrend(mKML, nClusters = 3, latrendData)
-gmm <- latrend(lcMethodLcmmGMM(fixed = Y ~ Time, mixture = ~ Time,
-   id = "Id", time = "Time"), latrendData)
-models <- lcModels(kml1, kml2, kml3, gmm)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 
-subset(models, nClusters > 1 & .method == 'kml')
+model1 <- latrend(method, latrendData, nClusters = 1)
+model2 <- latrend(method, latrendData, nClusters = 2)
+model3 <- latrend(method, latrendData, nClusters = 3)
+
+rngMethod <- lcMethodRandom("Y", id = "Id", time = "Time")
+rngModel <- latrend(rngMethod, latrendData)
+
+models <- lcModels(model1, model2, model3, rngModel)
+
+subset(models, nClusters > 1 & .method == 'lmkm')
+
+
+
+cleanEx()
+nameEx("test")
+### * test
+
+flush(stderr()); flush(stdout())
+
+### Name: test
+### Title: Test a condition
+### Aliases: test
+### Keywords: internal
+
+### ** Examples
+
+## Not run: 
+##D test('gt', 2 > 1)
+##D test('eq', 1 + 1, 2)
+##D test('lt', 2 < 1, onFail = "warn")
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("test.latrend")
+### * test.latrend
+
+flush(stderr()); flush(stdout())
+
+### Name: test.latrend
+### Title: Test the implementation of an lcMethod and associated lcModel
+###   subclasses
+### Aliases: test.latrend
+
+### ** Examples
+
+test.latrend("lcMethodRandom", tests = c("method", "basic"), clusterRecovery = "skip")
 
 
 
@@ -1196,32 +2045,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-method <- lcMethodKML(time = "Assessment")
-timeVariable(method) # "Assessment"
-
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+timeVariable(method) # "Time"
 data(latrendData)
-model <- latrend(lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
-idVariable(model) # "Id"
-
-
-
-cleanEx()
-nameEx("trajectories")
-### * trajectories
-
-flush(stderr()); flush(stdout())
-
-### Name: trajectories
-### Title: Extract the fitted trajectories for all strata
-### Aliases: trajectories trajectories,lcModel-method
-
-### ** Examples
-
-data(latrendData)
-model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), data = latrendData)
-trajectories(model)
-
-trajectories(model, at = c(0, .5, 1))
+method <- lcMethodRandom("Y", id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+timeVariable(model) # "Time"
 
 
 
@@ -1233,15 +2062,17 @@ flush(stderr()); flush(stdout())
 
 ### Name: trajectoryAssignments
 ### Title: Get the cluster membership of each trajectory
-### Aliases: trajectoryAssignments trajectoryAssignments,lcModel-method
+### Aliases: trajectoryAssignments trajectoryAssignments,matrix-method
+###   trajectoryAssignments,lcModel-method
 
 ### ** Examples
 
 data(latrendData)
-model <- latrend(method = lcMethodKML("Y", id = "Id", time = "Time"), latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
 trajectoryAssignments(model)
 
-# assign ids at random using weighted sampling
+# assign trajectories at random using weighted sampling
 trajectoryAssignments(model, strategy = which.weight)
 
 
@@ -1258,16 +2089,37 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-m <- lcMethodMixtoolsGMM(Value ~ 1)
-m2 <- update(m, formula = ~ . + Time)
+method <- lcMethodLMKM(Y ~ 1, nClusters = 2)
+method2 <- update(method, formula = ~ . + Time)
 
-m3 <- update(m2, nClusters = 3)
+method3 <- update(method2, nClusters = 3)
 
 k <- 2
-m4 <- update(m, nClusters = k) # nClusters: k
+method4 <- update(method, nClusters = k) # nClusters: k
 
-m5 <- update(m, nClusters = k, .eval = TRUE) # nClusters: 2
+method5 <- update(method, nClusters = k, .eval = TRUE) # nClusters: 2
 
+
+
+
+cleanEx()
+nameEx("update.lcModel")
+### * update.lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: update.lcModel
+### Title: Update a lcModel
+### Aliases: update.lcModel
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model2 <- latrend(method, latrendData, nClusters = 2)
+
+# fit for a different number of clusters
+model3 <- update(model2, nClusters = 3)
 
 
 

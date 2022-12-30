@@ -1,6 +1,11 @@
 set.seed(1)
+
+if (requireNamespace('ggplot2', quietly = TRUE)) {
+  library(ggplot2)
+}
+
 testLongData = generateLongData(
-  sizes = c(20, 30),
+  sizes = c(20L, 30L),
   fixed = Value ~ 1 + Assessment,
   cluster = ~ 1 + Assessment,
   random = ~ 1,
@@ -11,5 +16,10 @@ testLongData = generateLongData(
   randomScales = cbind(.1, .1),
   noiseScales = c(.1, .1),
   clusterNames = c('A', 'B'),
-  shuffle = TRUE) %>%
-  .[, .(Traj, Assessment, Value, Class)]
+  shuffle = TRUE
+) %>%
+  .[, .(Traj, Assessment, Value, Class)] %>%
+  .[, Constant := 1] %>%
+  .[, Cluster := Class] %>%
+  .[, Traj := factor(Traj)] %>%
+  .[]

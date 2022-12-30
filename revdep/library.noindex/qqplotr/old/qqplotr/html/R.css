@@ -1,3 +1,26 @@
+@media screen {
+    body {
+	line-height: 1.4;
+    }
+    .container {
+	/* width: 100%; */
+	padding-right: 20px;
+	padding-left: 20px;
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 1000px;
+    }
+}
+
+.rimage img { /* from knitr */
+    width: 96%;
+    margin-left: 2%;
+} 	
+
+.katex { font-size: 1.1em; }
+
+code.reqn { color: black; }
+
 body {
     background: white;
     color: black;
@@ -56,7 +79,7 @@ h6 {
     font-family: monospace;
     font-style: italic;
 }
-		
+
 img.toplogo {
     width: 4em;
     vertical-align: middle;

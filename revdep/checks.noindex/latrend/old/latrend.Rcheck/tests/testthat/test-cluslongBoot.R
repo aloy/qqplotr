@@ -2,9 +2,12 @@ context('latrendBoot')
 rngReset()
 
 test_that('latrendBoot', {
-  models = latrendBoot(lcMethodTestKML(), data=testLongData, samples=3, seed=1) %>%
-    expect_is('lcModels') %>%
-    expect_length(3)
+  expect_silent({
+    models = latrendBoot(mRandom, data = testLongData, samples = 3, seed = 1)
+  })
+
+  expect_is(models, 'lcModels')
+  expect_length(models, 3)
 
   # test if data bootstrap sample calls are correct
   expect_equal(deparse(getCall(models[[1]])$data), 'bootSample(testLongData, "Traj", 1140350788L)')
@@ -13,20 +16,22 @@ test_that('latrendBoot', {
 })
 
 test_that('latrendBoot without seed', {
-  latrendBoot(lcMethodTestKML(), data=testLongData, samples=2) %>%
-    expect_is('lcModels') %>%
-    expect_length(2)
+  models = latrendBoot(mRandom, data = testLongData, samples = 2)
+
+  expect_is(models, 'lcModels')
+  expect_length(models, 2)
 })
 
 test_that('latrendBoot with method var', {
-  kml = lcMethodTestKML()
-  latrendBoot(kml, data=testLongData, samples=2) %>%
-    expect_is('lcModels') %>%
-    expect_length(2)
+  models = latrendBoot(mRandom, data = testLongData, samples = 2)
+
+  expect_is(models, 'lcModels')
+  expect_length(models, 2)
 })
 
 test_that('latrendBoot with single sample', {
-  latrendBoot(lcMethodTestKML(), data=testLongData, samples=1) %>%
-    expect_is('lcModels') %>%
-    expect_length(1)
+  models = latrendBoot(mRandom, data = testLongData, samples = 1)
+
+  expect_is(models, 'lcModels')
+  expect_length(models, 1)
 })

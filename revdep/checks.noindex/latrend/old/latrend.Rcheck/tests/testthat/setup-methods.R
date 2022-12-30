@@ -1,97 +1,26 @@
-lcMethodTestKML = function(...) {
-  lcMethodKML(response = 'Value', nbRedrawing=1, maxIt=10, ..., seed=1)
-}
+# Methods ####
+# test method with deterministic result
+mTest1 = lcMethodTestLMKM(nClusters = 1)
+mTest2 = mTest = lcMethodTestLMKM(nClusters = 2)
+mTest3 = lcMethodTestLMKM(nClusters = 3)
+mTest4 = lcMethodTestLMKM(nClusters = 4)
 
-if (requireNamespace('lcmm')) {
-  lcMethodTestLcmmGMM = function(...) {
-    lcMethodLcmmGMM(fixed = Value ~ 1, maxiter=10, ..., seed=1)
-  }
+# method that produces a random result each time
+mRandom = lcMethodTestRandom()
+# method that produces an error when fitted
+mError = lcMethodError()
 
-  lcMethodTestLcmmGBTM = function(...) {
-    lcMethodLcmmGBTM(fixed = Value ~ 1, maxiter=10, ..., seed=1)
-  }
-}
+# Models ####
+# hard cluster models
+testModel1 = latrend(mTest, data = testLongData, nClusters = 1)
+testModel2 = testModel = latrend(mTest, data = testLongData, nClusters = 2)
+testModel3 = latrend(mTest, data = testLongData, nClusters = 3)
+testModel4 = latrend(mTest, data = testLongData, nClusters = 4)
 
-if (requireNamespace('flexmix')) {
-  lcMethodTestFlexmixGBTM = function(...) {
-    lcMethodFlexmixGBTM(formula = Value ~ Assessment, ..., control=list(iter.max=1, tolerance=1e-3), seed=1)
-  }
+rngModel1 = latrend(mRandom, data = testLongData, nClusters = 1)
+rngModel2 = rngModel = latrend(mRandom, data = testLongData, nClusters = 2)
 
-  lcMethodTestFlexmix = function(...) {
-    lcMethodFlexmix(formula = Value ~ 0, ...)
-  }
-}
-
-if (requireNamespace('crimCV')) {
-  lcMethodTestCrimCV = function(...) {
-    lcMethodCrimCV(response = 'Value', ..., model='ZIP', dpolyp=2, dpolyl=1, init=5, seed=1)
-  }
-}
-
-if (requireNamespace('funFEM')) {
-  lcMethodTestFunFEM = function(...) {
-    lcMethodFunFEM(response = 'Value', ...)
-  }
-}
-
-if (requireNamespace('mclust')) {
-  lcMethodTestMclustLLPA = function(...) {
-    lcMethodMclustLLPA(response = 'Value', ...)
-  }
-}
-
-lcMethodTestRandom = function(...) {
-  lcMethodRandom(response = 'Value', ...)
-}
-
-lcMethodTestStratify = function(...) {
-  lcMethodStratify(response = 'Value', ...)
-}
-
-if (requireNamespace('lme4')) {
-  lcMethodTestGCKM = function(...) {
-    lcMethodGCKM(formula = Value ~ (1 | Traj), ...)
-  }
-}
-
-lcMethodTestLMKM = function(...) {
-  lcMethodLMKM(formula = Value ~ Assessment, ...)
-}
-
-lcMethodTestTwoStep = function(...) {
-  lcMethodFeature(response = 'Value', ...)
-}
-
-lcMethodTestMixTVEM = function(...) {
-  lcMethodMixTVEM(formula = Value ~ time(1) - 1, ..., convergenceCriterion = 1e-6, numStarts = 10, maxIterations = 1e3, numInteriorKnots = 6, seed=2L)
-}
-
-lcMethodTestCrimCVt = function(...) {
-  lcMethodCrimCV(response = 'Value', ..., model='ZIPt', dpolyp=2, init=5, seed=1)
-}
-
-if (requireNamespace('longclust')) {
-  lcMethodTestLongclust = function(...) {
-    lcMethodLongclust(response = 'Value', modelSubset='VVA', gaussian=TRUE, ..., seed=1)
-  }
-
-  lcMethodTestLongclustT = function(...) {
-    lcMethodLongclust(response = 'Value', modelSubset='VEI', gaussian=FALSE, ..., seed=1)
-  }
-}
-
-if (requireNamespace('mixtools')) {
-  lcMethodTestMixtoolsNPRM = function(...) {
-    lcMethodMixtoolsNPRM(response = 'Value', maxiter=10, eps=1e-04, seed=1)
-  }
-
-  lcMethodTestMixtoolsGMM = function(...) {
-    lcMethodMixtoolsGMM(formula = Value ~ Assessment + (Assessment | Traj), epsilon=1e-02, ..., seed=1)
-  }
-}
-
-if (requireNamespace('mixAK')) {
-  lcMethodTestMixAK_GLMM = function(...) {
-    lcMethodMixAK_GLMM(fixed = Value ~ 1, random = ~ Assessment, ..., seed=1)
-  }
-}
+# fuzzy cluster models
+# fuzzyModel1 = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 1)
+# fuzzyModel2 = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 2)
+# fuzzyModel3 = latrend(lcMethodTestLcmmGMM(), testLongData, nClusters = 3)

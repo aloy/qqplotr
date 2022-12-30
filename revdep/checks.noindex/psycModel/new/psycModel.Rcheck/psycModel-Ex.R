@@ -6,6 +6,41 @@ library('psycModel')
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
 cleanEx()
+nameEx("anova_plot")
+### * anova_plot
+
+flush(stderr()); flush(stdout())
+
+### Name: anova_plot
+### Title: ANOVA Plot
+### Aliases: anova_plot
+
+### ** Examples
+
+# Main effect plot with 1 categorical variable
+fit_1 = lavaan::HolzingerSwineford1939 %>% 
+  dplyr::mutate(school = as.factor(school)) %>% 
+  lm(data = ., grade ~ school)
+anova_plot(fit_1,predictor = school)
+
+# Interaction effect plot with 2 categorical variables 
+fit_2 = lavaan::HolzingerSwineford1939 %>% 
+  dplyr::mutate(dplyr::across(c(school,sex),as.factor)) %>% 
+  lm(data = ., grade ~ school*sex)
+anova_plot(fit_2)
+
+# Interaction effect plot with 1 categorical variable and 1 continuous variable
+fit_3 = lavaan::HolzingerSwineford1939 %>% 
+  dplyr::mutate(school = as.factor(school)) %>% 
+  dplyr::mutate(ageyr = as.numeric(ageyr)) %>% 
+  lm(data = ., grade ~ ageyr*school)
+anova_plot(fit_3)
+
+
+
+
+
+cleanEx()
 nameEx("cfa_groupwise")
 ### * cfa_groupwise
 
@@ -42,15 +77,16 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 # REMEMBER, YOU MUST NAMED ALL ARGUMENT EXCEPT THE CFA ITEMS ARGUMENT
-# Fitting a multiple factor CFA model
+# Fitting a multilevel single factor CFA model
 fit <- cfa_summary(
   data = lavaan::HolzingerSwineford1939,
   x1:x3,
   x4:x6,
   x7:x9,
+  group = "sex",
+  model_variance = FALSE, # do not print the model_variance
+  model_covariance = FALSE # do not print the model_covariance
 )
-
-# Fitting a multilevel single factor CFA model
 
 
 # Fitting a CFA model by passing explicit lavaan model (equivalent to the above model)
@@ -119,6 +155,27 @@ cor_test(iris, where(is.numeric))
 
 
 cleanEx()
+nameEx("cronbach_alpha")
+### * cronbach_alpha
+
+flush(stderr()); flush(stdout())
+
+### Name: cronbach_alpha
+### Title: Cronbach alpha
+### Aliases: cronbach_alpha
+
+### ** Examples
+
+cronbach_alpha(
+  data = lavaan::HolzingerSwineford1939,
+  var_name = c('Visual','Textual','Speed'),
+  c(x1,x2,x3), # one way to pass the items of a factor is by wrapping it with c()
+  x4:x6, # another way to pass the items is use tidyselect syntax 
+  x7:x9)
+
+
+
+cleanEx()
 nameEx("descriptive_table")
 ### * descriptive_table
 
@@ -178,28 +235,6 @@ fit <- glm_model(
 
 
 cleanEx()
-nameEx("glme_model")
-### * glme_model
-
-flush(stderr()); flush(stdout())
-
-### Name: glme_model
-### Title: Generalized Linear Mixed Effect Model
-### Aliases: glme_model
-
-### ** Examples
-
-fit <- glme_model(
-  response_variable = incidence,
-  random_effect_factors = period,
-  family = "poisson", # or you can enter as poisson(link = 'log')
-  id = herd,
-  data = lme4::cbpp
-)
-
-
-
-cleanEx()
 nameEx("html_to_pdf")
 ### * html_to_pdf
 
@@ -220,47 +255,27 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
-nameEx("integrated_model_summary")
-### * integrated_model_summary
+nameEx("interaction_plot")
+### * interaction_plot
 
 flush(stderr()); flush(stdout())
 
-### Name: integrated_model_summary
-### Title: Integrated Function for Linear Regression
-### Aliases: integrated_model_summary
+### Name: interaction_plot
+### Title: Interaction plot
+### Aliases: interaction_plot
 
 ### ** Examples
 
-fit <- integrated_model_summary(
-  data = iris,
-  response_variable = "Sepal.Length",
-  predictor_variable = tidyselect::everything(),
-  two_way_interaction_factor = c(Sepal.Width, Species)
-)
+lm_fit_2 <- lm(Sepal.Length ~ Sepal.Width + Petal.Length +
+  Sepal.Width*Petal.Length, data = iris)
+  
+interaction_plot(lm_fit_2)
 
+lm_fit_3 <- lm(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + 
+  Sepal.Width*Petal.Length:Petal.Width, data = iris)
+  
+interaction_plot(lm_fit_3)
 
-
-cleanEx()
-nameEx("integrated_multilevel_model_summary")
-### * integrated_multilevel_model_summary
-
-flush(stderr()); flush(stdout())
-
-### Name: integrated_multilevel_model_summary
-### Title: Integrated Function for Mixed Effect Model
-### Aliases: integrated_multilevel_model_summary
-
-### ** Examples
-
-fit <- integrated_multilevel_model_summary(
-  data = popular,
-  response_variable = popular,
-  random_effect_factors = c(extrav),
-  non_random_effect_factors = texp,
-  two_way_interaction_factor = c(extrav, texp),
-  graph_label_name = c("popular", "extraversion", "teacher experience"),
-  id = class
-)
 
 
 
@@ -303,6 +318,31 @@ fit <- lm_model(
 
 
 cleanEx()
+nameEx("lm_model_summary")
+### * lm_model_summary
+
+flush(stderr()); flush(stdout())
+
+### Name: lm_model_summary
+### Title: Model Summary for Linear Regression
+### Aliases: lm_model_summary
+
+### ** Examples
+
+fit <- lm_model_summary(
+  data = iris,
+  response_variable = "Sepal.Length",
+  predictor_variable = tidyselect::everything(),
+  two_way_interaction_factor = c(Sepal.Width, Species),
+  interaction_plot = FALSE, # you can also request the interaction plot
+  simple_slope = FALSE, # you can also request simple slope estimate 
+  assumption_plot = FALSE, # you can also request assumption plot
+  streamline = FALSE #you can change this to get the least amount of info
+)
+
+
+
+cleanEx()
 nameEx("lme_model")
 ### * lme_model
 
@@ -339,6 +379,35 @@ lme_fit <- lme_model(
   model = "popular ~ extrav*texp + (1 + extrav | class)",
   data = popular
 )
+
+
+
+cleanEx()
+nameEx("lme_multilevel_model_summary")
+### * lme_multilevel_model_summary
+
+flush(stderr()); flush(stdout())
+
+### Name: lme_multilevel_model_summary
+### Title: Model Summary for Mixed Effect Model
+### Aliases: lme_multilevel_model_summary
+
+### ** Examples
+
+fit <- lme_multilevel_model_summary(
+  data = popular,
+  response_variable = popular,
+  random_effect_factors = NULL, # you can add random effect predictors here 
+  non_random_effect_factors = c(extrav,texp),
+  two_way_interaction_factor = NULL, # you can add two-way interaction plot here 
+  graph_label_name = NULL, #you can also change graph lable name here
+  id = class,
+  simple_slope = FALSE, # you can also request simple slope estimate 
+  assumption_plot = FALSE, # you can also request assumption plot
+  plot_color = FALSE, # you can also request the plot in color
+  streamline = FALSE # you can change this to get the least amount of info
+)
+
 
 
 
@@ -438,6 +507,23 @@ model_summary(lm_fit, assumption_plot = TRUE)
 
 
 cleanEx()
+nameEx("polynomial_regression_plot")
+### * polynomial_regression_plot
+
+flush(stderr()); flush(stdout())
+
+### Name: polynomial_regression_plot
+### Title: Polynomial Regression Plot
+### Aliases: polynomial_regression_plot
+
+### ** Examples
+
+fit = lm(data = iris, Sepal.Length ~ poly(Petal.Length,2))
+polynomial_regression_plot(model = fit,predictor = 'Petal.Length')
+
+
+
+cleanEx()
 nameEx("reliability_summary")
 ### * reliability_summary
 
@@ -475,9 +561,7 @@ fit <- lm_model(
 )
 
 simple_slope_fit <- simple_slope(
-  data = iris,
   model = fit,
-  three_way_interaction_factor = c("Sepal.Width", "Petal.Width", "Petal.Length")
 )
 
 
@@ -494,22 +578,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# I am going to show the more generic usage of this function
-# You can also use this package's built in function to fit the models
-# I recommend using the integrated_multilevel_model_summary to get everything
-
-# lme example
-lme_fit <- lme4::lmer("popular ~ extrav + sex + texp + extrav:sex:texp +
-(1 + extrav + sex | class)", data = popular)
-
-three_way_interaction_plot(lme_fit, data = popular)
-
-# lm example
-
 lm_fit <- lm(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width +
   Sepal.Width:Petal.Length:Petal.Width, data = iris)
 
 three_way_interaction_plot(lm_fit, data = iris)
+
 
 
 
@@ -525,40 +598,11 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# If you pass the model directly, it can't extract the data-frame from fit object
-# Therefore, for now, you must pass the data frame to the function.
-# You don't need pass the data if you use `lm_model` or `lme_model`.
-
-# lme example
-lme_fit <- lme4::lmer("popular ~ extrav*texp + (1 + extrav | class)",
-  data = popular
-)
-
-two_way_interaction_plot(lme_fit,
-  graph_label_name = c("popular", "extraversion", "teacher experience"),
-  data = popular
-)
-
 lm_fit <- lm(Sepal.Length ~ Sepal.Width * Petal.Width,
   data = iris
 )
-
 two_way_interaction_plot(lm_fit, data = iris)
 
-# For more advanced users
-label_name <- function(var_name) {
-  var_name_processed <- switch(var_name,
-    "extrav" = "Extroversion",
-    "texp" = "Teacher Experience",
-    "popular" = "popular"
-  )
-  if (is.null(var_name_processed)) {
-    var_name_processed <- var_name
-  }
-  return(var_name_processed)
-}
-
-two_way_interaction_plot(lme_fit, data = popular, graph_label_name = label_name)
 
 
 

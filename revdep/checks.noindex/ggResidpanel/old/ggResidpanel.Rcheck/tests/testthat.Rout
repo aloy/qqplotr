@@ -1,6 +1,6 @@
 
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin17.0 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -19,11 +19,14 @@ Type 'q()' to quit R.
 > library(ggResidpanel)
 > 
 > test_check("ggResidpanel")
-══ Skipped tests ═══════════════════════════════════════════════════════════════
-● Skipping on CRAN (12)
+`geom_smooth()` using formula = 'y ~ x'
+[ FAIL 0 | WARN 2 | SKIP 10 | PASS 18 ]
 
-[ FAIL 0 | WARN 2 | SKIP 12 | PASS 18 ]
+══ Skipped tests ═══════════════════════════════════════════════════════════════
+• On CRAN (10)
+
+[ FAIL 0 | WARN 2 | SKIP 10 | PASS 18 ]
 > 
 > proc.time()
    user  system elapsed 
- 19.315   2.421  24.222 
+ 20.404   0.564  21.544 

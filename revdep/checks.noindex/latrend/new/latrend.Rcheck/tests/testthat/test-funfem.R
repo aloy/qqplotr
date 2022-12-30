@@ -1,28 +1,21 @@
 context('funfem')
 skip_if_not_installed('funFEM')
+skip_on_cran()
 rngReset()
+# funFEM does not support K = 1
+tests = setdiff(DEFAULT_LATREND_TESTS, c('cluster-single', 'data-na', 'data-varlen'))
 
 library(funFEM)
-data(CanadianWeather)
-femData = CanadianWeather$dailyAv[,,'Temperature.C'] %>% t
+# data(CanadianWeather)
+# femData = CanadianWeather$dailyAv[,,'Temperature.C'] %>% t()
 
 test_that('default', {
-  suppressWarnings({
-    model = latrend(lcMethodTestFunFEM(), femData) %>%
-      expect_valid_lcModel()
-  })
-})
-
-test_that('many clusters', {
-  suppressWarnings({
-    model = latrend(lcMethodTestFunFEM(nClusters=4), femData) %>%
-      expect_valid_lcModel()
-  })
-})
-
-test_that('testLongData', {
-  suppressWarnings({
-    model = latrend(lcMethodTestFunFEM(), testLongData) %>%
-      expect_valid_lcModel()
+  expect_true({
+    test.latrend(
+      'lcMethodFunFEM',
+      tests = tests,
+      clusterRecovery = 'skip',
+      args = list(basis = function(time) fda::create.bspline.basis(time, nbasis = 4L, norder = 2L), seed = 1L)
+    )
   })
 })

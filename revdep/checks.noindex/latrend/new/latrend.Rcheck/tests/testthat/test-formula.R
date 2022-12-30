@@ -38,6 +38,7 @@ test_that('hasResponse', {
 })
 
 test_that('getREterms', {
+  skip_if_not_installed('lme4')
   expect_null(getREterms(~0))
   expect_null(getREterms(A~B))
   expect_length(getREterms(A~B + (1 | C)), 1)
@@ -48,6 +49,7 @@ test_that('getREterms', {
 })
 
 test_that('hasRE', {
+  skip_if_not_installed('lme4')
   expect_false(hasRE(A ~ 0))
   expect_false(hasRE(A ~ 1))
   expect_false(hasRE(A ~ B))
@@ -56,12 +58,14 @@ test_that('hasRE', {
 })
 
 test_that('REtermAsFormula', {
+  skip_if_not_installed('lme4')
   expect_equal(getREterms(A~B + (1 | C))[[1]] %>% REtermAsFormula, ~1)
   expect_equal(getREterms(A~B + (D | C))[[1]] %>% REtermAsFormula, ~D)
   expect_equal(getREterms(A~B + (-1 + D | C))[[1]] %>% REtermAsFormula, ~-1 + D)
 })
 
 test_that('getREGroupName', {
+  skip_if_not_installed('lme4')
   expect_equal(getREterms(A~B + (1 | C))[[1]] %>% getREGroupName, 'C')
   expect_equal(getREterms(A~B + (1 | C) + (1 | Group))[[2]] %>% getREGroupName, 'Group')
 })
@@ -120,6 +124,8 @@ test_that('dropIntercept', {
 })
 
 test_that('dropRE', {
+  skip_if_not_installed('lme4')
+
   expect_equal(dropRE(~0), ~0)
   expect_equal(dropRE(~1), ~1)
   expect_equal(dropRE(A ~ 0), A ~ 0)

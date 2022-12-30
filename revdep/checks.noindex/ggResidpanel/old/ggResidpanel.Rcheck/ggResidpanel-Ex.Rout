@@ -1,6 +1,6 @@
 
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin17.0 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -77,8 +77,8 @@ Type 'q()' to quit R.
 > # Adjust some options in the panel of plots
 > resid_compare(list(penguin_model, penguin_model_log2), plots = c("resid", "yvp"),
 + smoother = TRUE, theme = "grey")
-`geom_smooth()` using formula 'y ~ x'
-`geom_smooth()` using formula 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
 > 
 > 
 > 
@@ -100,34 +100,63 @@ Type 'q()' to quit R.
 > 
 > # Create the default interactive panel
 > resid_interact(penguin_model)
-Warning in geom2trace.default(dots[[1L]][[1L]], dots[[2L]][[1L]], dots[[3L]][[1L]]) :
-  geom_GeomFunction() has yet to be implemented in plotly.
-  If you'd like to see this geom implemented,
-  Please open an issue with your example code at
-  https://github.com/ropensci/plotly/issues
+Warning: The following aesthetics were dropped during statistical transformation:
+sample, label
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
 > 
 > # Select all plots to include in the panel and set the smoother option to TRUE
 > resid_interact(penguin_model, plots = "all", smoother = TRUE)
-Warning in geom2trace.default(dots[[1L]][[1L]], dots[[2L]][[1L]], dots[[3L]][[1L]]) :
-  geom_GeomFunction() has yet to be implemented in plotly.
-  If you'd like to see this geom implemented,
-  Please open an issue with your example code at
-  https://github.com/ropensci/plotly/issues
-`geom_smooth()` using formula 'y ~ x'
-`geom_smooth()` using formula 'y ~ x'
+Warning: The following aesthetics were dropped during statistical transformation: label
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+`geom_smooth()` using formula = 'y ~ x'
+Warning: The following aesthetics were dropped during statistical transformation: label
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation:
+sample, label
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+`geom_smooth()` using formula = 'y ~ x'
+Warning: The following aesthetics were dropped during statistical transformation: label
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
 > 
 > # Select only the residual plot and qq-plot to be included in the panel and
 > # set the number of rows to 2
 > resid_interact(penguin_model, plots = c("resid", "qq"), nrow = 2)
+Warning: The following aesthetics were dropped during statistical transformation:
+sample, label
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
 > 
 > # Choose the SAS panel of plots, change the theme to classic, and remove the
 > # titles of the plots
 > resid_interact(penguin_model, plots = "SAS", theme = "classic", title.opt = FALSE)
-Warning in geom2trace.default(dots[[1L]][[1L]], dots[[2L]][[1L]], dots[[3L]][[1L]]) :
-  geom_GeomFunction() has yet to be implemented in plotly.
-  If you'd like to see this geom implemented,
-  Please open an issue with your example code at
-  https://github.com/ropensci/plotly/issues
+Warning: The following aesthetics were dropped during statistical transformation: label
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
+Warning: The following aesthetics were dropped during statistical transformation:
+sample, label
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?
 > 
 > 
 > 
@@ -152,8 +181,8 @@ Warning in geom2trace.default(dots[[1L]][[1L]], dots[[2L]][[1L]], dots[[3L]][[1L
 > 
 > # Select all plots to include in the panel and set the smoother option to TRUE
 > resid_panel(penguin_model, plots = "all", smoother = TRUE)
-`geom_smooth()` using formula 'y ~ x'
-`geom_smooth()` using formula 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
 > 
 > # Select only the residual plot and qq-plot to be included in the panel,
 > # request confidence bands on the qq plot, and set the number of rows to 2
@@ -187,9 +216,9 @@ Warning in geom2trace.default(dots[[1L]][[1L]], dots[[2L]][[1L]], dots[[3L]][[1L
 > 
 > # Create plots of the response variable versus the predictor variables
 > resid_xpanel(penguin_model, yvar = "response", theme = "classic", smoother = TRUE)
-`geom_smooth()` using formula 'y ~ x'
-`geom_smooth()` using formula 'y ~ x'
-`geom_smooth()` using formula 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
+`geom_smooth()` using formula = 'y ~ x'
 > 
 > 
 > 
@@ -198,7 +227,7 @@ Warning in geom2trace.default(dots[[1L]][[1L]], dots[[2L]][[1L]], dots[[3L]][[1L
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  9.084 0.445 11.221 0.001 0.003 
+Time elapsed:  14.347 0.645 16.711 0 0 
 > grDevices::dev.off()
 null device 
           1 
