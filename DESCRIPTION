@@ -29,7 +29,8 @@ Depends: R (>= 3.1),
 Imports: dplyr,
     robustbase,
     MASS,
-    opdisDownsampling
+    opdisDownsampling,
+    qqconf (>= 1.3.0)
 Suggests: shiny,
     devtools,
     lattice,

@@ -138,7 +138,7 @@ stat_pp_band <- function(
 			na.rm = na.rm,
 			distribution = distribution,
 			dparams = dparams,
-			bandType = match.arg(bandType, c("boot")),
+			bandType = match.arg(bandType, c("boot", "ell")),
 			B = round(B),
 			conf = conf,
 			discrete = distribution %in% discreteDist,
@@ -164,7 +164,7 @@ StatPpBand <- ggplot2::ggproto(
 	),
 
 	required_aes = c("sample"),
-	
+
 	dropped_aes = c("sample"),
 
 	compute_group = {
@@ -181,6 +181,7 @@ StatPpBand <- ggplot2::ggproto(
 			# distributional functions
 			pFunc <- eval(parse(text = paste0("p", distribution)))
 			rFunc <- eval(parse(text = paste0("r", distribution)))
+			qFunc <- eval(parse(text = paste0("q", distribution)))
 
 			smp <- data$sample
 			n <- length(smp)
@@ -246,6 +247,22 @@ StatPpBand <- ggplot2::ggproto(
 
 				upper <- apply(X = sim, MARGIN = 1, FUN = quantile, prob = (1 + conf) / 2)
 				lower <- apply(X = sim, MARGIN = 1, FUN = quantile, prob = (1 - conf) / 2)
+			}
+
+			if (bandType == "ell") {
+
+				band <- qqconf::get_qq_band(
+					n = n,
+					alpha = 1 - conf,
+					distribution = qFunc,
+					dparams = dparams,
+					prob_pts_method = "normal"
+				)
+
+				probs <- do.call(pFunc, c(list(q=band$expected_value), dparams))
+				lower <- do.call(pFunc, c(list(q=band$lower_bound), dparams))
+				upper <- do.call(pFunc, c(list(q=band$upper_bound), dparams))
+
 			}
 
 			out <- data.frame(

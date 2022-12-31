@@ -194,7 +194,7 @@ stat_qq_band <- function(
 		stop("Please provide a positive value for B.",
 				 call. = FALSE)
 	}
-	bandType <- match.arg(bandType, c("pointwise", "boot", "ts", "ks"))
+	bandType <- match.arg(bandType, c("pointwise", "boot", "ts", "ks", "ell"))
 
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "nbinom", "pois")
@@ -244,7 +244,7 @@ StatQqBand <- ggplot2::ggproto(
 	),
 
 	required_aes = c("sample"),
-	
+
 	dropped_aes = c("sample"),
 
 	compute_group = {
@@ -426,6 +426,22 @@ StatQqBand <- ggplot2::ggproto(
 					upper <- qnorm(upperCi) * sigma + mu
 					lower <- qnorm(lowerCi) * sigma + mu
 				}
+			}
+
+			if (bandType == "ell") {
+
+				band <- qqconf::get_qq_band(
+					n = n,
+					alpha = 1 - conf,
+					distribution = qFunc,
+					dparams = dparams,
+					prob_pts_method = "normal"
+				)
+
+				probs <- band$expected_value
+				upper <- band$upper_bound
+				lower <- band$lower_bound
+
 			}
 
 			out <- data.frame(
