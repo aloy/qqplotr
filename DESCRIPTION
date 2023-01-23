@@ -11,7 +11,7 @@ BugReports: https://github.com/aloy/qqplotr/issues
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.2
 Collate: 
     'data.R'
     'geom_qq_band.R'
@@ -29,7 +29,8 @@ Depends: R (>= 3.1),
 Imports: dplyr,
     robustbase,
     MASS,
-    opdisDownsampling
+    opdisDownsampling,
+    qqconf (>= 1.3.1)
 Suggests: shiny,
     devtools,
     lattice,

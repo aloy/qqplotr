@@ -22,10 +22,10 @@ stat_pp_band(
 )
 }
 \arguments{
-\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
-\code{\link[ggplot2:aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
-default), it is combined with the default mapping at the top level of the
-plot. You must supply \code{mapping} if there is no plot mapping.}
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
+\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
+at the top level of the plot. You must supply \code{mapping} if there is no plot
+mapping.}
 
 \item{data}{The data to be displayed in this layer. There are three
 options:
@@ -42,10 +42,14 @@ the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data. A \code{function} can be created
 from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
-\item{geom}{The geometric object to use display the data}
+\item{geom}{The geometric object to use to display the data, either as a
+\code{ggproto} \code{Geom} subclass or as a string naming the geom stripped of the
+\code{geom_} prefix (e.g. \code{"point"} rather than \code{"geom_point"})}
 
-\item{position}{Position adjustment, either as a string, or the result of
-a call to a position adjustment function.}
+\item{position}{Position adjustment, either as a string naming the adjustment
+(e.g. \code{"jitter"} to use \code{position_jitter}), or the result of a call to a
+position adjustment function. Use the latter if you need to change the
+settings of the adjustment.}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
@@ -76,8 +80,9 @@ then the distributional parameters are estimated via MLE. MLE for custom
 distributions is currently not supported, so you must provide the
 appropriate \code{dparams} in that case.}
 
-\item{bandType}{Character. Only \code{"boot"} is available for now. \code{"boot"}
-creates pointwise confidence bands based on a bootstrap.}
+\item{bandType}{Character. Only \code{"boot"} and \code{"ell"} are available for now. \code{"boot"}
+creates pointwise confidence bands based on a bootstrap. \code{"ell"}
+constructs simultaenous bands using the equal local levels test.}
 
 \item{B}{Integer. If \code{bandType = "boot"}, then \code{B} is the number of
 bootstrap replicates.}
@@ -138,4 +143,16 @@ gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
  labs(x = "Probability Points", y = "Cumulative Probability")
 gg
 
+}
+\references{
+\itemize{
+\item{\href{https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+\item{\href{https://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
+S. et al. (2013). The Power to See: A New Graphical Test of Normality. The
+American Statistician. 67:4.}}
+\item{\href{https://arxiv.org/abs/2111.15082}{Weine, E. et al. (2021).
+Application of Equal Local Levels to Improve Q-Q Plot Testing Bands with R
+Package qqconf.}}
+}
 }

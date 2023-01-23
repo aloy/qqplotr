@@ -43,13 +43,14 @@
 #' @param qprobs Numeric vector of length two. Represents the quantiles used by
 #'   the \code{\link[stats]{quantile}} function to construct the Q-Q line.
 #' @param bandType Character. Either \code{"pointwise"}, \code{"boot"}, \code{"ks"} or
-#'   \code{"ts"}. \code{"pointwise"} constructs pointwise confidence bands based
+#'   \code{"ts"}, or \code{"ell"}. \code{"pointwise"} constructs pointwise confidence bands based
 #'   on Normal confidence intervals. \code{"boot"} creates pointwise confidence
 #'   bands based on a parametric bootstrap; parameters are estimated with MLEs.
 #'   \code{"ks"} constructs simultaneous confidence bands based on the Kolmogorov-Smirnov
-#'   test. Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
+#'   test. \code{"ts"} constructs tail-sensitive confidence bands, as
 #'   described by Aldor-Noiman et al. (2013) (also, see 'Note' for
-#'   limitations).
+#'   limitations). Finally, \code{"ell"} constructs simultaenous bands using the
+#'   equal local levels test describe by Weine et al. (2021).
 #' @param B Integer. If \code{bandType = "boot"}, then \code{B} is the number of
 #'   bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
 #'   number of simulated samples.
@@ -81,6 +82,9 @@
 #' \item{\href{https://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
 #' S. et al. (2013). The Power to See: A New Graphical Test of Normality. The
 #' American Statistician. 67:4.}}
+#' \item{\href{https://arxiv.org/abs/2111.15082}{Weine, E. et al. (2021).
+#' Application of Equal Local Levels to Improve Q-Q Plot Testing Bands with R
+#' Package qqconf.}}
 #' }
 #'
 #' @examples
@@ -127,6 +131,15 @@
 #'
 #' # Normal Q-Q plot of Normal data with tail-sensitive confidence bands
 #' bt <- "ts"
+#' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
+#'  stat_qq_band(bandType = bt) +
+#'  stat_qq_line() +
+#'  stat_qq_point() +
+#'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+#' gg
+#'
+#' # Normal Q-Q plot of Normal data with equal local levels (ell) bands
+#' bt <- "ell"
 #' gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 #'  stat_qq_band(bandType = bt) +
 #'  stat_qq_line() +
@@ -194,7 +207,7 @@ stat_qq_band <- function(
 		stop("Please provide a positive value for B.",
 				 call. = FALSE)
 	}
-	bandType <- match.arg(bandType, c("pointwise", "boot", "ts", "ks"))
+	bandType <- match.arg(bandType, c("pointwise", "boot", "ts", "ks", "ell"))
 
 	# vector with common discrete distributions
 	discreteDist <- c("binom", "geom", "nbinom", "pois")
@@ -233,6 +246,7 @@ stat_qq_band <- function(
 #' @keywords internal
 #' @usage NULL
 #' @export
+#' @importFrom qqconf get_qq_band
 StatQqBand <- ggplot2::ggproto(
 	`_class` = "StatQqBand",
 	`_inherit` = StatQqLine,
@@ -244,7 +258,7 @@ StatQqBand <- ggplot2::ggproto(
 	),
 
 	required_aes = c("sample"),
-	
+
 	dropped_aes = c("sample"),
 
 	compute_group = {
@@ -426,6 +440,22 @@ StatQqBand <- ggplot2::ggproto(
 					upper <- qnorm(upperCi) * sigma + mu
 					lower <- qnorm(lowerCi) * sigma + mu
 				}
+			}
+
+			if (bandType == "ell") {
+
+				band <- qqconf::get_qq_band(
+					n = n,
+					alpha = 1 - conf,
+					distribution = qFunc,
+					dparams = dparams,
+					prob_pts_method = "normal"
+				)
+
+				probs <- band$expected_value
+				upper <- band$upper_bound
+				lower <- band$lower_bound
+
 			}
 
 			out <- data.frame(

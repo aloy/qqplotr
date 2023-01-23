@@ -5,7 +5,7 @@
 \alias{StatQqLine}
 \title{StatQqLine}
 \format{
-An object of class \code{StatQqLine} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 4.
+An object of class \code{StatQqLine} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 5.
 }
 \description{
 StatQqLine

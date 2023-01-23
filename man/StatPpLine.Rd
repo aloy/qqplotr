@@ -5,7 +5,7 @@
 \alias{StatPpLine}
 \title{StatPpLine}
 \format{
-An object of class \code{StatPpLine} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 4.
+An object of class \code{StatPpLine} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 5.
 }
 \description{
 StatPpLine
