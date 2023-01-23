@@ -11,7 +11,7 @@ BugReports: https://github.com/aloy/qqplotr/issues
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.2
 Collate: 
     'data.R'
     'geom_qq_band.R'

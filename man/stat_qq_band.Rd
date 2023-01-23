@@ -50,10 +50,10 @@ stat_qq_band(
 )
 }
 \arguments{
-\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
-\code{\link[ggplot2:aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
-default), it is combined with the default mapping at the top level of the
-plot. You must supply \code{mapping} if there is no plot mapping.}
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}}. If specified and
+\code{inherit.aes = TRUE} (the default), it is combined with the default mapping
+at the top level of the plot. You must supply \code{mapping} if there is no plot
+mapping.}
 
 \item{data}{The data to be displayed in this layer. There are three
 options:
@@ -73,8 +73,10 @@ from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 \item{stat}{statistic to use to calculate confidence bands. Should be
 `qq_band`.}
 
-\item{position}{Position adjustment, either as a string, or the result of
-a call to a position adjustment function.}
+\item{position}{Position adjustment, either as a string naming the adjustment
+(e.g. \code{"jitter"} to use \code{position_jitter}), or the result of a call to a
+position adjustment function. Use the latter if you need to change the
+settings of the adjustment.}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
@@ -125,13 +127,14 @@ line.}
 the \code{\link[stats]{quantile}} function to construct the Q-Q line.}
 
 \item{bandType}{Character. Either \code{"pointwise"}, \code{"boot"}, \code{"ks"} or
-\code{"ts"}. \code{"pointwise"} constructs pointwise confidence bands based
+\code{"ts"}, or \code{"ell"}. \code{"pointwise"} constructs pointwise confidence bands based
 on Normal confidence intervals. \code{"boot"} creates pointwise confidence
 bands based on a parametric bootstrap; parameters are estimated with MLEs.
 \code{"ks"} constructs simultaneous confidence bands based on the Kolmogorov-Smirnov
-test. Finally, \code{"ts"} constructs tail-sensitive confidence bands, as
+test. \code{"ts"} constructs tail-sensitive confidence bands, as
 described by Aldor-Noiman et al. (2013) (also, see 'Note' for
-limitations).}
+limitations). Finally, \code{"ell"} constructs simultaenous bands using the
+equal local levels test describe by Weine et al. (2021).}
 
 \item{B}{Integer. If \code{bandType = "boot"}, then \code{B} is the number of
 bootstrap replicates. If \code{bandType = "ts"}, then \code{B} is the
@@ -156,7 +159,9 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
-\item{geom}{The geometric object to use display the data}
+\item{geom}{The geometric object to use to display the data, either as a
+\code{ggproto} \code{Geom} subclass or as a string naming the geom stripped of the
+\code{geom_} prefix (e.g. \code{"point"} rather than \code{"geom_point"})}
 }
 \description{
 Draws quantile-quantile confidence bands, with an additional detrend option.
@@ -221,6 +226,15 @@ gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 gg
 
+# Normal Q-Q plot of Normal data with equal local levels (ell) bands
+bt <- "ell"
+gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
+ stat_qq_band(bandType = bt) +
+ stat_qq_line() +
+ stat_qq_point() +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
+
 }
 \references{
 \itemize{
@@ -229,5 +243,8 @@ H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
 \item{\href{https://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
 S. et al. (2013). The Power to See: A New Graphical Test of Normality. The
 American Statistician. 67:4.}}
+\item{\href{https://arxiv.org/abs/2111.15082}{Weine, E. et al. (2021).
+Application of Equal Local Levels to Improve Q-Q Plot Testing Bands with R
+Package qqconf.}}
 }
 }

@@ -20,8 +20,9 @@
 #'   then the distributional parameters are estimated via MLE. MLE for custom
 #'   distributions is currently not supported, so you must provide the
 #'   appropriate \code{dparams} in that case.
-#' @param bandType Character. Only \code{"boot"} is available for now. \code{"boot"}
-#'   creates pointwise confidence bands based on a bootstrap.
+#' @param bandType Character. Only \code{"boot"} and \code{"ell"} are available for now. \code{"boot"}
+#'   creates pointwise confidence bands based on a bootstrap. \code{"ell"}
+#'   constructs simultaenous bands using the equal local levels test.
 #' @param B Integer. If \code{bandType = "boot"}, then \code{B} is the number of
 #'   bootstrap replicates.
 #' @param conf Numerical. Confidence level of the bands.
@@ -30,6 +31,18 @@
 #'   This procedure was described by Thode (2002), and may help reducing visual
 #'   bias caused by the orthogonal distances from P-P points to the reference
 #'   line.
+#'
+#' @references
+#' \itemize{
+#' \item{\href{https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
+#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+#' \item{\href{https://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
+#' S. et al. (2013). The Power to See: A New Graphical Test of Normality. The
+#' American Statistician. 67:4.}}
+#' \item{\href{https://arxiv.org/abs/2111.15082}{Weine, E. et al. (2021).
+#' Application of Equal Local Levels to Improve Q-Q Plot Testing Bands with R
+#' Package qqconf.}}
+#' }
 #'
 #' @examples
 #' # generate random Normal data
