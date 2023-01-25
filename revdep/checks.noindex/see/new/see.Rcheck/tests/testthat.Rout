@@ -53,4 +53,4 @@ Sampling priors, please wait...
 > 
 > proc.time()
    user  system elapsed 
- 47.592   0.851  49.191 
+ 44.082   0.644  45.310 

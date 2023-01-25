@@ -15,6 +15,7 @@ stat_pp_point(
   distribution = "norm",
   dparams = list(),
   detrend = FALSE,
+  down.sample = NULL,
   ...
 )
 }
@@ -83,6 +84,10 @@ This procedure was described by Thode (2002), and may help reducing visual
 bias caused by the orthogonal distances from P-P points to the reference
 line.}
 
+\item{down.sample}{Integer specifying how many points you want to sample
+in a reduced sample (i.e., a down sample). The default value is \code{NULL}
+indicating no downsampling.}
+
 \item{...}{Other arguments passed on to \code{\link[ggplot2:layer]{layer()}}. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
@@ -119,7 +124,6 @@ gg
 }
 \references{
 \itemize{
-\item{\href{https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
-H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+\item{Thode, H. (2002), Testing for Normality. CRC Press, 1st Ed.}
 }
 }

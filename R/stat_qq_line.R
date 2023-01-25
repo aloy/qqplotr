@@ -39,8 +39,7 @@
 #'
 #' @references
 #' \itemize{
-#' \item{\href{https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
-#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+#' \item{Thode, H. (2002), Testing for Normality. CRC Press, 1st Ed.}
 #' }
 #'
 #' @examples
@@ -162,7 +161,7 @@ StatQqLine <- ggplot2::ggproto(
 	required_aes = c("sample"),
 
 	dropped_aes = c("sample"),
-	
+
 	default_aes = ggplot2::aes(
 		x = ..xline..,
 		y = ..yline..

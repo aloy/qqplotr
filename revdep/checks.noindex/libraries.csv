@@ -1,3 +1,6 @@
 package,old,new,delta
-qqplotr,0.0.5,0.0.6.99999,*
-isoband,NA,0.2.7,*
+qqplotr,0.0.5,0.0.6,*
+colorspace,NA,2.1-0,*
+fansi,NA,1.0.4,*
+Rcpp,NA,1.0.10,*
+vctrs,NA,0.5.2,*

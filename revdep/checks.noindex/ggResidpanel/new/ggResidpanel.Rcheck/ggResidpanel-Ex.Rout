@@ -223,7 +223,7 @@ Warning: The following aesthetics were dropped during statistical transformation
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  15.462 0.709 16.572 0 0 
+Time elapsed:  14.905 0.598 15.616 0 0 
 > grDevices::dev.off()
 null device 
           1 

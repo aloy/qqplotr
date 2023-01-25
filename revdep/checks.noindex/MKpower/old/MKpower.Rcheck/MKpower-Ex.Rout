@@ -1886,7 +1886,7 @@ NOTE: Two-sided confidence interval
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  14.713 1.396 16.45 0 0 
+Time elapsed:  14.541 1.424 16.234 0 0 
 > grDevices::dev.off()
 null device 
           1 

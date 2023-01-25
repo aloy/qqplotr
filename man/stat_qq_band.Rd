@@ -187,6 +187,15 @@ gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_qq_point()
 gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 
+# Normal Q-Q plot of Normal data with equal local levels (ell) bands
+bt <- "ell"
+gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
+ stat_qq_band(bandType = bt) +
+ stat_qq_line() +
+ stat_qq_point() +
+ labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
+gg
+
 # Exponential Q-Q plot of mean ozone levels (airquality dataset)
 di <- "exp"
 dp <- list(rate = 1)
@@ -208,7 +217,8 @@ gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 gg
 
-# Normal Q-Q plot of Normal data with boostrap confidence bands
+\dontrun{
+# Normal Q-Q plot of Normal data with bootstrap confidence bands
 bt <- "boot"
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_qq_band(bandType = bt) +
@@ -225,21 +235,13 @@ gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
  stat_qq_point() +
  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 gg
+}
 
-# Normal Q-Q plot of Normal data with equal local levels (ell) bands
-bt <- "ell"
-gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
- stat_qq_band(bandType = bt) +
- stat_qq_line() +
- stat_qq_point() +
- labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
-gg
 
 }
 \references{
 \itemize{
-\item{\href{https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
-H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+\item{Thode, H. (2002), Testing for Normality. CRC Press, 1st Ed.}
 \item{\href{https://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865}{Aldor-Noiman,
 S. et al. (2013). The Power to See: A New Graphical Test of Normality. The
 American Statistician. 67:4.}}

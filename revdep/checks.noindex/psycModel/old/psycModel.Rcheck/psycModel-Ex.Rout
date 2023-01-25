@@ -1137,7 +1137,7 @@ Fitting Model with lm:
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  22.504 1.239 25.162 0.03 0.065 
+Time elapsed:  20.354 0.841 22.158 0.024 0.052 
 > grDevices::dev.off()
 null device 
           1 

@@ -11,7 +11,7 @@
 #' \item{country}{Athlete's country of origin}
 #' \item{distance}{Result in meters}
 #' }
-#' @source \url{https://www.olympic.org/london-2012/athletics/long-jump-men}
+#' @source \url{https://olympics.com/en/olympic-games/london-2012/results/athletics/long-jump-men}
 "longjump"
 
 

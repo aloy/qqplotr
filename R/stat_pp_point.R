@@ -25,11 +25,14 @@
 #'   This procedure was described by Thode (2002), and may help reducing visual
 #'   bias caused by the orthogonal distances from P-P points to the reference
 #'   line.
+#' @param down.sample Integer specifying how many points you want to sample
+#'   in a reduced sample (i.e., a down sample). The default value is \code{NULL}
+#'   indicating no downsampling.
+
 #'
 #' @references
 #' \itemize{
-#' \item{\href{https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
-#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+#' \item{Thode, H. (2002), Testing for Normality. CRC Press, 1st Ed.}
 #' }
 #'
 #' @examples
@@ -69,6 +72,7 @@ stat_pp_point <- function(
 	distribution = "norm",
 	dparams = list(),
 	detrend = FALSE,
+	down.sample = NULL,
 	...
 ) {
 	# error handling
@@ -108,6 +112,7 @@ stat_pp_point <- function(
 			distribution = distribution,
 			dparams = dparams,
 			detrend = detrend,
+			down.sample = down.sample,
 			...
 		)
 	)
@@ -133,12 +138,20 @@ StatPpPoint <- ggplot2::ggproto(
 													 scales,
 													 distribution,
 													 dparams,
-													 detrend) {
+													 detrend,
+													 down.sample) {
 		# cumulative distributional function
 		pFunc <- eval(parse(text = paste0("p", distribution)))
 
-		oidx <- order(data$sample)
-		smp <- data$sample[oidx]
+		samp <- data$sample
+		if(!is.null(down.sample)) {
+			ds <- opdisDownsampling::opdisDownsampling(samp, Size = down.sample,
+																								 nTrials = 500, MaxCores = 1)
+			samp <- ds$ReducedData$Data
+		}
+
+		oidx <- order(samp)
+		smp <- samp[oidx]
 		n <- length(smp)
 		probs <- ppoints(n)
 

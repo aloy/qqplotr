@@ -43,8 +43,7 @@
 #'
 #' @references
 #' \itemize{
-#' \item{\href{https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136}{Thode,
-#' H. (2002), Testing for Normality. CRC Press, 1st Ed.}}
+#' \item{Thode, H. (2002), Testing for Normality. CRC Press, 1st Ed.}
 #' }
 #'
 #' @examples

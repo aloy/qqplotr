@@ -49,4 +49,4 @@ boundary (singular) fit: see help('isSingular')
 > 
 > proc.time()
    user  system elapsed 
- 43.886   1.614  46.239 
+ 39.449   1.266  41.319 
