@@ -26,6 +26,11 @@
 #'   the objects will be detrended according to the reference Q-Q line. This
 #'   procedure was described by Thode (2002), and may help reducing visual bias
 #'   caused by the orthogonal distances from Q-Q points to the reference line.
+#' @param downsample Logical. Only used if \code{downsample = TRUE}.
+#'   Should the number of data points in the figure be, reduced? If \code{TRUE},
+#'   datapoints will be removed based on proximity quantified by downf.
+#' @param downf Double. Fraction of maximum distance in quantile data within
+#'   which data points will be discarded during down sampling.
 #' @param identity Logical. Only used if \code{detrend = TRUE}. Should an
 #'   identity line be used as the reference line for the plot detrending? If
 #'   \code{TRUE}, the points will be detrended according to the reference
@@ -77,6 +82,8 @@ stat_qq_point <- function(
 	distribution = "norm",
 	dparams = list(),
 	detrend = FALSE,
+	downsample = FALSE,
+    downf = 0.001,
 	identity = FALSE,
 	qtype = 7,
 	qprobs = c(.25, .75),
@@ -136,6 +143,8 @@ stat_qq_point <- function(
 			distribution = distribution,
 			dparams = dparams,
 			detrend = detrend,
+			downsample = downsample,
+			downf = downf,
 			identity = identity,
 			qtype = qtype,
 			qprobs = qprobs,
@@ -169,6 +178,8 @@ StatQqPoint <- ggplot2::ggproto(
 													 distribution = "norm",
 													 dparams = list(),
 													 detrend = FALSE,
+													 downsample = FALSE,
+													 downf = 0.001,
 													 identity = FALSE,
 													 qtype = 7,
 													 qprobs = c(.25),
@@ -262,6 +273,22 @@ StatQqPoint <- ggplot2::ggproto(
 		} else {
 			out <- data.frame(sample = smp, theoretical = theoretical)
 		}
+
+        if (downsample) {
+            res <- norm(as.matrix(apply(out, 2, max)
+                                  - apply(out, 2, min)), type="2") * downf
+            keep <- rep(TRUE, nrow(out))
+            j <- 1
+            for(i in 2:nrow(out)) {
+                d <- norm(as.matrix(out[i, ] - out[j, ]), type="2")
+                if (d < res) {
+                    keep[i] <- FALSE
+                } else {
+                    j <- i
+                }
+            }
+            out <- out[keep, ]
+        }
 
 		if (!is.null(data$label)) out$label <- data$label[oidx]
 		out
