@@ -128,7 +128,9 @@ GeomQqBand <- ggplot2::ggproto(
 		data
 	},
 
-	draw_group = ggplot2::GeomRibbon$draw_group,
+	draw_group = function(...) {
+		ggplot2::GeomRibbon$draw_group(...)
+	},
 
 	draw_key = ggplot2::draw_key_polygon
 )
