@@ -13,6 +13,5 @@
 #' \code{band}. Those Stats, while independent, complement each other when
 #' plotted together.
 #'
-#' @docType package
 #' @name qqplotr
-NULL
+"_PACKAGE"

@@ -2,6 +2,7 @@
 % Please edit documentation in R/qqplotr.R
 \docType{package}
 \name{qqplotr}
+\alias{qqplotr-package}
 \alias{qqplotr}
 \title{Q-Q and P-P plot extensions for 'ggplot2'}
 \description{
@@ -18,4 +19,22 @@ into two groups: Q-Q and P-P related.
 Each of the groups is composed of three Stats: \code{point}, \code{line}, and
 \code{band}. Those Stats, while independent, complement each other when
 plotted together.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/aloy/qqplotr}
+  \item Report bugs at \url{https://github.com/aloy/qqplotr/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Adam Loy \email{loyad01@gmail.com}
+
+Authors:
+\itemize{
+  \item Alexandre Almeida \email{almeida.xan@gmail.com}
+  \item Heike Hofmann
+}
+
 }
