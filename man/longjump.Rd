@@ -14,7 +14,7 @@ A data frame with 42 observations on the following 4 variables:
 }
 }
 \source{
-\url{https://olympics.com/en/olympic-games/london-2012/results/athletics/long-jump-men}
+https://www.olympics.com/en/olympic-games/london-2012/results/athletics/long-jump-men
 }
 \usage{
 data(longjump)
