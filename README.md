@@ -46,21 +46,20 @@ document, we will present some usage examples.
 
 ### Q-Q plot
 
--   `stat_qq_point` This is a modified version of `ggplot2::stat_qq`
-    with some parameters adjustments and a new option to detrend the
-    points.
--   `stat_qq_line` Draws a reference line based on the data quantiles,
-    as in `stats::qqline`.
--   `stat_qq_band` Draws confidence bands based on three methods:
-    `"pointwise"`, `"boot"`, `"ks"`, and `"ts"`:
-    -   `"pointwise"` constructs simultaneous confidence bands based on
-        the normal distribution;
-    -   `"boot"` creates pointwise confidence bands based on a
-        parametric boostrap;
-    -   `"ks"` constructs simultaneous confidence bands based on an
-        inversion of the Kolmogorov-Smirnov test;
-    -   `"ts"` constructs tail-sensitive confidence bands, as proposed
-        by Aldor-Noiman et al. (2013).
+- `stat_qq_point` This is a modified version of `ggplot2::stat_qq` with
+  some parameters adjustments and a new option to detrend the points.
+- `stat_qq_line` Draws a reference line based on the data quantiles, as
+  in `stats::qqline`.
+- `stat_qq_band` Draws confidence bands based on three methods:
+  `"pointwise"`, `"boot"`, `"ks"`, and `"ts"`:
+  - `"pointwise"` constructs simultaneous confidence bands based on the
+    normal distribution;
+  - `"boot"` creates pointwise confidence bands based on a parametric
+    boostrap;
+  - `"ks"` constructs simultaneous confidence bands based on an
+    inversion of the Kolmogorov-Smirnov test;
+  - `"ts"` constructs tail-sensitive confidence bands, as proposed by
+    Aldor-Noiman et al. (2013).
 
 In order to facilitate the visualization of multiple Q-Q band methods at
 the same time, the `geom_qq_band` Geom was also implemented. Its usage
@@ -68,12 +67,12 @@ will be illustrated further below.
 
 ### P-P plot
 
--   `stat_pp_point` Plots cumulative probabilities versus probability
-    points. The cumulative probability function is constructed with the
-    sample data, and then evaluated at each probability point.
--   `stat_pp_line` Draws a reference identity line (*x* = *y*).
--   `stat_pp_band` Draws confidence bands. For now, only the bootstrap
-    version (`"boot"`) is available.
+- `stat_pp_point` Plots cumulative probabilities versus probability
+  points. The cumulative probability function is constructed with the
+  sample data, and then evaluated at each probability point.
+- `stat_pp_line` Draws a reference identity line ($`x = y`$).
+- `stat_pp_band` Draws confidence bands. For now, only the bootstrap
+  version (`"boot"`) is available.
 
 ## Usage
 
@@ -314,8 +313,8 @@ runShinyExample()
 
 ## References
 
--   [Thode, H. (2002), Testing for Normality. CRC Press, 1st
-    Ed.](https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136)
--   [Aldor-Noiman, S. et al. (2013). The Power to See: A New Graphical
-    Test of Normality. The American Statistician.
-    67:4.](https://www.tandfonline.com/doi/abs/10.1080/00031305.2013.847865)
+- [Thode, H. (2002), Testing for Normality. CRC Press, 1st
+  Ed.](https://www.routledge.com/Testing-For-Normality/Thode/p/book/9780824796136)
+- [Aldor-Noiman, S. et al. (2013). The Power to See: A New Graphical
+  Test of Normality. The American Statistician.
+  67:4.](https://doi.org/10.1080/00031305.2013.847865)
