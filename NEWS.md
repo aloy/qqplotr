@@ -1,4 +1,4 @@
-# qqplotr (development version)
+# qqplotr 0.0.7
 
 * Fixed compatibility with ggplot2 4.0.0
 
