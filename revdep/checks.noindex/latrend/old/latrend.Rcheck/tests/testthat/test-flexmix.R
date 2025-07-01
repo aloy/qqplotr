@@ -1,4 +1,3 @@
-context('flexmix')
 skip_if_not_installed('flexmix')
 skip_on_cran()
 rngReset()
@@ -17,11 +16,13 @@ make.gbtm = function(response, ...) {
   )
 }
 
+
 test_that('default', {
   expect_true({
     test.latrend('lcMethodFlexmix', instantiator = make.flexmix, tests = tests)
   })
 })
+
 
 test_that('model spec', {
   expect_true({
@@ -36,9 +37,10 @@ test_that('model spec', {
   })
 })
 
-# gbtm does not converge
-# test_that('gbtm', {
-#   expect_true({
-#     test.latrend('lcMethodFlexmix', instantiator = make.gbtm, tests = tests)
-#   })
-# })
+
+test_that('gbtm', {
+  skip('convergence stability problem')
+  expect_true({
+    test.latrend('lcMethodFlexmix', instantiator = make.gbtm, tests = tests)
+  })
+})

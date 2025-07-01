@@ -1,9 +1,9 @@
 context('latrendRep')
 rngReset()
 
-m = lcMethodLMKM(formula = Value ~ Assessment)
+m = lcMethodLMKM(formula = Value ~ time)
 test_that('default', {
-  models = latrendRep(lcMethodLMKM(formula = Value ~ Assessment), data = testLongData, .rep = 2)
+  models = latrendRep(lcMethodLMKM(formula = Value ~ time), data = testLongData, .rep = 2)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
@@ -21,7 +21,7 @@ test_that('method var', {
 
 test_that('method name', {
   refMethod = mTest
-  model = latrendRep('lcMethodLMKM', formula = Value ~ Assessment, data = testLongData, .rep = 1)[[1]]
+  model = latrendRep('lcMethodLMKM', formula = Value ~ time, data = testLongData, .rep = 1)[[1]]
   newMethod = getLcMethod(model)
   expect_equal(newMethod$nClusters, refMethod$nClusters)
 })
@@ -42,7 +42,7 @@ test_that('matrix input', {
 })
 
 test_that('envir', {
-  method = lcMethodLMKM(nClusters = a, formula = Value ~ Assessment)
+  method = lcMethodLMKM(nClusters = a, formula = Value ~ time)
   env = list2env(list(a = 1))
   models = latrendRep(method, data = testLongData, envir = env, .rep = 2)
 

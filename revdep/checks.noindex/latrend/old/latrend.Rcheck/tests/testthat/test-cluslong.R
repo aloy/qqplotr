@@ -18,8 +18,8 @@ test_that('method var', {
 })
 
 test_that('method name', {
-  refMethod = lcMethodLMKM(formula = Value ~ Assessment, seed = 1)
-  model = latrend('lcMethodLMKM', formula = Value ~ Assessment, seed = 1, data = testLongData)
+  refMethod = lcMethodLMKM(formula = Value ~ time, seed = 1)
+  model = latrend('lcMethodLMKM', formula = Value ~ time, seed = 1, data = testLongData)
 
   newMethod = getLcMethod(model)
   expect_equal(newMethod$seed, refMethod$seed)
@@ -48,10 +48,10 @@ test_that('new method arguments', {
 })
 
 test_that('subset', {
-  model = latrend(mTest, data = testLongData[Assessment < .5])
+  model = latrend(mTest, data = testLongData[time < .5])
 
   expect_is(model, 'lcModel')
-  expect_equal(deparse(getCall(model)$data), 'testLongData[Assessment < 0.5]')
+  expect_equal(deparse(getCall(model)$data), 'testLongData[time < 0.5]')
 })
 
 test_that('data call', {
@@ -72,7 +72,7 @@ test_that('specify id and time with matrix input', {
 })
 
 test_that('envir', {
-  method = lcMethodLMKM(nClusters = a, formula = Value ~ Assessment)
+  method = lcMethodLMKM(nClusters = a, formula = Value ~ time)
   env = list2env(list(a = 1))
 
   model = latrend(method, data = testLongData, envir = env)
@@ -97,7 +97,7 @@ test_that('matrix input', {
 
 test_that('custom id and time', {
   nameData = copy(testLongData) %>%
-    setnames(c('Traj', 'Assessment'), c('Device', 'Observation'))
+    setnames(c('id', 'time'), c('Device', 'Observation'))
   method = lcMethodLMKM(Value ~ Observation, id = 'Device', time = 'Observation')
   model = latrend(method, data = nameData)
 
@@ -108,45 +108,45 @@ test_that('custom id and time', {
 test_that('id with NA', {
   set.seed(1)
   naData = copy(testLongData) %>%
-    .[sample(.N, 10), Traj := NA]
+    .[sample(.N, 10), id := NA]
 
   expect_error(latrend(mTest, data = naData))
 })
 
 test_that('factor id', {
   facData = copy(testLongData) %>%
-    .[, Traj := factor(Traj)]
+    .[, id := factor(id)]
 
   model = latrend(mTest, data = facData)
 
   expect_is(model, 'lcModel')
-  expect_equal(ids(model), levels(facData$Traj))
+  expect_equal(ids(model), levels(facData$id))
 })
 
 test_that('factor id, out of order', {
   facData = copy(testLongData) %>%
-    .[, Traj := factor(Traj, levels = rev(unique(Traj)))]
+    .[, id := factor(id, levels = rev(unique(id)))]
 
   model = latrend(mTest, data = facData)
 
   expect_is(model, 'lcModel')
-  expect_equal(ids(model), levels(facData$Traj))
+  expect_equal(ids(model), levels(facData$id))
 })
 
 test_that('factor id with empty levels', {
   facData = copy(testLongData) %>%
-    .[, Traj := factor(Traj, levels = seq(0, uniqueN(Traj) + 1))]
+    .[, id := factor(id, levels = seq(0, uniqueN(id) + 1))]
 
   expect_warning({
     model = latrend(mTest, data = facData)
-  }, regexp = 'mpty traj')
+  }, regexp = 'mpty')
 
   expect_is(model, 'lcModel')
 })
 
 test_that('id with NA', {
   naData = copy(testLongData) %>%
-    .[Traj == 1, Traj := NA]
+    .[id == 1, id := NA]
 
   expect_error(latrend(mTest, data = naData))
 })
@@ -222,3 +222,13 @@ test_that('trajectory length warning', {
   expect_warning(latrend(mTest, data = testLongData), regexp = 'warnTrajectoryLength')
   options(latrend.warnTrajectoryLength = 0)
 })
+
+
+test_that('"time" column', {
+  timeData = copy(testLongData)
+  setnames(timeData, 'time', 'time')
+  method = lcMethodTestLMKM(time = 'time')
+  model = latrend(method, data = timeData)
+  expect_is(model, 'lcModel')
+})
+

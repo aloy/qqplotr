@@ -1,8 +1,8 @@
 test_that("`plot.see_rope()` works", {
-  requiet("rstanarm")
+  skip_if_not_installed("rstanarm")
+
   set.seed(123)
-  m <- rstanarm::stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0)
-  result <- bayestestR::rope(m)
+  result <- bayestestR::rope(m_rstan, verbose = FALSE)
 
   expect_s3_class(plot(result), "gg")
 })

@@ -39,7 +39,7 @@ test_that('table assignments', {
     testLongData,
     response = 'Value',
     trajectoryAssignments = data.frame(
-      Traj = ids(refmodel),
+      id = ids(refmodel),
       Cluster = trajectoryAssignments(refmodel))
   )
 
@@ -96,20 +96,20 @@ test_that('local data', {
 partModel = lcModelPartition(
   testLongData,
   response = 'Value',
-  trajectoryAssignments = aggregate(Class ~ Traj, data.table::first, data = testLongData)$Class
+  trajectoryAssignments = aggregate(Class ~ id, data.table::first, data = testLongData)$Class
 )
 
 test_that('clusterTrajectories', {
   clusTrajs = clusterTrajectories(partModel)
 
   expect_is(clusTrajs, 'data.frame')
-  expect_named(clusTrajs, c('Cluster', 'Assessment', 'Value'))
+  expect_named(clusTrajs, c('Cluster', 'time', 'Value'))
   expect_is(clusTrajs$Cluster, 'factor')
-  expect_equivalent(unique(clusTrajs$Assessment), unique(testLongData$Assessment))
+  expect_equivalent(unique(clusTrajs$time), unique(testLongData$time))
   expect_equivalent(unique(clusTrajs$Cluster), unique(testLongData$Class))
   expect_equal(
     clusTrajs,
-    as.data.frame(testLongData[, .(Value = mean(Value)), keyby = .(Cluster = Class, Assessment)])
+    as.data.frame(testLongData[, .(Value = mean(Value)), keyby = .(Cluster = Class, time)])
   )
 })
 
@@ -118,7 +118,7 @@ test_that('clusterTrajectories with median center', {
 
   expect_equal(
     clusTrajs,
-    as.data.frame(testLongData[, .(Value = median(Value)), keyby = .(Cluster = Class, Assessment)])
+    as.data.frame(testLongData[, .(Value = median(Value)), keyby = .(Cluster = Class, time)])
   )
 })
 
@@ -126,14 +126,14 @@ test_that('clusterTrajectories at subset of times', {
   times = head(time(partModel), 3)
   clusTrajs = clusterTrajectories(partModel, center = mean, at = times)
 
-  expect_equivalent(unique(clusTrajs$Assessment), times)
+  expect_equivalent(unique(clusTrajs$time), times)
   expect_equal(
     clusTrajs,
     as.data.frame(
       testLongData[
-        Assessment %in% times,
+        time %in% times,
         .(Value = mean(Value)),
-        keyby = .(Cluster = Class, Assessment)
+        keyby = .(Cluster = Class, time)
       ]
     )
   )

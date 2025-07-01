@@ -1,7 +1,7 @@
 
-R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin17.0 (64-bit)
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -21,6 +21,13 @@ Type 'q()' to quit R.
 > source(file.path(R.home("share"), "R", "examples-header.R"))
 > options(warn = 1)
 > library('ggResidpanel')
+
+Attaching package: ‘ggResidpanel’
+
+The following object is masked from ‘package:datasets’:
+
+    penguins
+
 > 
 > base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 > base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
@@ -100,7 +107,7 @@ Type 'q()' to quit R.
 > 
 > # Create the default interactive panel
 > resid_interact(penguin_model)
-Warning: The following aesthetics were dropped during statistical transformation: label
+Warning: The following aesthetics were dropped during statistical transformation: label.
 ℹ This can happen when ggplot fails to infer the correct grouping structure in
   the data.
 ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
@@ -108,24 +115,24 @@ Warning: The following aesthetics were dropped during statistical transformation
 > 
 > # Select all plots to include in the panel and set the smoother option to TRUE
 > resid_interact(penguin_model, plots = "all", smoother = TRUE)
-Warning: The following aesthetics were dropped during statistical transformation: label
+Warning: The following aesthetics were dropped during statistical transformation: label.
 ℹ This can happen when ggplot fails to infer the correct grouping structure in
   the data.
 ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
   variable into a factor?
 `geom_smooth()` using formula = 'y ~ x'
-Warning: The following aesthetics were dropped during statistical transformation: label
+Warning: The following aesthetics were dropped during statistical transformation: label.
 ℹ This can happen when ggplot fails to infer the correct grouping structure in
   the data.
 ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
   variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: label
+Warning: The following aesthetics were dropped during statistical transformation: label.
 ℹ This can happen when ggplot fails to infer the correct grouping structure in
   the data.
 ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
   variable into a factor?
 `geom_smooth()` using formula = 'y ~ x'
-Warning: The following aesthetics were dropped during statistical transformation: label
+Warning: The following aesthetics were dropped during statistical transformation: label.
 ℹ This can happen when ggplot fails to infer the correct grouping structure in
   the data.
 ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
@@ -134,7 +141,7 @@ Warning: The following aesthetics were dropped during statistical transformation
 > # Select only the residual plot and qq-plot to be included in the panel and
 > # set the number of rows to 2
 > resid_interact(penguin_model, plots = c("resid", "qq"), nrow = 2)
-Warning: The following aesthetics were dropped during statistical transformation: label
+Warning: The following aesthetics were dropped during statistical transformation: label.
 ℹ This can happen when ggplot fails to infer the correct grouping structure in
   the data.
 ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
@@ -143,12 +150,12 @@ Warning: The following aesthetics were dropped during statistical transformation
 > # Choose the SAS panel of plots, change the theme to classic, and remove the
 > # titles of the plots
 > resid_interact(penguin_model, plots = "SAS", theme = "classic", title.opt = FALSE)
-Warning: The following aesthetics were dropped during statistical transformation: label
+Warning: The following aesthetics were dropped during statistical transformation: label.
 ℹ This can happen when ggplot fails to infer the correct grouping structure in
   the data.
 ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
   variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: label
+Warning: The following aesthetics were dropped during statistical transformation: label.
 ℹ This can happen when ggplot fails to infer the correct grouping structure in
   the data.
 ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
@@ -223,7 +230,7 @@ Warning: The following aesthetics were dropped during statistical transformation
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  14.905 0.598 15.616 0 0 
+Time elapsed:  5.215 0.19 6.895 0 0 
 > grDevices::dev.off()
 null device 
           1 

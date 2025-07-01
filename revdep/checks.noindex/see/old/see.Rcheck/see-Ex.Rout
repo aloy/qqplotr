@@ -1,7 +1,7 @@
 
-R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin17.0 (64-bit)
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -36,34 +36,24 @@ Type 'q()' to quit R.
 > 
 > ### ** Examples
 > 
-> ## Not run: 
-> ##D library(rstanarm)
-> ##D library(bayestestR)
-> ##D library(see)
-> ##D library(ggplot2)
-> ##D 
-> ##D model <- stan_glm(
-> ##D   Sepal.Length ~ Petal.Width + Species + Sepal.Width,
-> ##D   data = iris,
-> ##D   chains = 2, iter = 200
-> ##D )
-> ##D 
-> ##D result <- hdi(model, ci = c(0.5, 0.75, 0.9, 0.95))
-> ##D data <- data_plot(result, data = model)
-> ##D 
-> ##D p <- ggplot(
-> ##D   data,
-> ##D   aes(x = x, y = y, height = height, group = y, fill = fill)
-> ##D ) +
-> ##D   ggridges::geom_ridgeline_gradient()
-> ##D 
-> ##D p
-> ##D p + add_plot_attributes(data)
-> ## End(Not run)
+> ## Don't show: 
+> if (require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ ## Don't show: 
++ }) # examplesIf
+This is rstanarm version 2.32.1
+- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
+- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
+- For execution on a local, multicore CPU with excess RAM we recommend calling
+  options(mc.cores = parallel::detectCores())
+> ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
+
+detaching ‘package:rstanarm’, ‘package:Rcpp’
+
 > nameEx("bluebrown_colors")
 > ### * bluebrown_colors
 > 
@@ -97,27 +87,25 @@ Type 'q()' to quit R.
 > 
 > ### ** Examples
 > 
+> library(ggplot2)
+> 
 > # Create a radar/spider chart with ggplot:
-> if (require("datawizard") && require("ggplot2")) {
-+   data(iris)
-+   data <- aggregate(iris[-5], list(Species = iris$Species), mean)
-+   data <- data_to_long(
-+     data,
-+     c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
-+   )
-+ 
-+   ggplot(data, aes(x = name, y = value, color = Species, group = Species)) +
-+     geom_polygon(fill = NA, linewidth = 2) +
-+     coord_radar(start = -pi / 4)
-+ }
-Loading required package: datawizard
-Loading required package: ggplot2
+> data(iris)
+> data <- aggregate(iris[-5], list(Species = iris$Species), mean)
+> data <- datawizard::data_to_long(
++   data,
++   c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
++ )
+> 
+> ggplot(data, aes(x = name, y = value, color = Species, group = Species)) +
++   geom_polygon(fill = NA, linewidth = 2) +
++   coord_radar(start = -pi / 4)
 > 
 > 
 > 
 > cleanEx()
 
-detaching ‘package:ggplot2’, ‘package:datawizard’
+detaching ‘package:ggplot2’
 
 > nameEx("data_plot")
 > ### * data_plot
@@ -126,30 +114,47 @@ detaching ‘package:ggplot2’, ‘package:datawizard’
 > 
 > ### Name: data_plot
 > ### Title: Prepare objects for plotting or plot objects
-> ### Aliases: data_plot
+> ### Aliases: data_plot data_plot.compare_performance
 > 
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
++ library(bayestestR)
++ library(rstanarm)
++ 
++ model <<- suppressWarnings(stan_glm(
++   Sepal.Length ~ Petal.Width * Species,
++   data = iris,
++   chains = 2, iter = 200, refresh = 0
++ ))
++ 
++ x <- rope(model, verbose = FALSE)
++ plot(x)
++ 
++ x <- hdi(model)
++ plot(x) + theme_modern()
++ 
++ x <- p_direction(model, verbose = FALSE)
++ plot(x)
++ 
++ model <<- suppressWarnings(stan_glm(
++   mpg ~ wt + gear + cyl + disp,
++   chains = 2,
++   iter = 200,
++   refresh = 0,
++   data = mtcars
++ ))
++ x <- equivalence_test(model, verbose = FALSE)
++ plot(x)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:rstanarm’, ‘package:Rcpp’
-
 > nameEx("flat_colors")
 > ### * flat_colors
 > 
@@ -351,23 +356,6 @@ detaching ‘package:ggplot2’, ‘package:ggdist’
 +   geom_from_list(list(geom = "smooth", color = "red")) +
 +   geom_from_list(list(aes = list(x = "Sepal.Length"), geom = "ggside::geom_xsidedensity")) +
 +   geom_from_list(list(geom = "ggside::scale_xsidey_continuous", breaks = NULL))
-+ 
-+ # Example 6 (ggraph) --------------------------
-+ if (require("tidygraph", quietly = TRUE) &&
-+   require("ggraph", quietly = TRUE)) {
-+   # Prepare graph
-+   nodes <- data.frame(name = c("Dom", "Mattan", "Daniel", "Brenton"))
-+   edges <- data.frame(
-+     from = c(1, 1, 1, 2, 3, 3, 4, 4, 4),
-+     to = c(2, 3, 4, 1, 1, 2, 1, 2, 3)
-+   )
-+   data <- tidygraph::tbl_graph(nodes = nodes, edges = edges)
-+ 
-+   ggraph(data, layout = "kk") +
-+     geom_from_list(list(geom = "ggraph::geom_edge_arc")) +
-+     geom_from_list(list(geom = "ggraph::geom_node_point", size = 10)) +
-+     geom_from_list(list(geom = "ggraph::geom_node_label", aes = list(label = "name")))
-+ }
 + ## Don't show: 
 + }) # examplesIf
 Loading required package: ggside
@@ -390,8 +378,6 @@ Loading required package: ggplot2
 +     aes = list(x = "Sepal.Width", y = "Petal.Length")))
 > ggplot() + geom_from_list(list(geom = "density_2d_polygon", data = iris, 
 +     aes = list(x = "Sepal.Width", y = "Petal.Length")))
-Warning: The dot-dot notation (`..level..`) was deprecated in ggplot2 3.4.0.
-ℹ Please use `after_stat(level)` instead.
 > ggplot() + geom_from_list(list(geom = "density_2d_raster", data = iris, 
 +     aes = list(x = "Sepal.Width", y = "Petal.Length"))) + scale_x_continuous(expand = c(0, 
 +     0)) + scale_y_continuous(expand = c(0, 0))
@@ -408,32 +394,15 @@ Warning: The dot-dot notation (`..level..`) was deprecated in ggplot2 3.4.0.
 +     geom_from_list(list(geom = "smooth", color = "red")) + geom_from_list(list(aes = list(x = "Sepal.Length"), 
 +     geom = "ggside::geom_xsidedensity")) + geom_from_list(list(geom = "ggside::scale_xsidey_continuous", 
 +     breaks = NULL))
-> if (require("tidygraph", quietly = TRUE) && require("ggraph", quietly = TRUE)) {
-+     nodes <- data.frame(name = c("Dom", "Mattan", "Daniel", "Brenton"))
-+     edges <- data.frame(from = c(1, 1, 1, 2, 3, 3, 4, 4, 4), to = c(2, 3, 4, 1, 1, 
-+         2, 1, 2, 3))
-+     data <- tidygraph::tbl_graph(nodes = nodes, edges = edges)
-+     ggraph(data, layout = "kk") + geom_from_list(list(geom = "ggraph::geom_edge_arc")) + 
-+         geom_from_list(list(geom = "ggraph::geom_node_point", size = 10)) + geom_from_list(list(geom = "ggraph::geom_node_label", 
-+         aes = list(label = "name")))
-+ }
-
-Attaching package: ‘tidygraph’
-
-The following object is masked from ‘package:stats’:
-
-    filter
-
-Warning: Using the `size` aesthetic in this geom was deprecated in ggplot2 3.4.0.
-ℹ Please use `linewidth` in the `default_aes` field and elsewhere instead.
+Warning: `is.ggproto()` was deprecated in ggplot2 3.5.2.
+ℹ Please use `is_ggproto()` instead.
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
 
-detaching ‘package:ggraph’, ‘package:tidygraph’, ‘package:ggside’,
-  ‘package:ggplot2’
+detaching ‘package:ggside’, ‘package:ggplot2’
 
 > nameEx("geom_point2")
 > ### * geom_point2
@@ -544,6 +513,7 @@ detaching ‘package:ggplot2’
 > 
 > 
 > 
+> 
 > cleanEx()
 
 detaching ‘package:ggplot2’
@@ -579,6 +549,7 @@ detaching ‘package:ggplot2’
 +   geom_violinhalf(flip = c(1, 3)) +
 +   theme_modern() +
 +   scale_fill_material_d()
+> 
 > 
 > 
 > 
@@ -671,26 +642,26 @@ deep orange   blue grey
 > ### ** Examples
 > 
 > okabeito_colors()
-        orange       sky blue   bluish green         yellow           blue 
-     "#E69F00"      "#56B4E9"      "#009E73"      "#F0E442"      "#0072B2" 
-    vermillion reddish purple           grey          black 
-     "#D55E00"      "#CC79A7"      "#999999"      "#000000" 
+    orange light blue      green      amber       blue        red     purple 
+ "#E69F00"  "#56B4E9"  "#009E73"  "#F5C710"  "#0072B2"  "#D55E00"  "#CC79A7" 
+      grey      black 
+ "#999999"  "#000000" 
 > 
 > okabeito_colors(c("red", "light blue", "orange"))
        red light blue     orange 
  "#D55E00"  "#56B4E9"  "#E69F00" 
 > 
 > okabeito_colors(original_names = TRUE)
-    orange light blue      green     yellow       blue        red     purple 
- "#E69F00"  "#56B4E9"  "#009E73"  "#F0E442"  "#0072B2"  "#D55E00"  "#CC79A7" 
-      grey      black 
- "#999999"  "#000000" 
+        orange       sky blue   bluish green          amber           blue 
+     "#E69F00"      "#56B4E9"      "#009E73"      "#F5C710"      "#0072B2" 
+    vermillion reddish purple           grey          black 
+     "#D55E00"      "#CC79A7"      "#999999"      "#000000" 
 > 
 > okabeito_colors(black_first = TRUE)
-         black         orange       sky blue   bluish green         yellow 
-     "#000000"      "#E69F00"      "#56B4E9"      "#009E73"      "#F0E442" 
-          blue     vermillion reddish purple           grey 
-     "#0072B2"      "#D55E00"      "#CC79A7"      "#999999" 
+     black     orange light blue      green      amber       blue        red 
+ "#000000"  "#E69F00"  "#56B4E9"  "#009E73"  "#F5C710"  "#0072B2"  "#D55E00" 
+    purple       grey 
+ "#CC79A7"  "#999999" 
 > 
 > 
 > 
@@ -747,23 +718,105 @@ detaching ‘package:bayestestR’
 [39m
 [32mLow Correlation
 
-[39m Term  VIF    VIF 95% CI Increased SE Tolerance Tolerance 95% CI
-  cyl 5.41 [3.42,  9.04]         2.33      0.18     [0.11, 0.29]
+[39m Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI
+ gear 1.53 [1.19,  2.51]     1.24      0.65     [0.40, 0.84]
 
 [33mModerate Correlation
 
-[39m Term  VIF    VIF 95% CI Increased SE Tolerance Tolerance 95% CI
- gear 1.53  [1.19, 2.51]         1.24      0.65     [0.40, 0.84]
-   wt 5.05 [3.21,  8.41]         2.25      0.20     [0.12, 0.31]
- disp 9.97 [6.08, 16.85]         3.16      0.10     [0.06, 0.16]
+[39m Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI
+   wt 5.05 [3.21,  8.41]     2.25      0.20     [0.12, 0.31]
+  cyl 5.41 [3.42,  9.04]     2.33      0.18     [0.11, 0.29]
+ disp 9.97 [6.08, 16.85]     3.16      0.10     [0.06, 0.16]
 > plot(result)
-Variable `Component` is not in your data frame :/
+> 
 > 
 > 
 > 
 > cleanEx()
 
 detaching ‘package:performance’
+
+> nameEx("plot.see_check_dag")
+> ### * plot.see_check_dag
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plot.see_check_dag
+> ### Title: Plot method for check DAGs
+> ### Aliases: plot.see_check_dag
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> if (require("ggdag", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ library(performance)
++ # incorrect adjustment
++ dag <- check_dag(
++   y ~ x + b + c,
++   x ~ b,
++   outcome = "y",
++   exposure = "x"
++ )
++ dag
++ plot(dag)
++ 
++ # plot only model with required adjustments
++ plot(dag, which = "required")
++ 
++ # collider-bias?
++ dag <- check_dag(
++   y ~ x + c + d,
++   x ~ c + d,
++   b ~ x,
++   b ~ y,
++   outcome = "y",
++   exposure = "x",
++   adjusted = "c"
++ )
++ plot(dag)
++ 
++ # longer labels, automatic detection of outcome and exposure
++ dag <- check_dag(
++   QoL ~ age + education + gender,
++   age ~ education
++ )
++ plot(dag)
++ ## Don't show: 
++ }) # examplesIf
+
+Attaching package: ‘ggdag’
+
+The following object is masked from ‘package:stats’:
+
+    filter
+
+> library(performance)
+> dag <- check_dag(y ~ x + b + c, x ~ b, outcome = "y", exposure = "x")
+> dag
+[34m# Check for correct adjustment sets[39m
+- Outcome: y
+- Exposure: x
+
+[34mIdentification of direct and total effects
+
+[39m[31mIncorrectly adjusted![39m
+To estimate the direct and total effect, [3mat least[23m adjust for [33m`b`[39m. Currently, the model does not adjust for any variables.
+
+> plot(dag)
+> plot(dag, which = "required")
+> dag <- check_dag(y ~ x + c + d, x ~ c + d, b ~ x, b ~ y, outcome = "y", 
++     exposure = "x", adjusted = "c")
+> plot(dag)
+> dag <- check_dag(QoL ~ age + education + gender, age ~ education)
+> plot(dag)
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:performance’, ‘package:ggdag’
 
 > nameEx("plot.see_check_distribution")
 > ### * plot.see_check_distribution
@@ -776,6 +829,17 @@ detaching ‘package:performance’
 > 
 > ### ** Examples
 > 
+> ## Don't show: 
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("randomForest")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ library(performance)
++ m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
++ result <- check_distribution(m)
++ result
++ plot(result)
++ ## Don't show: 
++ }) # examplesIf
+> ## End(Don't show)
 > 
 > 
 > 
@@ -791,9 +855,8 @@ detaching ‘package:performance’
 > 
 > ### ** Examples
 > 
-> library(performance)
 > m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
-> result <- check_heteroscedasticity(m)
+> result <- performance::check_heteroscedasticity(m)
 > result
 [31mWarning: Heteroscedasticity (non-constant error variance) detected (p = 0.042).
 [39m> plot(result, data = m) # data required for pkgdown
@@ -801,9 +864,6 @@ detaching ‘package:performance’
 > 
 > 
 > cleanEx()
-
-detaching ‘package:performance’
-
 > nameEx("plot.see_check_homogeneity")
 > ### * plot.see_check_homogeneity
 > 
@@ -816,6 +876,7 @@ detaching ‘package:performance’
 > ### ** Examples
 > 
 > library(performance)
+> 
 > model <<- lm(len ~ supp + dose, data = ToothGrowth)
 > result <- check_homogeneity(model)
 > result
@@ -824,9 +885,42 @@ detaching ‘package:performance’
 > 
 > 
 > 
+> 
 > cleanEx()
 
 detaching ‘package:performance’
+
+> nameEx("plot.see_check_model")
+> ### * plot.see_check_model
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plot.see_check_model
+> ### Title: Plot method for checking model assumptions
+> ### Aliases: plot.see_check_model
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> if (require("patchwork")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ library(performance)
++ 
++ model <- lm(qsec ~ drat + wt, data = mtcars)
++ plot(check_model(model))
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: patchwork
+> library(performance)
+> model <- lm(qsec ~ drat + wt, data = mtcars)
+> plot(check_model(model))
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:performance’, ‘package:patchwork’
 
 > nameEx("plot.see_check_normality")
 > ### * plot.see_check_normality
@@ -840,15 +934,34 @@ detaching ‘package:performance’
 > ### ** Examples
 > 
 > library(performance)
+> 
 > m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 > result <- check_normality(m)
 > plot(result)
+> 
+> ## Don't show: 
+> if (require("qqplotr")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ plot(result, type = "qq", detrend = TRUE)
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: qqplotr
+Loading required package: ggplot2
+
+Attaching package: ‘qqplotr’
+
+The following objects are masked from ‘package:ggplot2’:
+
+    StatQqLine, stat_qq_line
+
+> plot(result, type = "qq", detrend = TRUE)
+> ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
 
-detaching ‘package:performance’
+detaching ‘package:qqplotr’, ‘package:ggplot2’, ‘package:performance’
 
 > nameEx("plot.see_check_outliers")
 > ### * plot.see_check_outliers
@@ -888,26 +1001,16 @@ detaching ‘package:performance’
 > 
 > ### ** Examples
 > 
-> if (require("insight") &&
-+   require("parameters") &&
-+   packageVersion("insight") >= "0.13.0") {
-+   data(iris)
-+   lm1 <- lm(Sepal.Length ~ Species, data = iris)
-+   lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
-+   lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
-+   result <- compare_parameters(lm1, lm2, lm3)
-+   plot(result)
-+ }
-Loading required package: insight
-Loading required package: parameters
-Warning: Removed 5 rows containing missing values (`geom_pointrange()`).
+> data(iris)
+> lm1 <- lm(Sepal.Length ~ Species, data = iris)
+> lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+> lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
+> result <- parameters::compare_parameters(lm1, lm2, lm3)
+> plot(result)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:parameters’, ‘package:insight’
-
 > nameEx("plot.see_compare_performance")
 > ### * plot.see_compare_performance
 > 
@@ -928,12 +1031,19 @@ detaching ‘package:parameters’, ‘package:insight’
 > result
 [34m# Comparison of Model Performance Indices[39m
 
-Name | Model | AIC (weights) | AICc (weights) | BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
--------------------------------------------------------------------------------------------------
-lm1  |    lm | 231.5 (<.001) |  231.7 (<.001) | 243.5 (<.001) | 0.619 |     0.614 | 0.510 | 0.515
-lm2  |    lm | 106.2 (0.566) |  106.6 (0.611) | 121.3 (0.964) | 0.837 |     0.833 | 0.333 | 0.338
-lm3  |    lm | 106.8 (0.434) |  107.6 (0.389) | 127.8 (0.036) | 0.840 |     0.835 | 0.330 | 0.336
+Name | Model | AIC (weights) | AICc (weights) | BIC (weights) |    R2
+---------------------------------------------------------------------
+lm1  |    lm | 231.5 (<.001) |  231.7 (<.001) | 243.5 (<.001) | 0.619
+lm2  |    lm | 106.2 (0.566) |  106.6 (0.611) | 121.3 (0.964) | 0.837
+lm3  |    lm | 106.8 (0.434) |  107.6 (0.389) | 127.8 (0.036) | 0.840
+
+Name | R2 (adj.) |  RMSE | Sigma
+--------------------------------
+lm1  |     0.614 | 0.510 | 0.515
+lm2  |     0.833 | 0.333 | 0.338
+lm3  |     0.835 | 0.330 | 0.336
 > plot(result)
+> 
 > 
 > 
 > 
@@ -998,28 +1108,15 @@ detaching ‘package:effectsize’
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("modelbased") && require("rstanarm") && require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (all(insight::check_if_installed(c("marginaleffects", "Formula"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: modelbased
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
-Loading required package: emmeans
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:emmeans’, ‘package:rstanarm’, ‘package:Rcpp’,
-  ‘package:modelbased’
-
 > nameEx("plot.see_estimate_density")
 > ### * plot.see_estimate_density
 > 
@@ -1032,25 +1129,21 @@ detaching ‘package:emmeans’, ‘package:rstanarm’, ‘package:Rcpp’,
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
++ library(rstanarm)
++ library(bayestestR)
++ set.seed(123)
++ m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
++ result <- estimate_density(m)
++ plot(result)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:rstanarm’, ‘package:Rcpp’
-
 > nameEx("plot.see_hdi")
 > ### * plot.see_hdi
 > 
@@ -1063,32 +1156,22 @@ detaching ‘package:rstanarm’, ‘package:Rcpp’
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("rstanarm") && FALSE) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
 + library(rstanarm)
 + library(bayestestR)
 + set.seed(123)
-+ m <<- stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0)
-+ result <- hdi(m)
++ m <- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
++ result <- bayestestR::hdi(m)
 + result
 + plot(result)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:rstanarm’, ‘package:Rcpp’
-
 > nameEx("plot.see_n_factors")
 > ### * plot.see_n_factors
 > 
@@ -1101,28 +1184,35 @@ detaching ‘package:rstanarm’, ‘package:Rcpp’
 > 
 > ### ** Examples
 > 
-> if (require("parameters") && require("nFactors")) {
-+   data(mtcars)
-+   result <- n_factors(mtcars, type = "PCA")
-+   result
-+   plot(result, type = "line")
-+ }
-Loading required package: parameters
+> ## Don't show: 
+> if (require("nFactors")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ data(mtcars)
++ result <- parameters::n_factors(mtcars, type = "PCA")
++ result
++ 
++ plot(result) # type = "bar" by default
++ plot(result, type = "line")
++ plot(result, type = "area")
++ ## Don't show: 
++ }) # examplesIf
 Loading required package: nFactors
-Loading required package: lattice
+> data(mtcars)
+> result <- parameters::n_factors(mtcars, type = "PCA")
+> result
+[34m# Method Agreement Procedure:
 
-Attaching package: ‘nFactors’
-
-The following object is masked from ‘package:lattice’:
-
-    parallel
-
+[39mThe choice of 3 dimensions is supported by 5 (29.41%) methods out of 17 (Bartlett, CNG, Scree (SE), Scree (R2), Velicer's MAP).
+> plot(result)
+> plot(result, type = "line")
+> plot(result, type = "area")
+> ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
 
-detaching ‘package:nFactors’, ‘package:lattice’, ‘package:parameters’
+detaching ‘package:nFactors’
 
 > nameEx("plot.see_p_direction")
 > ### * plot.see_p_direction
@@ -1136,25 +1226,21 @@ detaching ‘package:nFactors’, ‘package:lattice’, ‘package:parameters�
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
++ library(rstanarm)
++ library(bayestestR)
++ set.seed(123)
++ m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
++ result <- p_direction(m)
++ plot(result)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:rstanarm’, ‘package:Rcpp’
-
 > nameEx("plot.see_p_function")
 > ### * plot.see_p_function
 > 
@@ -1170,11 +1256,9 @@ detaching ‘package:rstanarm’, ‘package:Rcpp’
 > model <- lm(Sepal.Length ~ Species + Sepal.Width + Petal.Length, data = iris)
 > result <- p_function(model)
 > plot(result, n_columns = 2, show_labels = FALSE)
-Warning: Using linewidth for a discrete variable is not advised.
 > 
 > result <- p_function(model, keep = "Sepal.Width")
 > plot(result)
-Warning: Using linewidth for a discrete variable is not advised.
 > 
 > 
 > 
@@ -1194,25 +1278,21 @@ detaching ‘package:parameters’
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
++ library(rstanarm)
++ library(bayestestR)
++ set.seed(123)
++ m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
++ result <- p_significance(m)
++ plot(result)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:rstanarm’, ‘package:Rcpp’
-
 > nameEx("plot.see_parameters_brms_meta")
 > ### * plot.see_parameters_brms_meta
 > 
@@ -1225,40 +1305,13 @@ detaching ‘package:rstanarm’, ‘package:Rcpp’
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("brms") && require("metafor")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (require("brms") && require("metafor") && require("RcppEigen") && require("BH")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
-+ ## Not run: 
-+ ##D library(brms)
-+ ##D library(metafor)
-+ ##D data(dat.bcg)
-+ ##D 
-+ ##D dat <- escalc(
-+ ##D   measure = "RR",
-+ ##D   ai = tpos,
-+ ##D   bi = tneg,
-+ ##D   ci = cpos,
-+ ##D   di = cneg,
-+ ##D   data = dat.bcg
-+ ##D )
-+ ##D dat$author <- make.unique(dat$author)
-+ ##D 
-+ ##D # model
-+ ##D set.seed(123)
-+ ##D priors <- c(
-+ ##D   prior(normal(0, 1), class = Intercept),
-+ ##D   prior(cauchy(0, 0.5), class = sd)
-+ ##D )
-+ ##D model <- brm(yi | se(vi) ~ 1 + (1 | author), data = dat)
-+ ##D 
-+ ##D # result
-+ ##D mp <- model_parameters(model)
-+ ##D plot(mp)
-+ ## End(Not run)
 + ## Don't show: 
 + }) # examplesIf
 Loading required package: brms
 Loading required package: Rcpp
-Loading 'brms' package (version 2.18.0). Useful instructions
+Loading 'brms' package (version 2.22.0). Useful instructions
 can be found by typing help('brms'). A more detailed introduction
 to the package is available through vignette('brms_overview').
 
@@ -1271,17 +1324,21 @@ The following object is masked from ‘package:stats’:
 Loading required package: metafor
 Loading required package: Matrix
 Loading required package: metadat
+Loading required package: numDeriv
 
-Loading the 'metafor' package (version 3.8-1). For an
+Loading the 'metafor' package (version 4.8-0). For an
 introduction to the package please type: help(metafor)
 
+Loading required package: RcppEigen
+Loading required package: BH
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
 
-detaching ‘package:metafor’, ‘package:metadat’, ‘package:Matrix’,
+detaching ‘package:BH’, ‘package:RcppEigen’, ‘package:metafor’,
+  ‘package:numDeriv’, ‘package:metadat’, ‘package:Matrix’,
   ‘package:brms’, ‘package:Rcpp’
 
 > nameEx("plot.see_parameters_distribution")
@@ -1333,9 +1390,9 @@ wt          |       -3.79 | 1.08 | [-6.01, -1.57] | -3.51 | 0.002
 cyl         |       -1.78 | 0.61 | [-3.04, -0.52] | -2.91 | 0.007 
 gear        |       -0.49 | 0.79 | [-2.11,  1.13] | -0.62 | 0.540 
 disp        |    6.94e-03 | 0.01 | [-0.02,  0.03] |  0.58 | 0.568 
-
-Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
-  using a Wald t-distribution approximation.
+[33m
+Uncertainty intervals (equal-tailed) and p-values (two-tailed)
+  computed using a Wald t-distribution approximation.[39m
 > plot(result)
 > 
 > 
@@ -1361,20 +1418,19 @@ detaching ‘package:parameters’
 > result
 [34m# Loadings from Principal Component Analysis (no rotation)[39m
 
-Variable |  PC1  |  PC2  | PC3  |  PC4  | PC5  |  PC6  | Complexity
+Variable |   PC1 |   PC2 |  PC3 |   PC4 |  PC5 |   PC6 | Complexity
 -------------------------------------------------------------------
-mpg      | -0.93 |       |      | -0.30 |      |       |    1.30   
-cyl      | 0.96  |       |      |       |      | -0.21 |    1.18   
-disp     | 0.95  |       |      | -0.23 |      |       |    1.16   
-hp       | 0.87  | 0.36  |      |       | 0.30 |       |    1.64   
-drat     | -0.75 | 0.48  | 0.44 |       |      |       |    2.47   
-wt       | 0.88  | -0.35 | 0.26 |       |      |       |    1.54   
-qsec     | -0.54 | -0.81 |      |       |      |       |    1.96   
+mpg      | -0.93 |       |      | -0.30 |      |       |       1.30
+cyl      |  0.96 |       |      |       |      | -0.21 |       1.18
+disp     |  0.95 |       |      | -0.23 |      |       |       1.16
+hp       |  0.87 |  0.36 |      |       | 0.30 |       |       1.64
+drat     | -0.75 |  0.48 | 0.44 |       |      |       |       2.47
+wt       |  0.88 | -0.35 | 0.26 |       |      |       |       1.54
+qsec     | -0.54 | -0.81 |      |       |      |       |       1.96
 [33m
 The 6 principal components accounted for 99.30% of the total variance of the original data (PC1 = 72.66%, PC2 = 16.52%, PC3 = 4.93%, PC4 = 2.26%, PC5 = 1.85%, PC6 = 1.08%).
 [39m> plot(result)
-Warning: Removed 25 rows containing missing values (`position_stack()`).
-Warning: Removed 25 rows containing missing values (`geom_text()`).
+> 
 > 
 > 
 > 
@@ -1405,9 +1461,10 @@ Parameter   | Coefficient |         95% CI |      p
 wt          |       -3.42 | [-5.12, -1.72] | < .001
 cyl         |       -1.51 | [-2.34, -0.71] | < .001
 gear        |       -0.54 | [-2.07,  1.19] | 0.538 
-
-Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
-  using a simulated multivariate normal distribution approximation.
+[33m
+Uncertainty intervals (equal-tailed) and p-values (two-tailed)
+  computed using a simulated multivariate normal distribution
+  approximation.[39m
 > plot(result)
 > 
 > 
@@ -1448,6 +1505,64 @@ AUC: 37.66%
 
 detaching ‘package:performance’
 
+> nameEx("plot.see_performance_simres")
+> ### * plot.see_performance_simres
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plot.see_performance_simres
+> ### Title: Plot method for check model for (non-)normality of residuals
+> ### Aliases: plot.see_performance_simres
+> 
+> ### ** Examples
+> 
+> ## Don't show: 
+> if (require("glmmTMB") && require("qqplotr") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
++ ## End(Don't show)
++ data(Salamanders, package = "glmmTMB")
++ model <- glmmTMB::glmmTMB(
++   count ~ mined + spp + (1 | site),
++   family = poisson(),
++   data = Salamanders
++ )
++ simulated_residuals <- performance::simulate_residuals(model)
++ plot(simulated_residuals)
++ 
++ # or
++ simulated_residuals <- performance::simulate_residuals(model)
++ result <- performance::check_residuals(simulated_residuals)
++ plot(result)
++ ## Don't show: 
++ }) # examplesIf
+Loading required package: glmmTMB
+Loading required package: qqplotr
+Loading required package: ggplot2
+
+Attaching package: ‘qqplotr’
+
+The following objects are masked from ‘package:ggplot2’:
+
+    StatQqLine, stat_qq_line
+
+Loading required package: DHARMa
+This is DHARMa 0.4.7. For overview type '?DHARMa'. For recent changes, type news(package = 'DHARMa')
+> data(Salamanders, package = "glmmTMB")
+> model <- glmmTMB::glmmTMB(count ~ mined + spp + (1 | site), family = poisson(), 
++     data = Salamanders)
+> simulated_residuals <- performance::simulate_residuals(model)
+> plot(simulated_residuals)
+> simulated_residuals <- performance::simulate_residuals(model)
+> result <- performance::check_residuals(simulated_residuals)
+> plot(result)
+> ## End(Don't show)
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:DHARMa’, ‘package:qqplotr’, ‘package:ggplot2’,
+  ‘package:glmmTMB’
+
 > nameEx("plot.see_point_estimate")
 > ### * plot.see_point_estimate
 > 
@@ -1460,25 +1575,22 @@ detaching ‘package:performance’
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
++ library(rstanarm)
++ library(bayestestR)
++ set.seed(123)
++ m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
++ result <- point_estimate(m, centrality = "median")
++ result
++ plot(result)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:rstanarm’, ‘package:Rcpp’
-
 > nameEx("plot.see_rope")
 > ### * plot.see_rope
 > 
@@ -1491,25 +1603,22 @@ detaching ‘package:rstanarm’, ‘package:Rcpp’
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
++ library(rstanarm)
++ library(bayestestR)
++ set.seed(123)
++ m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
++ result <- rope(m)
++ result
++ plot(result)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:rstanarm’, ‘package:Rcpp’
-
 > nameEx("plot.see_si")
 > ### * plot.see_si
 > 
@@ -1522,25 +1631,22 @@ detaching ‘package:rstanarm’, ‘package:Rcpp’
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
++ library(rstanarm)
++ library(bayestestR)
++ set.seed(123)
++ m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
++ result <- si(m, verbose = FALSE)
++ result
++ plot(result)
 + ## Don't show: 
 + }) # examplesIf
-Loading required package: rstanarm
-Loading required package: Rcpp
-This is rstanarm version 2.21.3
-- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!
-- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.
-- For execution on a local, multicore CPU with excess RAM we recommend calling
-  options(mc.cores = parallel::detectCores())
 > ## End(Don't show)
 > 
 > 
 > 
 > cleanEx()
-
-detaching ‘package:rstanarm’, ‘package:Rcpp’
-
 > nameEx("plots")
 > ### * plots
 > 
@@ -1553,7 +1659,7 @@ detaching ‘package:rstanarm’, ‘package:Rcpp’
 > ### ** Examples
 > 
 > ## Don't show: 
-> if (requireNamespace("patchwork", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+> if (require("patchwork", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 + ## End(Don't show)
 + library(ggplot2)
 + library(see)
@@ -1590,7 +1696,7 @@ detaching ‘package:rstanarm’, ‘package:Rcpp’
 > 
 > cleanEx()
 
-detaching ‘package:ggplot2’
+detaching ‘package:ggplot2’, ‘package:patchwork’
 
 > nameEx("print.see_performance_pp_check")
 > ### * print.see_performance_pp_check
@@ -1603,11 +1709,21 @@ detaching ‘package:ggplot2’
 > 
 > ### ** Examples
 > 
-> if (require("performance")) {
-+   model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
-+   check_posterior_predictions(model)
-+ }
-Loading required package: performance
+> library(performance)
+> 
+> model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
+> check_predictions(model)
+> 
+> # dot-plot style for count-models
+> d <- iris
+> d$poisson_var <- rpois(150, 1)
+> model <- glm(
++   poisson_var ~ Species + Petal.Length + Petal.Width,
++   data = d,
++   family = poisson()
++ )
+> out <- check_predictions(model)
+> plot(out, type = "discrete_dots")
 > 
 > 
 > 
@@ -1700,17 +1816,17 @@ detaching ‘package:ggplot2’
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_boxplot() +
 +   theme_modern() +
-+   scale_fill_flat_d()
++   scale_fill_flat()
 > 
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_violin() +
 +   theme_modern() +
-+   scale_fill_flat_d(palette = "ice")
++   scale_fill_flat(palette = "ice")
 > 
 > ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
 +   geom_point() +
 +   theme_modern() +
-+   scale_color_flat_c(palette = "rainbow")
++   scale_color_flat(discrete = FALSE)
 > 
 > 
 > 
@@ -1738,17 +1854,17 @@ detaching ‘package:ggplot2’
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_boxplot() +
 +   theme_modern() +
-+   scale_fill_material_d()
++   scale_fill_material()
 > 
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_violin() +
 +   theme_modern() +
-+   scale_fill_material_d(palette = "ice")
++   scale_fill_material(palette = "ice")
 > 
 > ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
 +   geom_point() +
 +   theme_modern() +
-+   scale_color_material_c(palette = "rainbow")
++   scale_color_material(discrete = FALSE)
 > 
 > 
 > 
@@ -1775,17 +1891,17 @@ detaching ‘package:ggplot2’
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_boxplot() +
 +   theme_modern() +
-+   scale_fill_metro_d()
++   scale_fill_metro()
 > 
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_violin() +
 +   theme_modern() +
-+   scale_fill_metro_d(palette = "ice")
++   scale_fill_metro(palette = "ice")
 > 
 > ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
 +   geom_point() +
 +   theme_modern() +
-+   scale_color_metro_c(palette = "rainbow")
++   scale_color_metro(discrete = FALSE)
 > 
 > 
 > 
@@ -1801,7 +1917,7 @@ detaching ‘package:ggplot2’
 > ### Name: scale_color_okabeito
 > ### Title: Okabe-Ito color palette
 > ### Aliases: scale_color_okabeito scale_fill_okabeito scale_colour_okabeito
-> ###   scale_fill_oi
+> ###   scale_colour_oi scale_color_oi scale_fill_oi
 > 
 > ### ** Examples
 > 
@@ -1817,6 +1933,12 @@ detaching ‘package:ggplot2’
 +   geom_violin() +
 +   theme_modern() +
 +   scale_fill_oi(palette = "black_first")
+> 
+> # for the original brighter yellow color suggested by Okabe and Ito
+> ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
++   geom_violin() +
++   theme_modern() +
++   scale_fill_oi(palette = "full")
 > 
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_violin() +
@@ -1880,7 +2002,7 @@ detaching ‘package:ggplot2’
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_boxplot() +
 +   theme_modern() +
-+   scale_fill_see_d()
++   scale_fill_see()
 > 
 > ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
 +   geom_point() +
@@ -1890,7 +2012,7 @@ detaching ‘package:ggplot2’
 > ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
 +   geom_point() +
 +   theme_modern() +
-+   scale_color_see_c(palette = "rainbow")
++   scale_color_see(discrete = FALSE)
 > 
 > 
 > 
@@ -1917,17 +2039,17 @@ detaching ‘package:ggplot2’
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_boxplot() +
 +   theme_modern() +
-+   scale_fill_social_d()
++   scale_fill_social()
 > 
 > ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 +   geom_violin() +
 +   theme_modern() +
-+   scale_fill_social_d(palette = "ice")
++   scale_fill_social(palette = "ice")
 > 
 > ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
 +   geom_point() +
 +   theme_modern() +
-+   scale_color_social_c(palette = "rainbow")
++   scale_color_social(discrete = FALSE)
 > 
 > 
 > 
@@ -2011,6 +2133,33 @@ detaching ‘package:ggplot2’
 
 detaching ‘package:ggplot2’
 
+> nameEx("theme_azurelight")
+> ### * theme_azurelight
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: theme_azurelight
+> ### Title: Azurelight theme
+> ### Aliases: theme_azurelight
+> 
+> ### ** Examples
+> 
+> library(ggplot2)
+> library(see)
+> 
+> data(iris)
+> 
+> ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
++   geom_point2(size = 2.5) +
++   scale_color_social() +
++   theme_azurelight()
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:ggplot2’
+
 > nameEx("theme_blackboard")
 > ### * theme_blackboard
 > 
@@ -2026,7 +2175,7 @@ detaching ‘package:ggplot2’
 > library(see)
 > 
 > ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length)) +
-+   geom_point(color = "white") +
++   geom_point(color = see_colors("lime")) +
 +   theme_blackboard()
 > 
 > 
@@ -2050,7 +2199,8 @@ detaching ‘package:ggplot2’
 > library(see)
 > 
 > ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length)) +
-+   geom_point(color = "white") +
++   geom_point() +
++   scale_color_metro() +
 +   theme_lucid()
 > 
 > 
@@ -2075,7 +2225,14 @@ detaching ‘package:ggplot2’
 > 
 > ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
 +   geom_point() +
++   scale_color_see() +
 +   theme_modern()
+> 
+> # for a slightly better orientation, tick marks can be added
+> ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
++   geom_point() +
++   scale_color_see() +
++   theme_modern(show.ticks = TRUE)
 > 
 > 
 > 
@@ -2094,35 +2251,26 @@ detaching ‘package:ggplot2’
 > 
 > ### ** Examples
 > 
-> if (require("ggplot2") && require("poorman")) {
-+   data <- iris[-5] %>%
-+     aggregate(list(Species = iris$Species), mean) %>%
-+     datawizard::reshape_longer(c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"))
-+ 
-+   data %>%
-+     ggplot(aes(
-+       x = name,
-+       y = value,
-+       color = Species,
-+       group = Species,
-+       fill = Species
-+     )) +
-+     geom_polygon(linewidth = 1, alpha = 0.1) +
-+     coord_radar() +
-+     theme_radar()
-+ }
-Loading required package: ggplot2
-Loading required package: poorman
-
-  I'd seen my father. He was a poor man, and I watched him do astonishing things.
-    - Sidney Poitier
-
-Attaching package: ‘poorman’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
+> library(ggplot2)
+> 
+> data <- datawizard::reshape_longer(
++   aggregate(iris[-5], list(Species = iris$Species), mean),
++   c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
++ )
+> 
+> ggplot(
++   data,
++   aes(
++     x = name,
++     y = value,
++     color = Species,
++     group = Species,
++     fill = Species
++   )
++ ) +
++   geom_polygon(linewidth = 1, alpha = 0.1) +
++   coord_radar() +
++   theme_radar()
 > 
 > 
 > 
@@ -2130,11 +2278,11 @@ The following objects are masked from ‘package:stats’:
 > ###
 > cleanEx()
 
-detaching ‘package:poorman’, ‘package:ggplot2’
+detaching ‘package:ggplot2’
 
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  21.5 0.858 25.807 0.002 0.004 
+Time elapsed:  8.842 0.364 13.492 0 0 
 > grDevices::dev.off()
 null device 
           1 

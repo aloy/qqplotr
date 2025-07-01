@@ -1,10 +1,7 @@
 test_that("`plot.see_n_factors()` works", {
-  skip_if_not(getRversion() >= "4.1")
-  requiet("parameters")
-  requiet("nFactors")
-  requiet("vdiffr")
-  data(mtcars)
-  result <- n_factors(mtcars, type = "PCA")
+  skip_if_not_installed("nFactors")
+
+  result <- parameters::n_factors(datasets::mtcars, type = "PCA")
 
   set.seed(123)
   vdiffr::expect_doppelganger(
@@ -16,5 +13,11 @@ test_that("`plot.see_n_factors()` works", {
   vdiffr::expect_doppelganger(
     title = "line graph",
     fig = plot(result, type = "line")
+  )
+
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    title = "area graph",
+    fig = plot(result, type = "area")
   )
 })

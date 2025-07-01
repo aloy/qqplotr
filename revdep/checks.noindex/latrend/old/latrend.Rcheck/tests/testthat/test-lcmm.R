@@ -1,4 +1,3 @@
-context('LCMM models')
 skip_if_not_installed('lcmm')
 skip_on_cran()
 rngReset()
@@ -28,33 +27,55 @@ make.gmm = function(id, time, response, ..., init = 'default') {
   mc$time = time
   mc$maxiter = 10
   mc$seed = 1
+  mc$gridsearch.rep = 2
+  mc$gridsearch.maxiter = 5
+  mc$gridsearch.parallel = FALSE
 
   do.call(lcMethodLcmmGMM, as.list(mc)[-1]) %>% evaluate()
 }
 
+
 test_that('gmm', {
   expect_true({
-    test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+    suppressWarnings({
+      test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+    })
   })
 })
 
+
 test_that('gmm with init=lme', {
   skip_on_cran()
-  method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'lme')
+  method = make.gmm(id = 'id', time = 'time', response = 'Value', init = 'lme')
   model = latrend(method, testLongData)
   expect_true(is.lcModel(model))
 })
+
 
 test_that('gmm with init=lme.random', {
   skip_on_cran()
-  method = make.gmm(id = 'Traj', time = 'Assessment', response = 'Value', init = 'lme.random')
+  method = make.gmm(id = 'id', time = 'time', response = 'Value', init = 'lme.random')
   model = latrend(method, testLongData)
   expect_true(is.lcModel(model))
 })
 
+
+test_that('gmm with init=gridsearch', {
+  skip_on_cran()
+  method = make.gmm(id = 'id', time = 'time', response = 'Value', init = 'gridsearch')
+  model2 = latrend(method, testLongData, nClusters = 2)
+  expect_equal(nClusters(model2), 2)
+
+  model1 = latrend(method, testLongData, nClusters = 1)
+  expect_equal(nClusters(model1), 1)
+})
+
+
 test_that('gmm with NA covariate', {
   expect_true({
-    test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+    suppressWarnings({
+      test.latrend('lcMethodLcmmGMM', instantiator = make.gmm, tests = tests, data = lcmmData)
+    })
   })
 })
 
@@ -69,6 +90,7 @@ make.gbtm = function(id, time, response, ..., init = NULL) {
 
   do.call(lcMethodLcmmGBTM, as.list(mc)[-1]) %>% evaluate()
 }
+
 
 test_that('gbtm', {
   expect_true({

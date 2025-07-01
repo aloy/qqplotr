@@ -32,16 +32,16 @@ test_that('clusterTrajectories with hard separation model', {
   clusTrajs = clusterTrajectories(partModel)
 
   expect_is(clusTrajs, 'data.frame')
-  expect_named(clusTrajs, c('Cluster', 'Assessment', 'Value'))
+  expect_named(clusTrajs, c('Cluster', 'time', 'Value'))
   expect_is(clusTrajs$Cluster, 'factor')
-  expect_equivalent(unique(clusTrajs$Assessment), unique(testLongData$Assessment))
+  expect_equivalent(unique(clusTrajs$time), unique(testLongData$time))
   expect_equivalent(unique(clusTrajs$Cluster), unique(testLongData$Class))
 
   refdata = copy(testLongData)
   refdata[, Cluster := trajectoryAssignments(partModel)[make.idRowIndices(partModel)]]
   expect_equal(
     clusTrajs,
-    as.data.frame(refdata[, .(Value = mean(Value)), keyby = .(Cluster = Cluster, Assessment)])
+    as.data.frame(refdata[, .(Value = mean(Value)), keyby = .(Cluster = Cluster, time)])
   )
 })
 

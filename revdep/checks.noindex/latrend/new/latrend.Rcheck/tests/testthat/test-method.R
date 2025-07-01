@@ -90,6 +90,13 @@ test_that('unevaluated values', {
   expect_error(m[['missing', eval = FALSE]])
 })
 
+test_that('time function confusion', {
+  m = new('lcMethodTest', time = 'time')
+  expect_is(m[['time', eval = FALSE]], 'character')
+  expect_is(m[['time', eval = TRUE]], 'character')
+  expect_equal(m$time, 'time')
+})
+
 test_that('dependency function evaluation', {
   method = lcMethodTestLMKM(fun = mean)
   expect_is(method$fun, 'function')

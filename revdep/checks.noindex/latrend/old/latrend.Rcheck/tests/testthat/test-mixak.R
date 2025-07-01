@@ -1,7 +1,6 @@
-context('mixAK')
 skip_if_not_installed('mixAK')
 skip_on_cran()
-skip('Disabled due to incompatibility with R 4.2')
+
 rngReset()
 tests = c(DEFAULT_LATREND_TESTS) %>% setdiff('cluster-three')
 

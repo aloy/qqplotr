@@ -1,3 +1,7 @@
+# qqplotr (development version)
+
+* Fixed compatibility with ggplot2 4.0.0
+
 # 0.0.6
 
 * Added equal local level (ell) bands as discussed in Weiner et al. (2021) (Thanks Eric Weine)

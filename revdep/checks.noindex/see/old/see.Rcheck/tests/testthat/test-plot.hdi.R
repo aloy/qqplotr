@@ -1,10 +1,9 @@
 test_that("`plot.see_hdi()` works", {
-  requiet("rstanarm")
-  requiet("ggridges")
+  skip_if_not_installed("rstanarm")
+  skip_if_not_installed("ggridges")
 
   set.seed(123)
-  m <<- stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0)
-  result <- bayestestR::hdi(m)
+  result <- bayestestR::hdi(m_rstan)
 
   expect_s3_class(plot(result), "gg")
 })

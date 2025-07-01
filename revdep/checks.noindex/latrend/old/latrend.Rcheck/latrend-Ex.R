@@ -12,8 +12,9 @@ nameEx("PAP.adh")
 flush(stderr()); flush(stdout())
 
 ### Name: PAP.adh
-### Title: Biweekly Mean Therapy Adherence of OSA Patients over 1 Year
-### Aliases: PAP.adh PAP.adh1y
+### Title: Weekly Mean PAP Therapy Usage of OSA Patients in the First 3
+###   Months
+### Aliases: PAP.adh
 ### Keywords: datasets
 
 ### ** Examples
@@ -21,11 +22,41 @@ flush(stderr()); flush(stdout())
 data(PAP.adh)
 
 if (require("ggplot2")) {
-  plotTrajectories(PAP.adh, id = "Patient", time = "Biweek", response = "UsageHours")
+  plotTrajectories(PAP.adh, id = "Patient", time = "Week", response = "UsageHours")
 
   # plot according to cluster ground truth
   plotTrajectories(
     PAP.adh,
+    id = "Patient",
+    time = "Week",
+    response = "UsageHours",
+    cluster = "Group"
+  )
+}
+
+
+
+cleanEx()
+nameEx("PAP.adh1y")
+### * PAP.adh1y
+
+flush(stderr()); flush(stdout())
+
+### Name: PAP.adh1y
+### Title: Biweekly Mean PAP Therapy Adherence of OSA Patients over 1 Year
+### Aliases: PAP.adh1y
+### Keywords: datasets
+
+### ** Examples
+
+data(PAP.adh1y)
+
+if (require("ggplot2")) {
+  plotTrajectories(PAP.adh1y, id = "Patient", time = "Biweek", response = "UsageHours")
+
+  # plot according to cluster ground truth
+  plotTrajectories(
+    PAP.adh1y,
     id = "Patient",
     time = "Biweek",
     response = "UsageHours",
@@ -149,7 +180,7 @@ nameEx("clusterTrajectories")
 flush(stderr()); flush(stdout())
 
 ### Name: clusterTrajectories
-### Title: Extract the cluster trajectories
+### Title: Extract cluster trajectories
 ### Aliases: clusterTrajectories clusterTrajectories,lcModel-method
 
 ### ** Examples
@@ -324,7 +355,7 @@ nameEx("estimationTime")
 flush(stderr()); flush(stdout())
 
 ### Name: estimationTime
-### Title: Get the model estimation time
+### Title: Estimation time
 ### Aliases: estimationTime estimationTime,lcModel-method
 ###   estimationTime,lcModels-method estimationTime,list-method
 
@@ -346,9 +377,9 @@ nameEx("externalMetric")
 
 flush(stderr()); flush(stdout())
 
-### Name: externalMetric,lcModel,lcModel-method
+### Name: externalMetric
 ### Title: Compute external model metric(s)
-### Aliases: externalMetric,lcModel,lcModel-method externalMetric
+### Aliases: externalMetric externalMetric,lcModel,lcModel-method
 ###   externalMetric,lcModels,missing-method
 ###   externalMetric,lcModels,character-method
 ###   externalMetric,lcModels,lcModel-method
@@ -394,7 +425,7 @@ nameEx("fittedTrajectories")
 flush(stderr()); flush(stdout())
 
 ### Name: fittedTrajectories
-### Title: Extract the fitted trajectories for all strata
+### Title: Extract the fitted trajectories
 ### Aliases: fittedTrajectories fittedTrajectories,lcModel-method
 
 ### ** Examples
@@ -497,7 +528,7 @@ nameEx("getLabel")
 flush(stderr()); flush(stdout())
 
 ### Name: getLabel
-### Title: Extract the method label.
+### Title: Object label
 ### Aliases: getLabel getLabel,lcMethod-method getLabel,lcModel-method
 
 ### ** Examples
@@ -516,7 +547,7 @@ nameEx("getLcMethod")
 flush(stderr()); flush(stdout())
 
 ### Name: getLcMethod
-### Title: Get the method specification of a lcModel
+### Title: Get the method specification
 ### Aliases: getLcMethod getLcMethod,lcModel-method
 
 ### ** Examples
@@ -534,9 +565,10 @@ nameEx("getName")
 flush(stderr()); flush(stdout())
 
 ### Name: getName
-### Title: Get the (short) name of the lcMethod or Model
-### Aliases: getName getName,lcMethod-method getShortName
-###   getShortName,lcMethod-method getName,lcModel-method
+### Title: Object name
+### Aliases: getName getShortName getName,lcMethod-method
+###   getName,NULL-method getShortName,lcMethod-method
+###   getShortName,NULL-method getName,lcModel-method
 ###   getShortName,lcModel-method
 
 ### ** Examples
@@ -557,7 +589,7 @@ flush(stderr()); flush(stdout())
 ### Name: idVariable
 ### Title: Extract the trajectory identifier variable
 ### Aliases: idVariable idVariable,lcMethod-method
-###   idVariable,lcModel-method
+###   idVariable,lcModel-method idVariable,ANY-method
 
 ### ** Examples
 
@@ -629,13 +661,31 @@ new("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time")
 
 
 cleanEx()
+nameEx("latrend-methods")
+### * latrend-methods
+
+flush(stderr()); flush(stdout())
+
+### Name: latrend-methods
+### Title: Supported methods for longitudinal clustering
+### Aliases: latrend-methods
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
+
+
+
+cleanEx()
 nameEx("latrend-parallel")
 ### * latrend-parallel
 
 flush(stderr()); flush(stdout())
 
 ### Name: latrend-parallel
-### Title: Parallel computing using latrend
+### Title: Parallel computation using latrend
 ### Aliases: latrend-parallel
 
 ### ** Examples
@@ -650,18 +700,16 @@ nameEx("latrend")
 flush(stderr()); flush(stdout())
 
 ### Name: latrend
-### Title: Cluster longitudinal data
+### Title: Cluster longitudinal data using the specified method
 ### Aliases: latrend
 
 ### ** Examples
 
 data(latrendData)
-model <- latrend(lcMethodLMKM(Y ~ Time, id = "Id", time = "Time"), data = latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
 
 model <- latrend("lcMethodLMKM", formula = Y ~ Time, id = "Id", time = "Time", data = latrendData)
-
-method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
-model <- latrend(method, data = latrendData, nClusters = 3)
 
 model <- latrend(method, data = latrendData, nClusters = 3, seed = 1)
 
@@ -793,7 +841,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: lcFitMethods
 ### Title: Method fit modifiers
-### Aliases: lcFitMethods lcFitConverged-class lcFitConverged
+### Aliases: lcFitMethods lcMetaMethods lcFitConverged-class lcFitConverged
 ###   lcFitRep-class lcFitRep lcFitRepMin lcFitRepMax
 
 ### ** Examples
@@ -846,6 +894,25 @@ method3 <- update(method, nClusters = 3)
 
 
 cleanEx()
+nameEx("lcMethod-estimation")
+### * lcMethod-estimation
+
+flush(stderr()); flush(stdout())
+
+### Name: lcMethod-estimation
+### Title: Longitudinal cluster method ('lcMethod') estimation procedure
+### Aliases: lcMethod-estimation latrend-procedure lcMethod-steps
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, data = latrendData)
+summary(model)
+
+
+
+cleanEx()
 nameEx("lcMethodAkmedoids")
 ### * lcMethodAkmedoids
 
@@ -858,7 +925,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 data(latrendData)
-if (require("akmedoids")) {
+if (rlang::is_installed("akmedoids")) {
   method <- lcMethodAkmedoids(response = "Y", time = "Time", id = "Id", nClusters = 3)
   model <- latrend(method, data = latrendData)
 }
@@ -1136,19 +1203,24 @@ if (rlang::is_installed("lcmm")) {
     mixture = ~ Time,
     random = ~ 1,
     id = "Id",
-    time = "Time", ,
+    time = "Time",
     nClusters = 2
   )
   gmm <- latrend(method, data = latrendData)
   summary(gmm)
 
+  # define method with gridsearch
   method <- lcMethodLcmmGMM(
     fixed = Y ~ Time,
     mixture = ~ Time,
-    random = ~ Time,
+    random = ~ 1,
     id = "Id",
     time = "Time",
-    nClusters = 3
+    nClusters = 3,
+    init = "gridsearch",
+    gridsearch.maxiter = 10,
+    gridsearch.rep = 50,
+    gridsearch.parallel = TRUE
   )
 }
 
@@ -1359,6 +1431,49 @@ length(methods) # 3
 
 
 cleanEx()
+nameEx("lcModel-make")
+### * lcModel-make
+
+flush(stderr()); flush(stdout())
+
+### Name: lcModel-make
+### Title: Cluster-handling functions for lcModel implementations.
+### Aliases: lcModel-make make.trajectoryAssignments make.clusterIndices
+###   make.clusterNames make.clusterSizeLabels make.clusterPropLabels
+### Keywords: internal
+
+### ** Examples
+
+make.clusterSizeLabels(c('A', 'B'), c(10, 20))
+make.clusterPropLabels(c('A', 'B'), c(10, 20))
+
+
+
+cleanEx()
+nameEx("lcModel")
+### * lcModel
+
+flush(stderr()); flush(stdout())
+
+### Name: lcModel
+### Title: Longitudinal cluster result (*'lcModel'*)
+### Aliases: lcModel
+
+### ** Examples
+
+data(latrendData)
+# define the method
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+# estimate the method, giving the model
+model <- latrend(method, data = latrendData)
+
+if (require("ggplot2")) {
+  plotClusterTrajectories(model)
+}
+
+
+
+cleanEx()
 nameEx("lcModelPartition")
 ### * lcModelPartition
 
@@ -1387,18 +1502,38 @@ if (require("mclustcomp")) {
 
 
 cleanEx()
+nameEx("lcModels-class")
+### * lcModels-class
+
+flush(stderr()); flush(stdout())
+
+### Name: lcModels-class
+### Title: 'lcModels': a list of 'lcModel' objects
+### Aliases: lcModels-class
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+models <- latrendRep(method, data = latrendData, .rep = 5) # 5 repeated runs
+
+bestModel <- min(models, "MAE")
+
+
+
+cleanEx()
 nameEx("lcModels")
 ### * lcModels
 
 flush(stderr()); flush(stdout())
 
 ### Name: lcModels
-### Title: Construct a flat (named) list of lcModel objects
-### Aliases: lcModels lcModels-class
+### Title: Construct a list of 'lcModel' objects
+### Aliases: lcModels
 
 ### ** Examples
 
-data(latrendData)
+
 lmkmMethod <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
 lmkmModel <- latrend(lmkmMethod, latrendData)
 rngMethod <- lcMethodRandom("Y", id = "Id", time = "Time")
@@ -1473,7 +1608,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: metric
 ### Title: Compute internal model metric(s)
-### Aliases: metric metric,lcModel-method metric,list-method
+### Aliases: metric metric,lcModel-method internalMetric metric,list-method
 ###   metric,lcModels-method
 
 ### ** Examples
@@ -1560,7 +1695,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: nClusters
 ### Title: Number of clusters
-### Aliases: nClusters
+### Aliases: nClusters nClusters,lcModel-method
 
 ### ** Examples
 
@@ -1671,6 +1806,18 @@ model <- latrend(method, latrendData, nClusters = 3)
 if (require("ggplot2")) {
   plotClusterTrajectories(model)
 
+  # show cluster sizes in labels
+  plotClusterTrajectories(model, clusterLabeler = make.clusterSizeLabels)
+
+  # change cluster order
+  plotClusterTrajectories(model, clusterOrder = c('B', 'C', 'A'))
+
+  # sort clusters by decreasing size
+  plotClusterTrajectories(model, clusterOrder = order(-clusterSizes(model)))
+
+  # show only specific clusters
+  plotClusterTrajectories(model, clusterOrder = c('B', 'C'))
+
   # show assigned trajectories
   plotClusterTrajectories(model, trajectories = TRUE)
 
@@ -1696,7 +1843,7 @@ nameEx("plotFittedTrajectories")
 flush(stderr()); flush(stdout())
 
 ### Name: plotFittedTrajectories
-### Title: Plot fitted trajectories of a lcModel
+### Title: Plot the fitted trajectories
 ### Aliases: plotFittedTrajectories plotFittedTrajectories,lcModel-method
 
 ### ** Examples
@@ -1769,16 +1916,6 @@ if (require("ggplot2")) {
     id = "Id",
     time = "Time",
     cluster = "Class"
-  )
-
-  # compute cluster membership based on the mean being below 0
-  assignments <- aggregate(Y ~ Id, latrendData, mean)$Y < 0
-  plotTrajectories(
-    latrendData,
-    response = "Y",
-    id = "Id",
-    time = "Time",
-    cluster = assignments
   )
 }
 data(latrendData)
@@ -1882,7 +2019,7 @@ nameEx("predictForCluster")
 flush(stderr()); flush(stdout())
 
 ### Name: predictForCluster
-### Title: lcModel prediction conditional on a cluster
+### Title: Predict trajectories conditional on cluster membership
 ### Aliases: predictForCluster predictForCluster,lcModel-method
 
 ### ** Examples
@@ -1910,7 +2047,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: qqPlot
 ### Title: Quantile-quantile plot
-### Aliases: qqPlot qqPlot,lcModel-method
+### Aliases: qqPlot
 
 ### ** Examples
 
@@ -1931,7 +2068,7 @@ nameEx("responseVariable")
 flush(stderr()); flush(stdout())
 
 ### Name: responseVariable
-### Title: Extract the response variable
+### Title: Extract response variable
 ### Aliases: responseVariable responseVariable,lcMethod-method
 ###   responseVariable,lcModel-method
 
@@ -1953,7 +2090,7 @@ nameEx("strip")
 flush(stderr()); flush(stdout())
 
 ### Name: strip
-### Title: Reduce the lcModel memory footprint for serialization
+### Title: Reduce the memory footprint of an object for serialization
 ### Aliases: strip strip,lcMethod-method strip,ANY-method
 ###   strip,lcModel-method
 
@@ -2041,7 +2178,8 @@ flush(stderr()); flush(stdout())
 ### Name: timeVariable
 ### Title: Extract the time variable
 ### Aliases: timeVariable timeVariable,lcMethod-method
-###   timeVariable,lcModel-method
+###   timeVariable,lcModel-method timeVariable,ANY-method
+###   timeariable,ANY-method
 
 ### ** Examples
 
@@ -2051,6 +2189,27 @@ data(latrendData)
 method <- lcMethodRandom("Y", id = "Id", time = "Time")
 model <- latrend(method, latrendData)
 timeVariable(model) # "Time"
+
+
+
+cleanEx()
+nameEx("trajectories")
+### * trajectories
+
+flush(stderr()); flush(stdout())
+
+### Name: trajectories
+### Title: Get the trajectories
+### Aliases: trajectories trajectories,data.frame-method
+###   trajectories,matrix-method trajectories,call-method
+###   trajectories,lcModel-method
+
+### ** Examples
+
+data(latrendData)
+method <- lcMethodLMKM(Y ~ Time, id = "Id", time = "Time")
+model <- latrend(method, latrendData)
+trajectories(model)
 
 
 

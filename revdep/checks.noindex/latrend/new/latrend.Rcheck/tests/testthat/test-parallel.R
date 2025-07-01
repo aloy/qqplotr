@@ -38,8 +38,8 @@ mSleep = new('lcMethodSleep',
   alpha = 10,
   sleep = 1,
   center = meanNA,
-  time = 'Assessment',
-  id = 'Traj',
+  time = 'time',
+  id = 'id',
   nClusters = 2,
   name = 'random'
 )
@@ -90,11 +90,11 @@ test_that('parallel latrendBatch with lcmm', {
 test_that('parallel latrendBatch with local data', {
   localData = generateLongData(
     sizes = c(20, 30),
-    fixed = Value ~ 1 + Assessment,
-    cluster = ~ 1 + Assessment,
+    fixed = Value ~ 1 + time,
+    cluster = ~ 1 + time,
     random = ~ 1,
-    id = 'Traj',
-    data = data.frame(Assessment = seq(0, 1, by = .1)),
+    id = 'id',
+    data = data.frame(time = seq(0, 1, by = .1)),
     fixedCoefs = c(0, 0),
     clusterCoefs = cbind(c(-2, 1), c(2, -1)),
     randomScales = cbind(.1, .1),
@@ -115,11 +115,11 @@ test_that('parallel latrendBatch with local data list', {
     set.seed(seed)
     generateLongData(
       sizes = c(a, b),
-      fixed = Value ~ 1 + Assessment,
-      cluster = ~ 1 + Assessment,
+      fixed = Value ~ 1 + time,
+      cluster = ~ 1 + time,
       random = ~ 1,
-      id = 'Traj',
-      data = data.frame(Assessment = seq(0, 1, by = .1)),
+      id = 'id',
+      data = data.frame(time = seq(0, 1, by = .1)),
       fixedCoefs = c(0, 0),
       clusterCoefs = cbind(c(-2, 1), c(2, -1)),
       randomScales = cbind(.1, .1),

@@ -17,9 +17,9 @@ test_that('3 folds', {
   expect_is(models, 'lcModels')
   expect_length(models, 3)
 
-  expect_equal(deparse(getCall(models[[1]])$data), 'trainFold(testLongData, fold = 1, "Traj", 3, 1)')
-  expect_equal(deparse(getCall(models[[2]])$data), 'trainFold(testLongData, fold = 2, "Traj", 3, 1)')
-  expect_equal(deparse(getCall(models[[3]])$data), 'trainFold(testLongData, fold = 3, "Traj", 3, 1)')
+  expect_equal(deparse(getCall(models[[1]])$data), 'trainFold(testLongData, fold = 1, "id", 3, 1)')
+  expect_equal(deparse(getCall(models[[2]])$data), 'trainFold(testLongData, fold = 2, "id", 3, 1)')
+  expect_equal(deparse(getCall(models[[3]])$data), 'trainFold(testLongData, fold = 3, "id", 3, 1)')
 })
 
 test_that('without seed', {
@@ -30,18 +30,18 @@ test_that('without seed', {
 })
 
 test_that('data subset', {
-  models = latrendCV(mRandom, testLongData[Assessment < .5], folds = 2, seed = 1)
+  models = latrendCV(mRandom, testLongData[time < .5], folds = 2, seed = 1)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2)
 
   expect_equal(
     deparse(getCall(models[[1]])$data, width.cutoff = 500),
-    'trainFold(testLongData[Assessment < 0.5], fold = 1, "Traj", 2, 1)'
+    'trainFold(testLongData[time < 0.5], fold = 1, "id", 2, 1)'
   )
   expect_equal(
     deparse(getCall(models[[2]])$data, width.cutoff = 500),
-    'trainFold(testLongData[Assessment < 0.5], fold = 2, "Traj", 2, 1)'
+    'trainFold(testLongData[time < 0.5], fold = 2, "id", 2, 1)'
   )
 })
 
@@ -59,15 +59,15 @@ test_that('createTrainDataFolds', {
   expect_is(trainDataList[[1]], 'data.frame')
   expect_is(trainDataList[[2]], 'data.frame')
   expect_length(
-    union(unique(trainDataList[[1]]$Traj), unique(trainDataList[[2]]$Traj)),
-    uniqueN(testLongData$Traj)
+    union(unique(trainDataList[[1]]$id), unique(trainDataList[[2]]$id)),
+    uniqueN(testLongData$id)
   )
 })
 
 test_that('createTestDataFold', {
   trainDataList = createTrainDataFolds(testLongData, folds = 2, seed = 1)
   testData = createTestDataFold(testLongData, trainDataList[[1]])
-  expect_length(intersect(unique(testData$Traj), unique(trainDataList[[1]]$Traj)), 0)
+  expect_length(intersect(unique(testData$id), unique(trainDataList[[1]]$id)), 0)
 })
 
 test_that('createTestDataFolds', {
@@ -78,6 +78,6 @@ test_that('createTestDataFolds', {
 
   for(i in seq_along(testDataList)) {
     expect_is(testDataList[[i]], 'data.frame')
-    expect_length(intersect(unique(testDataList[[i]]$Traj), unique(trainDataList[[i]]$Traj)), 0)
+    expect_length(intersect(unique(testDataList[[i]]$id), unique(trainDataList[[i]]$id)), 0)
   }
 })

@@ -1,7 +1,7 @@
 
-R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin17.0 (64-bit)
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -17,16 +17,27 @@ Type 'q()' to quit R.
 
 > library(testthat)
 > library(ggResidpanel)
+
+Attaching package: 'ggResidpanel'
+
+The following object is masked from 'package:datasets':
+
+    penguins
+
 > 
 > test_check("ggResidpanel")
 `geom_smooth()` using formula = 'y ~ x'
 [ FAIL 0 | WARN 2 | SKIP 10 | PASS 18 ]
 
-══ Skipped tests ═══════════════════════════════════════════════════════════════
-• On CRAN (10)
+══ Skipped tests (10) ══════════════════════════════════════════════════════════
+• On CRAN (10): 'test-resid_panel.R:79:3', 'test-resid_panel.R:113:3',
+  'test-resid_panel.R:133:3', 'test-resid_panel.R:148:3',
+  'test-resid_panel.R:163:3', 'test-resid_panel.R:178:3',
+  'test-resid_panel.R:191:3', 'test-resid_panel.R:201:3',
+  'test-resid_panel.R:219:3', 'test-resid_panel.R:240:3'
 
 [ FAIL 0 | WARN 2 | SKIP 10 | PASS 18 ]
 > 
 > proc.time()
    user  system elapsed 
- 22.659   0.601  24.093 
+  6.844   0.167   7.385 

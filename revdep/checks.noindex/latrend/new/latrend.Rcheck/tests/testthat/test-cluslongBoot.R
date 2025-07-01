@@ -10,9 +10,9 @@ test_that('latrendBoot', {
   expect_length(models, 3)
 
   # test if data bootstrap sample calls are correct
-  expect_equal(deparse(getCall(models[[1]])$data), 'bootSample(testLongData, "Traj", 1140350788L)')
-  expect_equal(deparse(getCall(models[[2]])$data), 'bootSample(testLongData, "Traj", 312928385L)')
-  expect_equal(deparse(getCall(models[[3]])$data), 'bootSample(testLongData, "Traj", 866248189L)')
+  expect_equal(deparse(getCall(models[[1]])$data), 'bootSample(testLongData, "id", 1140350788L)')
+  expect_equal(deparse(getCall(models[[2]])$data), 'bootSample(testLongData, "id", 312928385L)')
+  expect_equal(deparse(getCall(models[[3]])$data), 'bootSample(testLongData, "id", 866248189L)')
 })
 
 test_that('latrendBoot without seed', {

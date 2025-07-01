@@ -26,16 +26,16 @@ test_that('multiple datasets', {
   models = latrendBatch(
     methods,
     data = .(testLongData,
-      testLongData[Assessment < .5],
-      testLongData[Assessment >= .5]),
+      testLongData[time < .5],
+      testLongData[time >= .5]),
     cartesian = TRUE)
 
   expect_is(models, 'lcModels')
   expect_length(models, 2*3)
 
   expect_equal(deparse(getCall(models[[1]])$data), 'testLongData')
-  expect_equal(deparse(getCall(models[[2]])$data), 'testLongData[Assessment < 0.5]')
-  expect_equal(deparse(getCall(models[[3]])$data), 'testLongData[Assessment >= 0.5]')
+  expect_equal(deparse(getCall(models[[2]])$data), 'testLongData[time < 0.5]')
+  expect_equal(deparse(getCall(models[[3]])$data), 'testLongData[time >= 0.5]')
 })
 
 
@@ -60,8 +60,8 @@ test_that('datasets list', {
   methods = lcMethods(mTest, nClusters = 1:2)
   dataList = list(
     testLongData,
-    testLongData[Assessment < .5],
-    testLongData[Assessment >= .5]
+    testLongData[time < .5],
+    testLongData[time >= .5]
   )
 
   models = latrendBatch(methods, data = dataList, cartesian = TRUE)
@@ -78,8 +78,8 @@ test_that('datasets list, cartesian=FALSE', {
   methods = lcMethods(mTest, nClusters = 1:3)
   dataList = list(
     testLongData,
-    testLongData[Assessment < .5],
-    testLongData[Assessment >= .5]
+    testLongData[time < .5],
+    testLongData[time >= .5]
   )
   models = latrendBatch(methods, data = dataList, cartesian = FALSE)
 
@@ -95,8 +95,8 @@ test_that('datasets list, cartesian=FALSE', {
 test_that('single method, multiple datasets', {
   dataList = list(
     testLongData,
-    testLongData[Assessment < .5],
-    testLongData[Assessment >= .5]
+    testLongData[time < .5],
+    testLongData[time >= .5]
   )
 
   models = latrendBatch(mTest, data = dataList, cartesian = TRUE)

@@ -1,7 +1,7 @@
 
-R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin17.0 (64-bit)
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -41,14 +41,568 @@ Type 'q()' to quit R.
 +                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
 +                         ry.H0 = function(x) rnorm(x, sd = 3))
 > hist(res1)
-Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
-ℹ Please use `after_stat(density)` instead.
-ℹ The deprecated feature was likely used in the MKpower package.
-  Please report the issue to the authors.
 > res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
 +                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
 +                       ry.H0 = rnorm)
 > hist(res2)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("power.ancova")
+> ### * power.ancova
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.ancova
+> ### Title: Power Calculation for ANCOVA
+> ### Aliases: power.ancova
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## Default matrix of contrasts
+> ## 3 groups
+> cbind(rep(1,2), -diag(2))
+     [,1] [,2] [,3]
+[1,]    1   -1    0
+[2,]    1    0   -1
+> ## 4 groups
+> cbind(rep(1,3), -diag(3))
+     [,1] [,2] [,3] [,4]
+[1,]    1   -1    0    0
+[2,]    1    0   -1    0
+[3,]    1    0    0   -1
+> 
+> ## Table 1 in Shieh (2020)
+> power.ancova(mu=c(400, 450, 500), var = 9900, power = 0.8)
+
+     ANCOVA power calculation 
+
+             ns = 20.46314, 20.46314, 20.46314
+             mu = 400, 450, 500
+            var = 9900
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 63
+
+> power.ancova(n = rep(63/3, 3), mu=c(400, 450, 500), var = 9900)
+
+     ANCOVA power calculation 
+
+             ns = 21, 21, 21
+             mu = 400, 450, 500
+            var = 9900
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8115591
+
+NOTE: Total sample size: 63
+
+> power.ancova(mu=c(400, 450, 500), var = 9900, power = 0.8, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 23.61609, 23.61609, 23.61609
+             mu = 400, 450, 500
+            var = 9900
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 72
+
+> power.ancova(n = rep(72/3, 3), mu=c(400, 450, 500), var = 9900, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 24, 24, 24
+             mu = 400, 450, 500
+            var = 9900
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8083228
+
+NOTE: Total sample size: 72
+
+> 
+> ## Table 2 in Shieh (2020)
+> power.ancova(mu=c(400, 450, 500), var = 7500, power = 0.8)
+
+     ANCOVA power calculation 
+
+             ns = 15.85492, 15.85492, 15.85492
+             mu = 400, 450, 500
+            var = 7500
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 48
+
+> power.ancova(n = rep(48/3, 3), mu=c(400, 450, 500), var = 7500)
+
+     ANCOVA power calculation 
+
+             ns = 16, 16, 16
+             mu = 400, 450, 500
+            var = 7500
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8041981
+
+NOTE: Total sample size: 48
+
+> power.ancova(mu=c(400, 450, 500), var = 7500, power = 0.8, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 19.0415, 19.0415, 19.0415
+             mu = 400, 450, 500
+            var = 7500
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 60
+
+> power.ancova(n = rep(60/3, 3), mu=c(400, 450, 500), var = 7500, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 20, 20, 20
+             mu = 400, 450, 500
+            var = 7500
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8263188
+
+NOTE: Total sample size: 60
+
+> 
+> ## Table 3 in Shieh (2020)
+> power.ancova(mu=c(400, 450, 500), var = 1900, power = 0.8)
+
+     ANCOVA power calculation 
+
+             ns = 5.217321, 5.217321, 5.217321
+             mu = 400, 450, 500
+            var = 1900
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 18
+
+> power.ancova(n = rep(18/3, 3), mu=c(400, 450, 500), var = 1900)
+
+     ANCOVA power calculation 
+
+             ns = 6, 6, 6
+             mu = 400, 450, 500
+            var = 1900
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8750844
+
+NOTE: Total sample size: 18
+
+> power.ancova(mu=c(400, 450, 500), var = 1900, power = 0.8, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 8.553361, 8.553361, 8.553361
+             mu = 400, 450, 500
+            var = 1900
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 27
+
+> power.ancova(n = rep(27/3, 3), mu=c(400, 450, 500), var = 1900, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 9, 9, 9
+             mu = 400, 450, 500
+            var = 1900
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8441553
+
+NOTE: Total sample size: 27
+
+> 
+> ## ANOVA approach for Table 1-3
+> power.anova.test(groups = 3, between.var = var(c(400, 450, 500)), 
++                  within.var = 10000, power = 0.8)
+
+     Balanced one-way analysis of variance power calculation 
+
+         groups = 3
+              n = 20.30205
+    between.var = 2500
+     within.var = 10000
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: n is number in each group
+
+> power.anova.test(n = 63/3, groups = 3, between.var = var(c(400, 450, 500)), 
++                  within.var = 10000)
+
+     Balanced one-way analysis of variance power calculation 
+
+         groups = 3
+              n = 21
+    between.var = 2500
+     within.var = 10000
+      sig.level = 0.05
+          power = 0.8147697
+
+NOTE: n is number in each group
+
+> 
+> ## Table 4 in Shieh (2020)
+> power.ancova(mu=c(410, 450, 490), var = 9900, power = 0.8)
+
+     ANCOVA power calculation 
+
+             ns = 31.17475, 31.17475, 31.17475
+             mu = 410, 450, 490
+            var = 9900
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 96
+
+> power.ancova(n = rep(96/3, 3), mu=c(410, 450, 490), var = 9900)
+
+     ANCOVA power calculation 
+
+             ns = 32, 32, 32
+             mu = 410, 450, 490
+            var = 9900
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8113679
+
+NOTE: Total sample size: 96
+
+> power.ancova(mu=c(410, 450, 490), var = 9900, power = 0.8, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 34.28176, 34.28176, 34.28176
+             mu = 410, 450, 490
+            var = 9900
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 105
+
+> power.ancova(n = rep(105/3, 3), mu=c(410, 450, 490), var = 9900, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 35, 35, 35
+             mu = 410, 450, 490
+            var = 9900
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8099276
+
+NOTE: Total sample size: 105
+
+> 
+> ## Table 5 in Shieh (2020)
+> power.ancova(mu=c(410, 450, 490), var = 7500, power = 0.8)
+
+     ANCOVA power calculation 
+
+             ns = 23.95963, 23.95963, 23.95963
+             mu = 410, 450, 490
+            var = 7500
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 72
+
+> power.ancova(n = rep(72/3, 3), mu=c(410, 450, 490), var = 7500)
+
+     ANCOVA power calculation 
+
+             ns = 24, 24, 24
+             mu = 410, 450, 490
+            var = 7500
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8007513
+
+NOTE: Total sample size: 72
+
+> power.ancova(mu=c(410, 450, 490), var = 7500, power = 0.8, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 27.09381, 27.09381, 27.09381
+             mu = 410, 450, 490
+            var = 7500
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 84
+
+> power.ancova(n = rep(84/3, 3), mu=c(410, 450, 490), var = 7500, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 28, 28, 28
+             mu = 410, 450, 490
+            var = 7500
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8163034
+
+NOTE: Total sample size: 84
+
+> 
+> ## Table 6 in Shieh (2020)
+> power.ancova(mu=c(410, 450, 490), var = 1900, power = 0.8)
+
+     ANCOVA power calculation 
+
+             ns = 7.212445, 7.212445, 7.212445
+             mu = 410, 450, 490
+            var = 1900
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 24
+
+> power.ancova(n = rep(24/3, 3), mu=c(410, 450, 490), var = 1900)
+
+     ANCOVA power calculation 
+
+             ns = 8, 8, 8
+             mu = 410, 450, 490
+            var = 1900
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8516283
+
+NOTE: Total sample size: 24
+
+> power.ancova(mu=c(410, 450, 490), var = 1900, power = 0.8, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 10.51576, 10.51576, 10.51576
+             mu = 410, 450, 490
+            var = 1900
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 33
+
+> power.ancova(n = rep(33/3, 3), mu=c(410, 450, 490), var = 1900, nr.covs = 10)
+
+     ANCOVA power calculation 
+
+             ns = 11, 11, 11
+             mu = 410, 450, 490
+            var = 1900
+        nr.covs = 10
+      sig.level = 0.05
+          power = 0.8325422
+
+NOTE: Total sample size: 33
+
+> 
+> ## ANOVA approach for Table 4-6
+> power.anova.test(groups = 3, between.var = var(c(410, 450, 490)), 
++                  within.var = 10000, power = 0.8)
+
+     Balanced one-way analysis of variance power calculation 
+
+         groups = 3
+              n = 31.12903
+    between.var = 1600
+     within.var = 10000
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: n is number in each group
+
+> power.anova.test(n = 96/3, groups = 3, between.var = var(c(410, 450, 490)), 
++                  within.var = 10000)
+
+     Balanced one-way analysis of variance power calculation 
+
+         groups = 3
+              n = 32
+    between.var = 1600
+     within.var = 10000
+      sig.level = 0.05
+          power = 0.811864
+
+NOTE: n is number in each group
+
+> 
+> ###############################################################################
+> ## Example from Maxwell and Delaney (2004) according to Shieh (2020)
+> ###############################################################################
+> ## ANCOVA (balanced design)
+> power.ancova(n = rep(30/3, 3), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898)
+
+     ANCOVA power calculation 
+
+             ns = 10, 10, 10
+             mu = 7.5366, 11.9849, 13.9785
+            var = 29.0898
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.6145256
+
+NOTE: Total sample size: 30
+
+> power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8)
+
+     ANCOVA power calculation 
+
+             ns = 14.29481, 14.29481, 14.29481
+             mu = 7.5366, 11.9849, 13.9785
+            var = 29.0898
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 45
+
+> power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.9)
+
+     ANCOVA power calculation 
+
+             ns = 18.32456, 18.32456, 18.32456
+             mu = 7.5366, 11.9849, 13.9785
+            var = 29.0898
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.9
+
+NOTE: Total sample size: 57
+
+> 
+> ## ANOVA
+> power.anova.test(n = 30/3, groups = 3, between.var = var(c(7.5366, 11.9849, 13.9785)), 
++                  within.var = 29.0898)
+
+     Balanced one-way analysis of variance power calculation 
+
+         groups = 3
+              n = 10
+    between.var = 10.87665
+     within.var = 29.0898
+      sig.level = 0.05
+          power = 0.6338728
+
+NOTE: n is number in each group
+
+> power.anova.test(groups = 3, between.var = var(c(7.5366, 11.9849, 13.9785)), 
++                  within.var = 29.0898, power = 0.8)
+
+     Balanced one-way analysis of variance power calculation 
+
+         groups = 3
+              n = 13.93289
+    between.var = 10.87665
+     within.var = 29.0898
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: n is number in each group
+
+> power.anova.test(groups = 3, between.var = var(c(7.5366, 11.9849, 13.9785)), 
++                  within.var = 29.0898, power = 0.9)
+
+     Balanced one-way analysis of variance power calculation 
+
+         groups = 3
+              n = 17.96242
+    between.var = 10.87665
+     within.var = 29.0898
+      sig.level = 0.05
+          power = 0.9
+
+NOTE: n is number in each group
+
+>                  
+> ## ANCOVA - imbalanced design
+> power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8, 
++              group.ratio = c(1, 1.25, 1.5))
+
+     ANCOVA power calculation 
+
+             ns = 12.25390, 15.31738, 18.38085
+             mu = 7.5366, 11.9849, 13.9785
+            var = 29.0898
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 48
+
+> power.ancova(n = c(13, 16, 19), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898,  
++              group.ratio = c(1, 1.25, 1.5))
+
+     ANCOVA power calculation 
+
+             ns = 13, 16, 19
+             mu = 7.5366, 11.9849, 13.9785
+            var = 29.0898
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8266307
+
+NOTE: Total sample size: 48
+
+> power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8, 
++              group.ratio = c(1, 0.8, 2/3))
+
+     ANCOVA power calculation 
+
+             ns = 16.87449, 13.49959, 11.24966
+             mu = 7.5366, 11.9849, 13.9785
+            var = 29.0898
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8
+
+NOTE: Total sample size: 43
+
+> power.ancova(n = c(17, 14, 12), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898,  
++              group.ratio = c(1, 0.8, 2/3))
+
+     ANCOVA power calculation 
+
+             ns = 17, 14, 12
+             mu = 7.5366, 11.9849, 13.9785
+            var = 29.0898
+        nr.covs = 1
+      sig.level = 0.05
+          power = 0.8034654
+
+NOTE: Total sample size: 43
+
 > 
 > 
 > 
@@ -59,8 +613,8 @@ Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: power.diagnostic.test
-> ### Title: Power calculations for a diagnostic test
-> ### Aliases: power.diagnostic.test
+> ### Title: Power Calculations for Diagnostic Tests
+> ### Aliases: power.diagnostic.test ssize.sens.ci ssize.spec.ci
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -213,6 +767,38 @@ NOTE: n is number of cases, n1 is number of controls
 NOTE: n is number of cases, n1 is number of controls
 
 > 
+> ## function only for sensitivity
+> ssize.sens.ci(sens = 0.99, delta = 0.14, power = 0.95) # 40
+
+     Diagnostic test exact power calculation 
+
+           sens = 0.99
+              n = 40
+             n1 = 40
+          delta = 0.14
+      sig.level = 0.05
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of cases, n1 is number of controls
+
+> 
+> ## function only for specificity
+> ssize.spec.ci(spec = 0.99, delta = 0.13, power = 0.95) # 43
+
+     Diagnostic test exact power calculation 
+
+           spec = 0.99
+              n = 43
+             n1 = 43
+          delta = 0.13
+      sig.level = 0.05
+          power = 0.95
+           prev = NULL
+
+NOTE: n is number of controls, n1 is number of cases
+
+> 
 > 
 > 
 > cleanEx()
@@ -222,7 +808,7 @@ NOTE: n is number of cases, n1 is number of controls
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: power.hsu.t.test
-> ### Title: Power calculations for two sample Hsu t test
+> ### Title: Power Calculations for Two-sample Hsu t Test
 > ### Aliases: power.hsu.t.test
 > ### Keywords: htest
 > 
@@ -306,13 +892,264 @@ NOTE: n is number in *each* group
 > 
 > 
 > cleanEx()
+> nameEx("power.mpe.atleast.one")
+> ### * power.mpe.atleast.one
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.mpe.atleast.one
+> ### Title: Power for at least One Endpoint with Known Covariance
+> ### Aliases: power.mpe.atleast.one
+> ### Keywords: multivariate
+> 
+> ### ** Examples
+> 
+> ## compute power
+> power.mpe.atleast.one(K = 2, delta = c(0.2,0.2), Sigma = diag(c(1,1)), power = 0.8)
+
+ Power calculation for multiple primary endpoints for at least one endpoint 
+
+              n = 218.963
+          delta = 0.2, 0.2
+             SD = 1, 1
+            rho = 0
+      sig.level = 0.025
+          power = 0.8
+
+Sigma =
+     [,1] [,2]
+[1,]    1    0
+[2,]    0    1
+
+NOTE: n is number in *each* group
+
+> 
+> ## compute sample size
+> power.mpe.atleast.one(K = 2, delta = c(0.2,0.2), Sigma = diag(c(2,2)), power = 0.9)
+
+ Power calculation for multiple primary endpoints for at least one endpoint 
+
+              n = 594.5002
+          delta = 0.2, 0.2
+             SD = 1.414214, 1.414214
+            rho = 0
+      sig.level = 0.025
+          power = 0.9
+
+Sigma =
+     [,1] [,2]
+[1,]    2    0
+[2,]    0    2
+
+NOTE: n is number in *each* group
+
+> 
+> ## known covariance matrix
+> Sigma <- matrix(c(1.440, 0.840, 1.296, 0.840,
++                   0.840, 1.960, 0.168, 1.568,
++                   1.296, 0.168, 1.440, 0.420,
++                   0.840, 1.568, 0.420, 1.960), ncol = 4)
+> ## compute power
+> power.mpe.atleast.one(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75), Sigma = Sigma)
+
+ Power calculation for multiple primary endpoints for at least one endpoint 
+
+              n = 60
+          delta = 0.50, 0.75, 0.50, 0.75
+             SD = 1.2, 1.4, 1.2, 1.4
+            rho = 0.50, 0.90, 0.50, 0.10, 0.80, 0.25
+      sig.level = 0.0125
+          power = 0.9024363
+
+Sigma =
+      [,1]  [,2]  [,3]  [,4]
+[1,] 1.440 0.840 1.296 0.840
+[2,] 0.840 1.960 0.168 1.568
+[3,] 1.296 0.168 1.440 0.420
+[4,] 0.840 1.568 0.420 1.960
+
+NOTE: n is number in *each* group
+
+> ## equivalent: known SDs and correlation rho
+> power.mpe.atleast.one(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75),
++                       SD = c(1.2, 1.4, 1.2, 1.4), 
++                       rho = c(0.5, 0.9, 0.5, 0.1, 0.8, 0.25))
+
+ Power calculation for multiple primary endpoints for at least one endpoint 
+
+              n = 60
+          delta = 0.50, 0.75, 0.50, 0.75
+             SD = 1.2, 1.4, 1.2, 1.4
+            rho = 0.50, 0.90, 0.50, 0.10, 0.80, 0.25
+      sig.level = 0.0125
+          power = 0.9024375
+
+Sigma =
+      [,1]  [,2]  [,3]  [,4]
+[1,] 1.440 0.840 1.296 0.840
+[2,] 0.840 1.960 0.168 1.568
+[3,] 1.296 0.168 1.440 0.420
+[4,] 0.840 1.568 0.420 1.960
+
+NOTE: n is number in *each* group
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("power.mpe.known.var")
+> ### * power.mpe.known.var
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.mpe.known.var
+> ### Title: Multiple Co-Primary Endpoints with Known Covariance
+> ### Aliases: power.mpe.known.var
+> ### Keywords: htest multivariate
+> 
+> ### ** Examples
+> 
+> ## compute power
+> power.mpe.known.var(K = 2, n = 20, delta = c(1,1), Sigma = diag(c(1,1)))
+
+ Power calculation for multiple co-primary endpoints (covariance known) 
+
+              n = 20
+          delta = 1, 1
+             SD = 1, 1
+            rho = 0
+      sig.level = 0.05
+          power = 0.8750109
+
+Sigma =
+     [,1] [,2]
+[1,]    1    0
+[2,]    0    1
+
+NOTE: n is number in *each* group
+
+> 
+> ## compute sample size
+> power.mpe.known.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
++                     sig.level = 0.025)
+
+ Power calculation for multiple co-primary endpoints (covariance known) 
+
+              n = 51.61514
+          delta = 1, 1
+             SD = 1.414214, 1.414214
+            rho = 0
+      sig.level = 0.025
+          power = 0.9
+
+Sigma =
+     [,1] [,2]
+[1,]    2    0
+[2,]    0    2
+
+NOTE: n is number in *each* group
+
+> 
+> ## known covariance matrix
+> Sigma <- matrix(c(1.440, 0.840, 1.296, 0.840,
++                   0.840, 1.960, 0.168, 1.568,
++                   1.296, 0.168, 1.440, 0.420,
++                   0.840, 1.568, 0.420, 1.960), ncol = 4)
+> ## compute power
+> power.mpe.known.var(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75), Sigma = Sigma)
+
+ Power calculation for multiple co-primary endpoints (covariance known) 
+
+              n = 60
+          delta = 0.50, 0.75, 0.50, 0.75
+             SD = 1.2, 1.4, 1.2, 1.4
+            rho = 0.50, 0.90, 0.50, 0.10, 0.80, 0.25
+      sig.level = 0.05
+          power = 0.6207681
+
+Sigma =
+      [,1]  [,2]  [,3]  [,4]
+[1,] 1.440 0.840 1.296 0.840
+[2,] 0.840 1.960 0.168 1.568
+[3,] 1.296 0.168 1.440 0.420
+[4,] 0.840 1.568 0.420 1.960
+
+NOTE: n is number in *each* group
+
+> ## equivalent: known SDs and correlation rho
+> power.mpe.known.var(K = 4, n = 60,delta = c(0.5, 0.75, 0.5, 0.75),
++                     SD = c(1.2, 1.4, 1.2, 1.4), 
++                     rho = c(0.5, 0.9, 0.5, 0.1, 0.8, 0.25))
+
+ Power calculation for multiple co-primary endpoints (covariance known) 
+
+              n = 60
+          delta = 0.50, 0.75, 0.50, 0.75
+             SD = 1.2, 1.4, 1.2, 1.4
+            rho = 0.50, 0.90, 0.50, 0.10, 0.80, 0.25
+      sig.level = 0.05
+          power = 0.6208335
+
+Sigma =
+      [,1]  [,2]  [,3]  [,4]
+[1,] 1.440 0.840 1.296 0.840
+[2,] 0.840 1.960 0.168 1.568
+[3,] 1.296 0.168 1.440 0.420
+[4,] 0.840 1.568 0.420 1.960
+
+NOTE: n is number in *each* group
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("power.mpe.unknown.var")
+> ### * power.mpe.unknown.var
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: power.mpe.unknown.var
+> ### Title: Multiple Co-Primary Endpoints with Unknown Covariance
+> ### Aliases: power.mpe.unknown.var
+> ### Keywords: htest multivariate
+> 
+> ### ** Examples
+> 
+> ## compute power
+> ## Not run: 
+> ##D power.mpe.unknown.var(K = 2, n = 20, delta = c(1,1), Sigma = diag(c(1,1)))
+> ##D 
+> ##D ## To compute sample size, first assume covariance as known
+> ##D power.mpe.known.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
+> ##D                   sig.level = 0.025)
+> ##D 
+> ##D ## The value of n, which is 51, is used as n.min and n.max must be larger
+> ##D ## then n.min so we try 60.
+> ##D power.mpe.unknown.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
+> ##D                   sig.level = 0.025, n.min = 51, n.max = 60)
+> ##D 
+> ##D ## More complex example with unknown covariance matrix assumed to be
+> ##D Sigma <- matrix(c(1.440, 0.840, 1.296, 0.840,
+> ##D                   0.840, 1.960, 0.168, 1.568,
+> ##D                   1.296, 0.168, 1.440, 0.420,
+> ##D                   0.840, 1.568, 0.420, 1.960), ncol = 4)
+> ##D ## compute power
+> ##D power.mpe.unknown.var(K = 4, n = 90, delta = c(0.5, 0.75, 0.5, 0.75), Sigma = Sigma)
+> ##D ## equivalent: unknown SDs and correlation rho
+> ##D power.mpe.unknown.var(K = 4, n = 90, delta = c(0.5, 0.75, 0.5, 0.75),
+> ##D                       SD = c(1.2, 1.4, 1.2, 1.4),
+> ##D                       rho = c(0.5, 0.9, 0.5, 0.1, 0.8, 0.25))
+> ## End(Not run)
+> 
+> 
+> cleanEx()
 > nameEx("power.nb.test")
 > ### * power.nb.test
 > 
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: power.nb.test
-> ### Title: Power calculation for comparing two negative binomial rates
+> ### Title: Power Calculation for Comparing Two Negative Binomial Rates
 > ### Aliases: power.nb.test
 > ### Keywords: htest
 > 
@@ -952,7 +1789,7 @@ NOTE: n = total sample size
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: power.welch.t.test
-> ### Title: Power calculations for two sample Welch t test
+> ### Title: Power Calculations for Two-sample Welch t Test
 > ### Aliases: power.welch.t.test
 > ### Keywords: htest
 > 
@@ -1022,13 +1859,85 @@ NOTE: n is number in *each* group
 > 
 > 
 > cleanEx()
+> nameEx("print.power.mpe.test")
+> ### * print.power.mpe.test
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: print.power.mpe.test
+> ### Title: Print Methods for Hypothesis Tests, Sample size and Power
+> ###   Calculations
+> ### Aliases: print.power.mpe.test
+> ### Keywords: htest power.htest
+> 
+> ### ** Examples
+> 
+> (pkv <- power.mpe.known.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
++                             sig.level = 0.025))
+
+ Power calculation for multiple co-primary endpoints (covariance known) 
+
+              n = 51.61514
+          delta = 1, 1
+             SD = 1.414214, 1.414214
+            rho = 0
+      sig.level = 0.025
+          power = 0.9
+
+Sigma =
+     [,1] [,2]
+[1,]    2    0
+[2,]    0    2
+
+NOTE: n is number in *each* group
+
+> print(pkv, digits =  4) # using less digits than default
+
+ Power calculation for multiple co-primary endpoints (covariance known) 
+
+              n = 51.62
+          delta = 1, 1
+             SD = 1.414, 1.414
+            rho = 0
+      sig.level = 0.025
+          power = 0.9
+
+Sigma =
+     [,1] [,2]
+[1,]    2    0
+[2,]    0    2
+
+NOTE: n is number in *each* group
+
+> print(pkv, digits = 12) # using more digits than default
+
+ Power calculation for multiple co-primary endpoints (covariance known) 
+
+              n = 51.6151370364
+          delta = 1, 1
+             SD = 1.41421356237, 1.41421356237
+            rho = 0
+      sig.level = 0.025
+          power = 0.9
+
+Sigma =
+     [,1] [,2]
+[1,]    2    0
+[2,]    0    2
+
+NOTE: n is number in *each* group
+
+> 
+> 
+> 
+> cleanEx()
 > nameEx("qqunifSimPower")
 > ### * qqunifSimPower
 > 
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: qqunif
-> ### Title: qq - Plots for Uniform Distribution
+> ### Title: qq-Plots for Uniform Distribution
 > ### Aliases: qqunif qqunif.default qqunif.sim.power.ttest
 > ###   qqunif.sim.power.wtest
 > ### Keywords: hplot
@@ -1037,77 +1946,17 @@ NOTE: n is number in *each* group
 > 
 > ## default
 > qqunif(runif(100))
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
 > 
 > ## visualization of empirical power and type-I-error
 > res1 <- sim.power.t.test(nx = 5, rx = rnorm, rx.H0 = rnorm, 
 +                         ny = 10, ry = function(x) rnorm(x, mean = 3, sd = 3), 
 +                         ry.H0 = function(x) rnorm(x, sd = 3))
 > qqunif(res1, alpha = 0.1)
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
 > 
 > res2 <- sim.power.wilcox.test(nx = 6, rx = rnorm, rx.H0 = rnorm,
 +                       ny = 6, ry = function(x) rnorm(x, mean = 2), 
 +                       ry.H0 = rnorm)
 > qqunif(res2)
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
-Warning: The following aesthetics were dropped during statistical transformation: sample
-ℹ This can happen when ggplot fails to infer the correct grouping structure in
-  the data.
-ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-  variable into a factor?
 > 
 > 
 > 
@@ -1721,6 +2570,82 @@ emp.type.I.error = 0.0406
 > 
 > 
 > cleanEx()
+> nameEx("ssize.auc.ci")
+> ### * ssize.auc.ci
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ssize.auc.ci
+> ### Title: Sample Size Calculations for AUC
+> ### Aliases: ssize.auc.ci
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+> ## compute n
+> ssize.auc.ci(AUC = 0.9, delta = 0.05, power = 0.8)
+
+     
+
+            AUC = 0.9
+              n = 126.4292
+             n1 = 126.4292
+          delta = 0.05
+      sig.level = 0.05
+          power = 0.8
+           prev = 0.5
+
+NOTE: n is number of cases, n1 is number of controls
+
+> ## compute delta
+> ssize.auc.ci(AUC = 0.9, n = 254, power = 0.8)
+
+     
+
+            AUC = 0.9
+              n = 127
+             n1 = 127
+          delta = 0.04987028
+      sig.level = 0.05
+          power = 0.8
+           prev = 0.5
+
+NOTE: n is number of cases, n1 is number of controls
+
+> ## compute power
+> ssize.auc.ci(AUC = 0.9, n = 254, delta = 0.05)
+
+     
+
+            AUC = 0.9
+              n = 127
+             n1 = 127
+          delta = 0.05
+      sig.level = 0.05
+          power = 0.8016039
+           prev = 0.5
+
+NOTE: n is number of cases, n1 is number of controls
+
+> ## compute sig.level
+> ssize.auc.ci(AUC = 0.9, n = 254, delta = 0.05, power = 0.8, sig.level = NULL)
+
+     
+
+            AUC = 0.9
+              n = 127
+             n1 = 127
+          delta = 0.05
+      sig.level = 0.04942423
+          power = 0.8
+           prev = 0.5
+
+NOTE: n is number of cases, n1 is number of controls
+
+> 
+> 
+> 
+> cleanEx()
 > nameEx("ssize.pcc")
 > ### * ssize.pcc
 > 
@@ -1776,7 +2701,7 @@ NOTE: n1 is number of cases, n2 is number of controls
 > 
 > ### Name: ssize.propCI
 > ### Title: Sample Size Calculation for Confidence Interval of a Proportion
-> ### Aliases: ssize.propCI
+> ### Aliases: ssize.propCI ssize.prop.ci
 > ### Keywords: htest
 > 
 > ### ** Examples
@@ -1862,6 +2787,612 @@ NOTE: Two-sided confidence interval
 > 
 > 
 > cleanEx()
+> nameEx("ssize.reference.range")
+> ### * ssize.reference.range
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ssize.reference.range
+> ### Title: Power Calculations for Two-sample Hsu t Test
+> ### Aliases: ssize.reference.range
+> ### Keywords: htest
+> 
+> ### ** Examples
+> 
+>   ## see Table 1 in Jennen-Steinmetz and Wellek (2005)
+>   ssize.reference.range(delta = 0.03, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 76.75793
+          delta = 0.03
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ## 135 vs 125 (error in Table 1)
+>   ssize.reference.range(delta = 0.03, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 134.2273
+          delta = 0.03
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.03, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 75.23317
+          delta = 0.03
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.03, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 142.7926
+          delta = 0.03
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.025, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 109.4726
+          delta = 0.025
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ssize.reference.range(delta = 0.025, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 195.4125
+          delta = 0.025
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.025, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 108.3358
+          delta = 0.025
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.025, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 205.6213
+          delta = 0.025
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.02, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 170.1423
+          delta = 0.02
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ## 314 vs. 305 (error Table 1?)
+>   ssize.reference.range(delta = 0.02, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 313.6031
+          delta = 0.02
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.02, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 169.2746
+          delta = 0.02
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.02, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 321.2833
+          delta = 0.02
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.015, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 301.617
+          delta = 0.015
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ssize.reference.range(delta = 0.015, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 558.22
+          delta = 0.015
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.015, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 300.9327
+          delta = 0.015
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.015, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 571.1703
+          delta = 0.015
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.01, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 677.7219
+          delta = 0.01
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ssize.reference.range(delta = 0.01, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 1275.296
+          delta = 0.01
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.01, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 677.0985
+          delta = 0.01
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.01, ref.prob = 0.9, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 1285.133
+          delta = 0.01
+       ref.prob = 0.9
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 122.9682
+          delta = 0.015
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 256.5194
+          delta = 0.015
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 119.9662
+          delta = 0.015
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 293.1005
+          delta = 0.015
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.0125, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 175.0131
+          delta = 0.0125
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ssize.reference.range(delta = 0.0125, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 396.2929
+          delta = 0.0125
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.0125, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 172.7514
+          delta = 0.0125
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.0125, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 422.0648
+          delta = 0.0125
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 271.6691
+          delta = 0.01
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 635.2654
+          delta = 0.01
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 269.9241
+          delta = 0.01
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 659.4762
+          delta = 0.01
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.0075, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 481.3139
+          delta = 0.0075
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ssize.reference.range(delta = 0.0075, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 1152.062
+          delta = 0.0075
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.0075, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 479.865
+          delta = 0.0075
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.0075, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 1172.402
+          delta = 0.0075
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   ssize.reference.range(delta = 0.005, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 1080.887
+          delta = 0.005
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact method for normal distribution
+
+>   ssize.reference.range(delta = 0.005, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE)
+
+     Reference range sample size calculation 
+
+              n = 2606.398
+          delta = 0.005
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.005, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 1079.696
+          delta = 0.005
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.005, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE)
+
+     Reference range sample size calculation 
+
+              n = 2637.905
+          delta = 0.005
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = two.sided
+
+NOTE: Approximate non-parametric method
+
+>   
+>   
+>   ## results are equivalent to one-sided reference range with coverage of 
+>   ## 95 percent instead of 90 percent; for example
+>   ssize.reference.range(delta = 0.03, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = TRUE, alternative = "one.sided")
+
+     Reference range sample size calculation 
+
+              n = 76.75793
+          delta = 0.03
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = one.sided
+
+NOTE: Exact method for normal distribution
+
+>   ## 135 vs 125 (error in Table 1)
+>   ssize.reference.range(delta = 0.03, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = TRUE, alternative = "one.sided")
+
+     Reference range sample size calculation 
+
+              n = 134.2273
+          delta = 0.03
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = one.sided
+
+NOTE: Exact non-parametric method
+
+>   ssize.reference.range(delta = 0.03, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "parametric", exact = FALSE, alternative = "one.sided")
+
+     Reference range sample size calculation 
+
+              n = 75.23317
+          delta = 0.03
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = one.sided
+
+NOTE: Approximate method for normal distribution
+
+>   ssize.reference.range(delta = 0.03, ref.prob = 0.95, conf.prob = 0.9, 
++                         method = "nonparametric", exact = FALSE, alternative = "one.sided")
+
+     Reference range sample size calculation 
+
+              n = 142.7926
+          delta = 0.03
+       ref.prob = 0.95
+      conf.prob = 0.9
+    alternative = one.sided
+
+NOTE: Approximate non-parametric method
+
+> 
+> 
+> 
+> 
+> cleanEx()
 > nameEx("volcanoSimPower")
 > ### * volcanoSimPower
 > 
@@ -1886,7 +3417,7 @@ NOTE: Two-sided confidence interval
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  14.541 1.424 16.234 0 0 
+Time elapsed:  6.719 0.483 7.415 0 0 
 > grDevices::dev.off()
 null device 
           1 

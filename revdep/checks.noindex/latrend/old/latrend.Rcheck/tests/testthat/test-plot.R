@@ -1,8 +1,8 @@
-context('plot')
 skip_if_not_installed('ggplot2')
 library('ggplot2')
 rngReset()
 
+# Data.frame ####
 test_that('plotTrajectories.data.frame', {
   p = plotTrajectories(testLongData, response = 'Value')
   expect_true(is.ggplot(p))
@@ -20,6 +20,20 @@ test_that('plotTrajectories.data.frame without response', {
 
 test_that('plotClusterTrajectories.data.frame', {
   p = plotClusterTrajectories(testLongData, response = 'Value', cluster = 'Class')
+  expect_true(is.ggplot(p))
+})
+
+test_that('plotClusterTrajectories.data.frame with labeler', {
+  p = plotClusterTrajectories(
+    testLongData, clusterLabeler = make.clusterPropLabels, response = 'Value', cluster = 'Class'
+  )
+  expect_true(is.ggplot(p))
+})
+
+test_that('plotClusterTrajectories.data.frame with labeler', {
+  p = plotClusterTrajectories(
+    testLongData, clusterLabeler = make.clusterSizeLabels, response = 'Value', cluster = 'Class'
+  )
   expect_true(is.ggplot(p))
 })
 
@@ -60,3 +74,55 @@ test_that('plotClusterTrajectories.data.frame with trajectories = pct', {
     plotClusterTrajectories(testLongData, response = 'Value', cluster = 'Class', trajectories = '-1pct')
   )
 })
+
+# Model-specific ####
+test_that('plotTrajectories.lcModel', {
+  p1 = plotTrajectories(testModel1)
+  expect_true(is.ggplot(p1))
+
+  p3 = plotTrajectories(testModel3)
+  expect_true(is.ggplot(p3))
+})
+
+
+test_that('plotClusterTrajectories.lcModel', {
+  p1 = plotClusterTrajectories(testModel1)
+  expect_true(is.ggplot(p1))
+
+  p3 = plotClusterTrajectories(testModel3)
+  expect_true(is.ggplot(p3))
+})
+
+
+test_that('plotClusterTrajectories.lcModel with labeler', {
+  p1 = plotClusterTrajectories(testModel1, clusterLabeler = make.clusterSizeLabels)
+  expect_true(is.ggplot(p1))
+
+  p3 = plotClusterTrajectories(testModel3, clusterLabeler = make.clusterSizeLabels)
+  expect_true(is.ggplot(p3))
+})
+
+
+test_that('plotClusterTrajectories.lcModel with ordening', {
+  p3 = plotClusterTrajectories(testModel3, clusterOrder = clusterNames(testModel3)[1:2])
+  expect_true(is.ggplot(p3))
+})
+
+
+test_that('plot.lcModel', {
+  p1 = plot(testModel1)
+  expect_true(is.ggplot(p1))
+
+  p3 = plot(testModel3)
+  expect_true(is.ggplot(p3))
+})
+
+
+test_that('plot.lcModel with options', {
+  p1 = plot(testModel1, linewidth = 1)
+  expect_true(is.ggplot(p1))
+
+  p3 = plot(testModel3, alpha = 1)
+  expect_true(is.ggplot(p3))
+})
+

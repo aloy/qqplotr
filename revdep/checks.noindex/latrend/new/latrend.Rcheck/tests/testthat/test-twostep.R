@@ -10,7 +10,7 @@ make.gckm = function(id, response, ...) {
 
 test_that('specify', {
   repfun = function(method, data, ...) {
-    as.data.table(data)[, mean(Value), by = Traj]$V1 %>% cbind()
+    as.data.table(data)[, mean(Value), by = id]$V1 %>% cbind()
   }
   clusfun = function(method, data, repMat, ...) {
     clusters = factor(repMat[,1] > 0, levels = c(F,T), labels = c('Low', 'High'))
@@ -30,7 +30,7 @@ test_that('gckm', {
 })
 
 test_that('gckm through latrendBatch', {
-  method = make.gckm(id = 'Traj', response = 'Value')
+  method = make.gckm(id = 'id', response = 'Value')
   models = latrendBatch(lcMethods(method, nClusters = 1:3), testLongData)
   expect_length(models, 3)
 })

@@ -17,30 +17,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-## Not run: 
-##D library(rstanarm)
-##D library(bayestestR)
-##D library(see)
-##D library(ggplot2)
-##D 
-##D model <- stan_glm(
-##D   Sepal.Length ~ Petal.Width + Species + Sepal.Width,
-##D   data = iris,
-##D   chains = 2, iter = 200
-##D )
-##D 
-##D result <- hdi(model, ci = c(0.5, 0.75, 0.9, 0.95))
-##D data <- data_plot(result, data = model)
-##D 
-##D p <- ggplot(
-##D   data,
-##D   aes(x = x, y = y, height = height, group = y, fill = fill)
-##D ) +
-##D   ggridges::geom_ridgeline_gradient()
-##D 
-##D p
-##D p + add_plot_attributes(data)
-## End(Not run)
+## Don't show: 
+if (require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -74,19 +56,19 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Create a radar/spider chart with ggplot:
-if (require("datawizard") && require("ggplot2")) {
-  data(iris)
-  data <- aggregate(iris[-5], list(Species = iris$Species), mean)
-  data <- data_to_long(
-    data,
-    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
-  )
+library(ggplot2)
 
-  ggplot(data, aes(x = name, y = value, color = Species, group = Species)) +
-    geom_polygon(fill = NA, linewidth = 2) +
-    coord_radar(start = -pi / 4)
-}
+# Create a radar/spider chart with ggplot:
+data(iris)
+data <- aggregate(iris[-5], list(Species = iris$Species), mean)
+data <- datawizard::data_to_long(
+  data,
+  c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+)
+
+ggplot(data, aes(x = name, y = value, color = Species, group = Species)) +
+  geom_polygon(fill = NA, linewidth = 2) +
+  coord_radar(start = -pi / 4)
 
 
 
@@ -98,13 +80,40 @@ flush(stderr()); flush(stdout())
 
 ### Name: data_plot
 ### Title: Prepare objects for plotting or plot objects
-### Aliases: data_plot
+### Aliases: data_plot data_plot.compare_performance
 
 ### ** Examples
 
 ## Don't show: 
-if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
+library(bayestestR)
+library(rstanarm)
+
+model <<- suppressWarnings(stan_glm(
+  Sepal.Length ~ Petal.Width * Species,
+  data = iris,
+  chains = 2, iter = 200, refresh = 0
+))
+
+x <- rope(model, verbose = FALSE)
+plot(x)
+
+x <- hdi(model)
+plot(x) + theme_modern()
+
+x <- p_direction(model, verbose = FALSE)
+plot(x)
+
+model <<- suppressWarnings(stan_glm(
+  mpg ~ wt + gear + cyl + disp,
+  chains = 2,
+  iter = 200,
+  refresh = 0,
+  data = mtcars
+))
+x <- equivalence_test(model, verbose = FALSE)
+plot(x)
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -287,23 +296,6 @@ ggplot(iris, aes(x = Sepal.Length, y = Petal.Width)) +
   geom_from_list(list(geom = "smooth", color = "red")) +
   geom_from_list(list(aes = list(x = "Sepal.Length"), geom = "ggside::geom_xsidedensity")) +
   geom_from_list(list(geom = "ggside::scale_xsidey_continuous", breaks = NULL))
-
-# Example 6 (ggraph) --------------------------
-if (require("tidygraph", quietly = TRUE) &&
-  require("ggraph", quietly = TRUE)) {
-  # Prepare graph
-  nodes <- data.frame(name = c("Dom", "Mattan", "Daniel", "Brenton"))
-  edges <- data.frame(
-    from = c(1, 1, 1, 2, 3, 3, 4, 4, 4),
-    to = c(2, 3, 4, 1, 1, 2, 1, 2, 3)
-  )
-  data <- tidygraph::tbl_graph(nodes = nodes, edges = edges)
-
-  ggraph(data, layout = "kk") +
-    geom_from_list(list(geom = "ggraph::geom_edge_arc")) +
-    geom_from_list(list(geom = "ggraph::geom_node_point", size = 10)) +
-    geom_from_list(list(geom = "ggraph::geom_node_label", aes = list(label = "name")))
-}
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -402,6 +394,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 
 
 
+
 cleanEx()
 nameEx("geom_violinhalf")
 ### * geom_violinhalf
@@ -434,6 +427,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_violinhalf(flip = c(1, 3)) +
   theme_modern() +
   scale_fill_material_d()
+
 
 
 
@@ -562,6 +556,60 @@ plot(result)
 
 
 
+
+cleanEx()
+nameEx("plot.see_check_dag")
+### * plot.see_check_dag
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.see_check_dag
+### Title: Plot method for check DAGs
+### Aliases: plot.see_check_dag
+
+### ** Examples
+
+## Don't show: 
+if (require("ggdag", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+library(performance)
+# incorrect adjustment
+dag <- check_dag(
+  y ~ x + b + c,
+  x ~ b,
+  outcome = "y",
+  exposure = "x"
+)
+dag
+plot(dag)
+
+# plot only model with required adjustments
+plot(dag, which = "required")
+
+# collider-bias?
+dag <- check_dag(
+  y ~ x + c + d,
+  x ~ c + d,
+  b ~ x,
+  b ~ y,
+  outcome = "y",
+  exposure = "x",
+  adjusted = "c"
+)
+plot(dag)
+
+# longer labels, automatic detection of outcome and exposure
+dag <- check_dag(
+  QoL ~ age + education + gender,
+  age ~ education
+)
+plot(dag)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
+
+
+
 cleanEx()
 nameEx("plot.see_check_distribution")
 ### * plot.see_check_distribution
@@ -574,6 +622,17 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+## Don't show: 
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("randomForest")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+library(performance)
+m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+result <- check_distribution(m)
+result
+plot(result)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -589,9 +648,8 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-library(performance)
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
-result <- check_heteroscedasticity(m)
+result <- performance::check_heteroscedasticity(m)
 result
 plot(result, data = m) # data required for pkgdown
 
@@ -610,10 +668,37 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 library(performance)
+
 model <<- lm(len ~ supp + dose, data = ToothGrowth)
 result <- check_homogeneity(model)
 result
 plot(result)
+
+
+
+
+cleanEx()
+nameEx("plot.see_check_model")
+### * plot.see_check_model
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.see_check_model
+### Title: Plot method for checking model assumptions
+### Aliases: plot.see_check_model
+
+### ** Examples
+
+## Don't show: 
+if (require("patchwork")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+library(performance)
+
+model <- lm(qsec ~ drat + wt, data = mtcars)
+plot(check_model(model))
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -630,9 +715,18 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 library(performance)
+
 m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 result <- check_normality(m)
 plot(result)
+
+## Don't show: 
+if (require("qqplotr")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+plot(result, type = "qq", detrend = TRUE)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -672,16 +766,12 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-if (require("insight") &&
-  require("parameters") &&
-  packageVersion("insight") >= "0.13.0") {
-  data(iris)
-  lm1 <- lm(Sepal.Length ~ Species, data = iris)
-  lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
-  lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
-  result <- compare_parameters(lm1, lm2, lm3)
-  plot(result)
-}
+data(iris)
+lm1 <- lm(Sepal.Length ~ Species, data = iris)
+lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
+result <- parameters::compare_parameters(lm1, lm2, lm3)
+plot(result)
 
 
 
@@ -705,6 +795,7 @@ lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
 result <- compare_performance(lm1, lm2, lm3)
 result
 plot(result)
+
 
 
 
@@ -760,7 +851,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("modelbased") && require("rstanarm") && require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (all(insight::check_if_installed(c("marginaleffects", "Formula"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
 ## Don't show: 
 }) # examplesIf
@@ -781,8 +872,14 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
+library(rstanarm)
+library(bayestestR)
+set.seed(123)
+m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
+result <- estimate_density(m)
+plot(result)
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -802,13 +899,13 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("rstanarm") && FALSE) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
 library(rstanarm)
 library(bayestestR)
 set.seed(123)
-m <<- stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0)
-result <- hdi(m)
+m <- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
+result <- bayestestR::hdi(m)
 result
 plot(result)
 ## Don't show: 
@@ -830,12 +927,19 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-if (require("parameters") && require("nFactors")) {
-  data(mtcars)
-  result <- n_factors(mtcars, type = "PCA")
-  result
-  plot(result, type = "line")
-}
+## Don't show: 
+if (require("nFactors")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+data(mtcars)
+result <- parameters::n_factors(mtcars, type = "PCA")
+result
+
+plot(result) # type = "bar" by default
+plot(result, type = "line")
+plot(result, type = "area")
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
 
 
 
@@ -852,8 +956,14 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
+library(rstanarm)
+library(bayestestR)
+set.seed(123)
+m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
+result <- p_direction(m)
+plot(result)
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -895,8 +1005,14 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
+library(rstanarm)
+library(bayestestR)
+set.seed(123)
+m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
+result <- p_significance(m)
+plot(result)
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -916,35 +1032,8 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("brms") && require("metafor")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (require("brms") && require("metafor") && require("RcppEigen") && require("BH")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
-## Not run: 
-##D library(brms)
-##D library(metafor)
-##D data(dat.bcg)
-##D 
-##D dat <- escalc(
-##D   measure = "RR",
-##D   ai = tpos,
-##D   bi = tneg,
-##D   ci = cpos,
-##D   di = cneg,
-##D   data = dat.bcg
-##D )
-##D dat$author <- make.unique(dat$author)
-##D 
-##D # model
-##D set.seed(123)
-##D priors <- c(
-##D   prior(normal(0, 1), class = Intercept),
-##D   prior(cauchy(0, 0.5), class = sd)
-##D )
-##D model <- brm(yi | se(vi) ~ 1 + (1 | author), data = dat)
-##D 
-##D # result
-##D mp <- model_parameters(model)
-##D plot(mp)
-## End(Not run)
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -1012,6 +1101,7 @@ plot(result)
 
 
 
+
 cleanEx()
 nameEx("plot.see_parameters_simulate")
 ### * plot.see_parameters_simulate
@@ -1061,6 +1151,40 @@ plot(result)
 
 
 cleanEx()
+nameEx("plot.see_performance_simres")
+### * plot.see_performance_simres
+
+flush(stderr()); flush(stdout())
+
+### Name: plot.see_performance_simres
+### Title: Plot method for check model for (non-)normality of residuals
+### Aliases: plot.see_performance_simres
+
+### ** Examples
+
+## Don't show: 
+if (require("glmmTMB") && require("qqplotr") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+## End(Don't show)
+data(Salamanders, package = "glmmTMB")
+model <- glmmTMB::glmmTMB(
+  count ~ mined + spp + (1 | site),
+  family = poisson(),
+  data = Salamanders
+)
+simulated_residuals <- performance::simulate_residuals(model)
+plot(simulated_residuals)
+
+# or
+simulated_residuals <- performance::simulate_residuals(model)
+result <- performance::check_residuals(simulated_residuals)
+plot(result)
+## Don't show: 
+}) # examplesIf
+## End(Don't show)
+
+
+
+cleanEx()
 nameEx("plot.see_point_estimate")
 ### * plot.see_point_estimate
 
@@ -1073,8 +1197,15 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
+library(rstanarm)
+library(bayestestR)
+set.seed(123)
+m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
+result <- point_estimate(m, centrality = "median")
+result
+plot(result)
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -1094,8 +1225,15 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
+library(rstanarm)
+library(bayestestR)
+set.seed(123)
+m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
+result <- rope(m)
+result
+plot(result)
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -1115,8 +1253,15 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (identical(Sys.getenv("NOT_CRAN"), "true") && require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
+library(rstanarm)
+library(bayestestR)
+set.seed(123)
+m <<- suppressWarnings(stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0))
+result <- si(m, verbose = FALSE)
+result
+plot(result)
 ## Don't show: 
 }) # examplesIf
 ## End(Don't show)
@@ -1136,7 +1281,7 @@ flush(stderr()); flush(stdout())
 ### ** Examples
 
 ## Don't show: 
-if (requireNamespace("patchwork", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
+if (require("patchwork", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)({ # examplesIf
 ## End(Don't show)
 library(ggplot2)
 library(see)
@@ -1174,10 +1319,21 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-if (require("performance")) {
-  model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
-  check_posterior_predictions(model)
-}
+library(performance)
+
+model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
+check_predictions(model)
+
+# dot-plot style for count-models
+d <- iris
+d$poisson_var <- rpois(150, 1)
+model <- glm(
+  poisson_var ~ Species + Petal.Length + Petal.Width,
+  data = d,
+  family = poisson()
+)
+out <- check_predictions(model)
+plot(out, type = "discrete_dots")
 
 
 
@@ -1261,17 +1417,17 @@ library(see)
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_boxplot() +
   theme_modern() +
-  scale_fill_flat_d()
+  scale_fill_flat()
 
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_violin() +
   theme_modern() +
-  scale_fill_flat_d(palette = "ice")
+  scale_fill_flat(palette = "ice")
 
 ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
   geom_point() +
   theme_modern() +
-  scale_color_flat_c(palette = "rainbow")
+  scale_color_flat(discrete = FALSE)
 
 
 
@@ -1296,17 +1452,17 @@ library(see)
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_boxplot() +
   theme_modern() +
-  scale_fill_material_d()
+  scale_fill_material()
 
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_violin() +
   theme_modern() +
-  scale_fill_material_d(palette = "ice")
+  scale_fill_material(palette = "ice")
 
 ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
   geom_point() +
   theme_modern() +
-  scale_color_material_c(palette = "rainbow")
+  scale_color_material(discrete = FALSE)
 
 
 
@@ -1330,17 +1486,17 @@ library(see)
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_boxplot() +
   theme_modern() +
-  scale_fill_metro_d()
+  scale_fill_metro()
 
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_violin() +
   theme_modern() +
-  scale_fill_metro_d(palette = "ice")
+  scale_fill_metro(palette = "ice")
 
 ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
   geom_point() +
   theme_modern() +
-  scale_color_metro_c(palette = "rainbow")
+  scale_color_metro(discrete = FALSE)
 
 
 
@@ -1353,7 +1509,7 @@ flush(stderr()); flush(stdout())
 ### Name: scale_color_okabeito
 ### Title: Okabe-Ito color palette
 ### Aliases: scale_color_okabeito scale_fill_okabeito scale_colour_okabeito
-###   scale_fill_oi
+###   scale_colour_oi scale_color_oi scale_fill_oi
 
 ### ** Examples
 
@@ -1369,6 +1525,12 @@ ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_violin() +
   theme_modern() +
   scale_fill_oi(palette = "black_first")
+
+# for the original brighter yellow color suggested by Okabe and Ito
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violin() +
+  theme_modern() +
+  scale_fill_oi(palette = "full")
 
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_violin() +
@@ -1426,7 +1588,7 @@ library(see)
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_boxplot() +
   theme_modern() +
-  scale_fill_see_d()
+  scale_fill_see()
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
   geom_point() +
@@ -1436,7 +1598,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
 ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
   geom_point() +
   theme_modern() +
-  scale_color_see_c(palette = "rainbow")
+  scale_color_see(discrete = FALSE)
 
 
 
@@ -1460,17 +1622,17 @@ library(see)
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_boxplot() +
   theme_modern() +
-  scale_fill_social_d()
+  scale_fill_social()
 
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   geom_violin() +
   theme_modern() +
-  scale_fill_social_d(palette = "ice")
+  scale_fill_social(palette = "ice")
 
 ggplot(iris, aes(x = Petal.Length, y = Petal.Width, color = Sepal.Length)) +
   geom_point() +
   theme_modern() +
-  scale_color_social_c(palette = "rainbow")
+  scale_color_social(discrete = FALSE)
 
 
 
@@ -1532,6 +1694,30 @@ ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length)) +
 
 
 cleanEx()
+nameEx("theme_azurelight")
+### * theme_azurelight
+
+flush(stderr()); flush(stdout())
+
+### Name: theme_azurelight
+### Title: Azurelight theme
+### Aliases: theme_azurelight
+
+### ** Examples
+
+library(ggplot2)
+library(see)
+
+data(iris)
+
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point2(size = 2.5) +
+  scale_color_social() +
+  theme_azurelight()
+
+
+
+cleanEx()
 nameEx("theme_blackboard")
 ### * theme_blackboard
 
@@ -1547,7 +1733,7 @@ library(ggplot2)
 library(see)
 
 ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length)) +
-  geom_point(color = "white") +
+  geom_point(color = see_colors("lime")) +
   theme_blackboard()
 
 
@@ -1568,7 +1754,8 @@ library(ggplot2)
 library(see)
 
 ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length)) +
-  geom_point(color = "white") +
+  geom_point() +
+  scale_color_metro() +
   theme_lucid()
 
 
@@ -1590,7 +1777,14 @@ library(see)
 
 ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
   geom_point() +
+  scale_color_see() +
   theme_modern()
+
+# for a slightly better orientation, tick marks can be added
+ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
+  geom_point() +
+  scale_color_see() +
+  theme_modern(show.ticks = TRUE)
 
 
 
@@ -1606,23 +1800,26 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-if (require("ggplot2") && require("poorman")) {
-  data <- iris[-5] %>%
-    aggregate(list(Species = iris$Species), mean) %>%
-    datawizard::reshape_longer(c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"))
+library(ggplot2)
 
-  data %>%
-    ggplot(aes(
-      x = name,
-      y = value,
-      color = Species,
-      group = Species,
-      fill = Species
-    )) +
-    geom_polygon(linewidth = 1, alpha = 0.1) +
-    coord_radar() +
-    theme_radar()
-}
+data <- datawizard::reshape_longer(
+  aggregate(iris[-5], list(Species = iris$Species), mean),
+  c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+)
+
+ggplot(
+  data,
+  aes(
+    x = name,
+    y = value,
+    color = Species,
+    group = Species,
+    fill = Species
+  )
+) +
+  geom_polygon(linewidth = 1, alpha = 0.1) +
+  coord_radar() +
+  theme_radar()
 
 
 

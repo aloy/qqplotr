@@ -9,7 +9,7 @@ library(akmedoids)
 # Generate data ####
 data(traj, package = 'akmedoids')
 capture.output({
-  impTraj = akmedoids::data_imputation(traj, id_field = TRUE, method = 2, replace_with = 1, fill_zeros = FALSE)
+  impTraj = data_imputation(traj, id_field = TRUE, method = 2, replace_with = 1, fill_zeros = FALSE)
 })
 trajMat = as.matrix(impTraj$CompleteData[-1])
 rownames(trajMat) = impTraj$CompleteData[,1]

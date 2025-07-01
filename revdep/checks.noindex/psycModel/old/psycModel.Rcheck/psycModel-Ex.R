@@ -310,8 +310,8 @@ flush(stderr()); flush(stdout())
 
 fit <- lm_model(
   data = iris,
-  response_variable = "Sepal.Length",
-  predictor_variable = tidyselect::everything(),
+  response_variable = Sepal.Length,
+  predictor_variable = dplyr::everything(),
   two_way_interaction_factor = c(Sepal.Width, Species)
 )
 
@@ -332,13 +332,33 @@ flush(stderr()); flush(stdout())
 fit <- lm_model_summary(
   data = iris,
   response_variable = "Sepal.Length",
-  predictor_variable = tidyselect::everything(),
+  predictor_variable = dplyr::everything(),
   two_way_interaction_factor = c(Sepal.Width, Species),
   interaction_plot = FALSE, # you can also request the interaction plot
   simple_slope = FALSE, # you can also request simple slope estimate 
   assumption_plot = FALSE, # you can also request assumption plot
   streamline = FALSE #you can change this to get the least amount of info
 )
+
+
+
+cleanEx()
+nameEx("lm_model_table")
+### * lm_model_table
+
+flush(stderr()); flush(stdout())
+
+### Name: lm_model_table
+### Title: Linear Regression Model Table Generate tables with multiple
+###   response and predictor variable (only 'lm' models are supported)
+### Aliases: lm_model_table
+
+### ** Examples
+
+
+lm_model_table(data = iris, 
+            response_variable = c(Sepal.Length,Sepal.Width),
+            predictor_variable = Petal.Width)
 
 
 
@@ -502,7 +522,7 @@ lm_fit <- lm(Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width,
   data = iris
 )
 
-model_summary(lm_fit, assumption_plot = TRUE)
+model_summary(lm_fit)
 
 
 
@@ -556,7 +576,7 @@ flush(stderr()); flush(stdout())
 fit <- lm_model(
   data = iris,
   response_variable = Sepal.Length,
-  predictor_variable = tidyselect::everything(),
+  predictor_variable = dplyr::everything(),
   three_way_interaction_factor = c(Sepal.Width, Petal.Width, Petal.Length)
 )
 

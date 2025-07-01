@@ -30,14 +30,109 @@ hist(res2)
 
 
 cleanEx()
+nameEx("power.ancova")
+### * power.ancova
+
+flush(stderr()); flush(stdout())
+
+### Name: power.ancova
+### Title: Power Calculation for ANCOVA
+### Aliases: power.ancova
+### Keywords: htest
+
+### ** Examples
+
+## Default matrix of contrasts
+## 3 groups
+cbind(rep(1,2), -diag(2))
+## 4 groups
+cbind(rep(1,3), -diag(3))
+
+## Table 1 in Shieh (2020)
+power.ancova(mu=c(400, 450, 500), var = 9900, power = 0.8)
+power.ancova(n = rep(63/3, 3), mu=c(400, 450, 500), var = 9900)
+power.ancova(mu=c(400, 450, 500), var = 9900, power = 0.8, nr.covs = 10)
+power.ancova(n = rep(72/3, 3), mu=c(400, 450, 500), var = 9900, nr.covs = 10)
+
+## Table 2 in Shieh (2020)
+power.ancova(mu=c(400, 450, 500), var = 7500, power = 0.8)
+power.ancova(n = rep(48/3, 3), mu=c(400, 450, 500), var = 7500)
+power.ancova(mu=c(400, 450, 500), var = 7500, power = 0.8, nr.covs = 10)
+power.ancova(n = rep(60/3, 3), mu=c(400, 450, 500), var = 7500, nr.covs = 10)
+
+## Table 3 in Shieh (2020)
+power.ancova(mu=c(400, 450, 500), var = 1900, power = 0.8)
+power.ancova(n = rep(18/3, 3), mu=c(400, 450, 500), var = 1900)
+power.ancova(mu=c(400, 450, 500), var = 1900, power = 0.8, nr.covs = 10)
+power.ancova(n = rep(27/3, 3), mu=c(400, 450, 500), var = 1900, nr.covs = 10)
+
+## ANOVA approach for Table 1-3
+power.anova.test(groups = 3, between.var = var(c(400, 450, 500)), 
+                 within.var = 10000, power = 0.8)
+power.anova.test(n = 63/3, groups = 3, between.var = var(c(400, 450, 500)), 
+                 within.var = 10000)
+
+## Table 4 in Shieh (2020)
+power.ancova(mu=c(410, 450, 490), var = 9900, power = 0.8)
+power.ancova(n = rep(96/3, 3), mu=c(410, 450, 490), var = 9900)
+power.ancova(mu=c(410, 450, 490), var = 9900, power = 0.8, nr.covs = 10)
+power.ancova(n = rep(105/3, 3), mu=c(410, 450, 490), var = 9900, nr.covs = 10)
+
+## Table 5 in Shieh (2020)
+power.ancova(mu=c(410, 450, 490), var = 7500, power = 0.8)
+power.ancova(n = rep(72/3, 3), mu=c(410, 450, 490), var = 7500)
+power.ancova(mu=c(410, 450, 490), var = 7500, power = 0.8, nr.covs = 10)
+power.ancova(n = rep(84/3, 3), mu=c(410, 450, 490), var = 7500, nr.covs = 10)
+
+## Table 6 in Shieh (2020)
+power.ancova(mu=c(410, 450, 490), var = 1900, power = 0.8)
+power.ancova(n = rep(24/3, 3), mu=c(410, 450, 490), var = 1900)
+power.ancova(mu=c(410, 450, 490), var = 1900, power = 0.8, nr.covs = 10)
+power.ancova(n = rep(33/3, 3), mu=c(410, 450, 490), var = 1900, nr.covs = 10)
+
+## ANOVA approach for Table 4-6
+power.anova.test(groups = 3, between.var = var(c(410, 450, 490)), 
+                 within.var = 10000, power = 0.8)
+power.anova.test(n = 96/3, groups = 3, between.var = var(c(410, 450, 490)), 
+                 within.var = 10000)
+
+###############################################################################
+## Example from Maxwell and Delaney (2004) according to Shieh (2020)
+###############################################################################
+## ANCOVA (balanced design)
+power.ancova(n = rep(30/3, 3), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898)
+power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8)
+power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.9)
+
+## ANOVA
+power.anova.test(n = 30/3, groups = 3, between.var = var(c(7.5366, 11.9849, 13.9785)), 
+                 within.var = 29.0898)
+power.anova.test(groups = 3, between.var = var(c(7.5366, 11.9849, 13.9785)), 
+                 within.var = 29.0898, power = 0.8)
+power.anova.test(groups = 3, between.var = var(c(7.5366, 11.9849, 13.9785)), 
+                 within.var = 29.0898, power = 0.9)
+                 
+## ANCOVA - imbalanced design
+power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8, 
+             group.ratio = c(1, 1.25, 1.5))
+power.ancova(n = c(13, 16, 19), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898,  
+             group.ratio = c(1, 1.25, 1.5))
+power.ancova(mu=c(7.5366, 11.9849, 13.9785), var = 29.0898, power = 0.8, 
+             group.ratio = c(1, 0.8, 2/3))
+power.ancova(n = c(17, 14, 12), mu=c(7.5366, 11.9849, 13.9785), var = 29.0898,  
+             group.ratio = c(1, 0.8, 2/3))
+
+
+
+cleanEx()
 nameEx("power.diagnostic.test")
 ### * power.diagnostic.test
 
 flush(stderr()); flush(stdout())
 
 ### Name: power.diagnostic.test
-### Title: Power calculations for a diagnostic test
-### Aliases: power.diagnostic.test
+### Title: Power Calculations for Diagnostic Tests
+### Aliases: power.diagnostic.test ssize.sens.ci ssize.spec.ci
 ### Keywords: htest
 
 ### ** Examples
@@ -60,6 +155,12 @@ power.diagnostic.test(sens = 0.95, delta = 0.1, n = 102, power = 0.95,
 ## yields 102 not 93!
 power.diagnostic.test(sens = 0.95, delta = 0.1, power = 0.95)
 
+## function only for sensitivity
+ssize.sens.ci(sens = 0.99, delta = 0.14, power = 0.95) # 40
+
+## function only for specificity
+ssize.spec.ci(spec = 0.99, delta = 0.13, power = 0.95) # 43
+
 
 
 cleanEx()
@@ -69,7 +170,7 @@ nameEx("power.hsu.t.test")
 flush(stderr()); flush(stdout())
 
 ### Name: power.hsu.t.test
-### Title: Power calculations for two sample Hsu t test
+### Title: Power Calculations for Two-sample Hsu t Test
 ### Aliases: power.hsu.t.test
 ### Keywords: htest
 
@@ -88,13 +189,120 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("power.mpe.atleast.one")
+### * power.mpe.atleast.one
+
+flush(stderr()); flush(stdout())
+
+### Name: power.mpe.atleast.one
+### Title: Power for at least One Endpoint with Known Covariance
+### Aliases: power.mpe.atleast.one
+### Keywords: multivariate
+
+### ** Examples
+
+## compute power
+power.mpe.atleast.one(K = 2, delta = c(0.2,0.2), Sigma = diag(c(1,1)), power = 0.8)
+
+## compute sample size
+power.mpe.atleast.one(K = 2, delta = c(0.2,0.2), Sigma = diag(c(2,2)), power = 0.9)
+
+## known covariance matrix
+Sigma <- matrix(c(1.440, 0.840, 1.296, 0.840,
+                  0.840, 1.960, 0.168, 1.568,
+                  1.296, 0.168, 1.440, 0.420,
+                  0.840, 1.568, 0.420, 1.960), ncol = 4)
+## compute power
+power.mpe.atleast.one(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75), Sigma = Sigma)
+## equivalent: known SDs and correlation rho
+power.mpe.atleast.one(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75),
+                      SD = c(1.2, 1.4, 1.2, 1.4), 
+                      rho = c(0.5, 0.9, 0.5, 0.1, 0.8, 0.25))
+
+
+
+cleanEx()
+nameEx("power.mpe.known.var")
+### * power.mpe.known.var
+
+flush(stderr()); flush(stdout())
+
+### Name: power.mpe.known.var
+### Title: Multiple Co-Primary Endpoints with Known Covariance
+### Aliases: power.mpe.known.var
+### Keywords: htest multivariate
+
+### ** Examples
+
+## compute power
+power.mpe.known.var(K = 2, n = 20, delta = c(1,1), Sigma = diag(c(1,1)))
+
+## compute sample size
+power.mpe.known.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
+                    sig.level = 0.025)
+
+## known covariance matrix
+Sigma <- matrix(c(1.440, 0.840, 1.296, 0.840,
+                  0.840, 1.960, 0.168, 1.568,
+                  1.296, 0.168, 1.440, 0.420,
+                  0.840, 1.568, 0.420, 1.960), ncol = 4)
+## compute power
+power.mpe.known.var(K = 4, n = 60, delta = c(0.5, 0.75, 0.5, 0.75), Sigma = Sigma)
+## equivalent: known SDs and correlation rho
+power.mpe.known.var(K = 4, n = 60,delta = c(0.5, 0.75, 0.5, 0.75),
+                    SD = c(1.2, 1.4, 1.2, 1.4), 
+                    rho = c(0.5, 0.9, 0.5, 0.1, 0.8, 0.25))
+
+
+
+cleanEx()
+nameEx("power.mpe.unknown.var")
+### * power.mpe.unknown.var
+
+flush(stderr()); flush(stdout())
+
+### Name: power.mpe.unknown.var
+### Title: Multiple Co-Primary Endpoints with Unknown Covariance
+### Aliases: power.mpe.unknown.var
+### Keywords: htest multivariate
+
+### ** Examples
+
+## compute power
+## Not run: 
+##D power.mpe.unknown.var(K = 2, n = 20, delta = c(1,1), Sigma = diag(c(1,1)))
+##D 
+##D ## To compute sample size, first assume covariance as known
+##D power.mpe.known.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
+##D                   sig.level = 0.025)
+##D 
+##D ## The value of n, which is 51, is used as n.min and n.max must be larger
+##D ## then n.min so we try 60.
+##D power.mpe.unknown.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
+##D                   sig.level = 0.025, n.min = 51, n.max = 60)
+##D 
+##D ## More complex example with unknown covariance matrix assumed to be
+##D Sigma <- matrix(c(1.440, 0.840, 1.296, 0.840,
+##D                   0.840, 1.960, 0.168, 1.568,
+##D                   1.296, 0.168, 1.440, 0.420,
+##D                   0.840, 1.568, 0.420, 1.960), ncol = 4)
+##D ## compute power
+##D power.mpe.unknown.var(K = 4, n = 90, delta = c(0.5, 0.75, 0.5, 0.75), Sigma = Sigma)
+##D ## equivalent: unknown SDs and correlation rho
+##D power.mpe.unknown.var(K = 4, n = 90, delta = c(0.5, 0.75, 0.5, 0.75),
+##D                       SD = c(1.2, 1.4, 1.2, 1.4),
+##D                       rho = c(0.5, 0.9, 0.5, 0.1, 0.8, 0.25))
+## End(Not run)
+
+
+cleanEx()
 nameEx("power.nb.test")
 ### * power.nb.test
 
 flush(stderr()); flush(stdout())
 
 ### Name: power.nb.test
-### Title: Power calculation for comparing two negative binomial rates
+### Title: Power Calculation for Comparing Two Negative Binomial Rates
 ### Aliases: power.nb.test
 ### Keywords: htest
 
@@ -194,7 +402,7 @@ nameEx("power.welch.t.test")
 flush(stderr()); flush(stdout())
 
 ### Name: power.welch.t.test
-### Title: Power calculations for two sample Welch t test
+### Title: Power Calculations for Two-sample Welch t Test
 ### Aliases: power.welch.t.test
 ### Keywords: htest
 
@@ -212,13 +420,34 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("print.power.mpe.test")
+### * print.power.mpe.test
+
+flush(stderr()); flush(stdout())
+
+### Name: print.power.mpe.test
+### Title: Print Methods for Hypothesis Tests, Sample size and Power
+###   Calculations
+### Aliases: print.power.mpe.test
+### Keywords: htest power.htest
+
+### ** Examples
+
+(pkv <- power.mpe.known.var(K = 2, delta = c(1,1), Sigma = diag(c(2,2)), power = 0.9,
+                            sig.level = 0.025))
+print(pkv, digits =  4) # using less digits than default
+print(pkv, digits = 12) # using more digits than default
+
+
+
+cleanEx()
 nameEx("qqunifSimPower")
 ### * qqunifSimPower
 
 flush(stderr()); flush(stdout())
 
 ### Name: qqunif
-### Title: qq - Plots for Uniform Distribution
+### Title: qq-Plots for Uniform Distribution
 ### Aliases: qqunif qqunif.default qqunif.sim.power.ttest
 ###   qqunif.sim.power.wtest
 ### Keywords: hplot
@@ -361,6 +590,30 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("ssize.auc.ci")
+### * ssize.auc.ci
+
+flush(stderr()); flush(stdout())
+
+### Name: ssize.auc.ci
+### Title: Sample Size Calculations for AUC
+### Aliases: ssize.auc.ci
+### Keywords: htest
+
+### ** Examples
+
+## compute n
+ssize.auc.ci(AUC = 0.9, delta = 0.05, power = 0.8)
+## compute delta
+ssize.auc.ci(AUC = 0.9, n = 254, power = 0.8)
+## compute power
+ssize.auc.ci(AUC = 0.9, n = 254, delta = 0.05)
+## compute sig.level
+ssize.auc.ci(AUC = 0.9, n = 254, delta = 0.05, power = 0.8, sig.level = NULL)
+
+
+
+cleanEx()
 nameEx("ssize.pcc")
 ### * ssize.pcc
 
@@ -394,7 +647,7 @@ flush(stderr()); flush(stdout())
 
 ### Name: ssize.propCI
 ### Title: Sample Size Calculation for Confidence Interval of a Proportion
-### Aliases: ssize.propCI
+### Aliases: ssize.propCI ssize.prop.ci
 ### Keywords: htest
 
 ### ** Examples
@@ -406,6 +659,128 @@ ssize.propCI(prop = 0.3, width = 0.1, method = "jeffreys")
 ssize.propCI(prop = 0.3, width = 0.1, method = "clopper-pearson")
 ssize.propCI(prop = 0.3, width = 0.1, method = "wilson")
 ssize.propCI(prop = 0.3, width = 0.1, method = "agresti-coull")
+
+
+
+cleanEx()
+nameEx("ssize.reference.range")
+### * ssize.reference.range
+
+flush(stderr()); flush(stdout())
+
+### Name: ssize.reference.range
+### Title: Power Calculations for Two-sample Hsu t Test
+### Aliases: ssize.reference.range
+### Keywords: htest
+
+### ** Examples
+
+  ## see Table 1 in Jennen-Steinmetz and Wellek (2005)
+  ssize.reference.range(delta = 0.03, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ## 135 vs 125 (error in Table 1)
+  ssize.reference.range(delta = 0.03, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.03, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.03, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.025, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ssize.reference.range(delta = 0.025, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.025, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.025, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.02, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ## 314 vs. 305 (error Table 1?)
+  ssize.reference.range(delta = 0.02, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.02, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.02, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.015, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ssize.reference.range(delta = 0.015, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.015, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.015, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.01, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ssize.reference.range(delta = 0.01, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.01, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.01, ref.prob = 0.9, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.015, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.0125, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ssize.reference.range(delta = 0.0125, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.0125, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.0125, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.01, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.0075, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ssize.reference.range(delta = 0.0075, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.0075, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.0075, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  ssize.reference.range(delta = 0.005, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE)
+  ssize.reference.range(delta = 0.005, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE)
+  ssize.reference.range(delta = 0.005, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE)
+  ssize.reference.range(delta = 0.005, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE)
+  
+  
+  ## results are equivalent to one-sided reference range with coverage of 
+  ## 95 percent instead of 90 percent; for example
+  ssize.reference.range(delta = 0.03, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = TRUE, alternative = "one.sided")
+  ## 135 vs 125 (error in Table 1)
+  ssize.reference.range(delta = 0.03, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = TRUE, alternative = "one.sided")
+  ssize.reference.range(delta = 0.03, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "parametric", exact = FALSE, alternative = "one.sided")
+  ssize.reference.range(delta = 0.03, ref.prob = 0.95, conf.prob = 0.9, 
+                        method = "nonparametric", exact = FALSE, alternative = "one.sided")
+
 
 
 

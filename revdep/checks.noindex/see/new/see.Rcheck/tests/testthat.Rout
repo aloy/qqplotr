@@ -1,7 +1,7 @@
 
-R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin17.0 (64-bit)
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -15,42 +15,34 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> # This file is part of the standard setup for testthat.
-> # It is recommended that you do not modify it.
-> #
-> # Where should you do additional test configuration?
-> # Learn more about the roles of various files in:
-> # * https://r-pkgs.org/tests.html
-> # * https://testthat.r-lib.org/reference/test_package.html#special-files
-> 
-> library(testthat)
-> library(see)
-> 
-> # easystats
-> library(bayestestR)
-> library(effectsize)
-> library(insight)
-> library(correlation)
-> library(datawizard)
-> library(performance)
-> library(parameters)
-> 
-> # third-party
-> library(ggplot2)
-> 
-> test_check("see")
-Variable `Component` is not in your data frame :/
-No variable was specified for contrast estimation. Selecting `contrast = "Species"`.
-We selected `at = c("Species")`.
-Possible multicollinearity between Petal.Width:Speciesversicolor and Petal.Width (r = 0.87), Petal.Width:Speciesversicolor and Speciesversicolor (r = 0.72), Petal.Width:Speciesvirginica and Petal.Width:Speciesversicolor (r = 0.79). This might lead to inappropriate results. See 'Details' in '?rope'.
-Sampling priors, please wait...
-[ FAIL 0 | WARN 10 | SKIP 8 | PASS 32 ]
+> # graphics engine changed in R 4.4, and so snapshots generated on
+> # previous R version won't work
+> if (getRversion() >= "4.4.0") {
++   library(testthat)
++   library(see)
++ 
++   test_check("see")
++ }
+Starting 2 test processes
+[ FAIL 0 | WARN 0 | SKIP 24 | PASS 34 ]
 
-══ Skipped tests ═══════════════════════════════════════════════════════════════
-• On CRAN (8)
+══ Skipped tests (24) ══════════════════════════════════════════════════════════
+• On CRAN (23): 'test-check_model.R:2:3', 'test-plot.check_collinearity.R:7:3',
+  'test-plot.check_normality.R:18:3', 'test-plot.check_dag.R:17:3',
+  'test-plot.check_dag.R:68:3', 'test-plot.check_dag.R:90:3',
+  'test-plot.compare_parameters.R:20:3', 'test-plot.effectsize_table.R:5:3',
+  'test-plot.estimate_density.R:14:3', 'test-plot.n_factors.R:7:3',
+  'test-plot.p_direction.R:11:1', 'test-plot.p_significance.R:11:1',
+  'test-plot.performance_pp_check.R:6:3', 'test-plot.performance_roc.R:14:3',
+  'test-plot.parameters_model.R:7:3', 'test-plot.parameters_model.R:35:3',
+  'test-plot.parameters_model.R:90:3', 'test-plot.parameters_model.R:104:3',
+  'test-scale_color_colorhex_c.R:3:3', 'test-vdiffr_bayestestr_plots.R:11:3',
+  'test-vdiffr_geoms_coords.R:9:3', 'test-vdiffr_scale_color.R:2:3',
+  'test-vdiffr_themes.R:22:3'
+• TRUE is TRUE (1): 'test-plot.simulate_parameters.R:1:1'
 
-[ FAIL 0 | WARN 10 | SKIP 8 | PASS 32 ]
+[ FAIL 0 | WARN 0 | SKIP 24 | PASS 34 ]
 > 
 > proc.time()
    user  system elapsed 
- 44.082   0.644  45.310 
+ 16.330   0.725   9.110 

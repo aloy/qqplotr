@@ -3,6 +3,22 @@ rngReset()
 
 model = testModel
 
+test_that('trajectories', {
+  ref = model.data(model) %>%
+    subset(select = c('id', 'time', 'Value', 'Cluster')) %>%
+    as.data.table(key = 'id') %>%
+    setnames('Cluster', 'cluster')
+
+  pred = trajectories(model, cluster = 'cluster') %>%
+    as.data.table()
+
+  expect_equal(
+    as.data.frame(ref),
+    as.data.frame(pred)
+  )
+})
+
+
 test_that('clusterTrajectories', {
   times = time(model)
   pred = clusterTrajectories(model)
@@ -135,9 +151,9 @@ test_that('clusterNames<-', {
 })
 
 test_that('consistency between predict() and predict(cluster)', {
-  allPreds = predict(model, newdata = data.frame(Assessment = c(0, 1)))
-  dfPredA = predict(model, newdata = data.frame(Assessment = c(0, 1), Cluster = 'A'))
-  dfPredB = predict(model, newdata = data.frame(Assessment = c(0, 1), Cluster = 'B'))
+  allPreds = predict(model, newdata = data.frame(time = c(0, 1)))
+  dfPredA = predict(model, newdata = data.frame(time = c(0, 1), Cluster = 'A'))
+  dfPredB = predict(model, newdata = data.frame(time = c(0, 1), Cluster = 'B'))
 
   expect_equal(allPreds$A$Fit, dfPredA$Fit)
   expect_equal(allPreds$B$Fit, dfPredB$Fit)
@@ -191,7 +207,7 @@ test_that('predictForCluster', {
 })
 
 test_that('predictForCluster with newdata', {
-  newdata = data.frame(Assessment = 0)
+  newdata = data.frame(time = 0)
   predA = predictForCluster(model, cluster = 'A', newdata = newdata)
   expect_is(predA, 'numeric')
   expect_length(predA, nrow(newdata))
@@ -201,7 +217,7 @@ test_that('predictForCluster with newdata', {
 })
 
 test_that('predictForCluster with newdata and Cluster column', {
-  newdata = data.table(Assessment = 0)
+  newdata = data.table(time = 0)
   newdataClus = copy(newdata)[, Cluster := 'B']
 
   refpred = predictForCluster(model, cluster = 'A', newdata = newdata)

@@ -1,7 +1,7 @@
 options(deparse.max.lines=5)
 
-options(latrend.id = 'Traj')
-options(latrend.time = 'Assessment')
+options(latrend.id = 'id')
+options(latrend.time = 'time')
 options(latrend.verbose = R.utils::Verbose())
 options(latrend.warnModelDataClusterColumn = FALSE)
 options(latrend.warnNewDataClusterColumn = FALSE)
@@ -87,28 +87,32 @@ expect_valid_lcModel = function(object) {
 
   # Predict
   # cluster-specific prediction
-  pred = predict(object, newdata=data.frame(Cluster='T1', Assessment=time(object)[c(1,3)]))
+  pred = predict(object, newdata = data.frame(Cluster = 'T1', time = time(object)[c(1,3)]))
   expect_is(pred, 'data.frame', info='predictClusterTime')
   expect_true('Fit' %in% names(pred), info='predictClusterTime')
   expect_equal(nrow(pred), 2, info='predictClusterTime')
 
   # prediction for all clusters; list of data.frames
-  pred2 = predict(object, newdata=data.frame(Assessment=time(object)[c(1,3)]))
+  pred2 = predict(object, newdata = data.frame(time = time(object)[c(1,3)]))
   expect_is(pred2, 'list', info='predictTime')
   expect_length(pred2, nClusters(object))
   expect_true('Fit' %in% names(pred2$T1), info='predictTime')
 
   # id-specific prediction for a specific cluster; data.frame
-  pred3 = predict(object, newdata=data.frame(Cluster=rep('T1', 4),
-                                     Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
-                                     Assessment=c(time(object)[c(1,3,1,1)])))
+  pred3 = predict(object, newdata = data.frame(
+    Cluster = rep('T1', 4),
+    id = c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
+    time = c(time(object)[c(1,3,1,1)])
+  ))
   expect_is(pred3, 'data.frame', info='predictClusterIdTime')
   expect_true('Fit' %in% names(pred3), info='predictClusterIdTime')
   expect_equal(nrow(pred3), 4, info='predictClusterIdTime')
 
   # id-specific prediction for all clusters; list of data.frames
-  pred4 = predict(object, newdata=data.frame(Traj=c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
-                                     Assessment=c(time(object)[c(1,3,1,1)])))
+  pred4 = predict(object, newdata = data.frame(
+    id = c(ids(object)[c(1,1,2)], tail(ids(object), 1)),
+    time = c(time(object)[c(1,3,1,1)])
+  ))
   expect_is(pred4, 'list', info='predictIdTime')
   expect_length(pred4, nClusters(object))
   expect_true('Fit' %in% names(pred4$T1), info='predictIdTime')
@@ -126,7 +130,7 @@ expect_valid_lcModel = function(object) {
   # predictForCluster
   predClus = predictForCluster(
     object,
-    newdata = data.frame(Assessment = time(object)[c(1,3)]),
+    newdata = data.frame(time = time(object)[c(1,3)]),
     cluster = 'T1'
   )
   expect_is(predClus, 'numeric', info='predictForCluster')

@@ -1,10 +1,9 @@
 test_that("`plot.see_si()` works", {
-  requiet("rstanarm")
-  requiet("logspline")
+  skip_if_not_installed("rstanarm")
+  skip_if_not_installed("logspline")
 
   set.seed(123)
-  m <- stan_glm(Sepal.Length ~ Petal.Width * Species, data = iris, refresh = 0)
-  result <- bayestestR::si(m)
+  result <- bayestestR::si(m_rstan, verbose = FALSE)
 
   expect_s3_class(plot(result), "gg")
 })
