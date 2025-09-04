@@ -65,6 +65,10 @@
 #'   confidence bands. If either \code{mu} or \code{sigma} are \code{NULL}, then
 #'   those parameters are estimated using robust estimates from the \pkg{stats}
 #'   package.
+#' @param inherit.aes If FALSE, overrides the default aesthetics, rather than
+#'	 combining with them. This is most useful for helper functions that define
+#'	 both data and aesthetics and shouldn't inherit behaviour from the default
+#'	 plot specification
 #'
 #' @note
 #' \itemize{

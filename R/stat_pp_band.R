@@ -31,6 +31,10 @@
 #'   This procedure was described by Thode (2002), and may help reducing visual
 #'   bias caused by the orthogonal distances from P-P points to the reference
 #'   line.
+#' @param inherit.aes If FALSE, overrides the default aesthetics, rather than
+#'	 combining with them. This is most useful for helper functions that define
+#'	 both data and aesthetics and shouldn't inherit behaviour from the default
+#'	 plot specification
 #'
 #' @references
 #' \itemize{

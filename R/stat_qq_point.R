@@ -40,6 +40,10 @@
 #' @param down.sample Integer specifying how many points you want to sample
 #'   in a reduced sample (i.e., a down sample). The default value is \code{NULL}
 #'   indicating no downsampling.
+#' @param inherit.aes If FALSE, overrides the default aesthetics, rather than
+#'	 combining with them. This is most useful for helper functions that define
+#'	 both data and aesthetics and shouldn't inherit behaviour from the default
+#'	 plot specification
 #'
 #' @references
 #' \itemize{

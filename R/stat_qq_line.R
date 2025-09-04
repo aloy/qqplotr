@@ -36,6 +36,10 @@
 #' @param qprobs Numeric vector of length two. Only used if \code{detrend =
 #'   TRUE} and \code{identity =  FALSE}. Represents the quantiles used by the
 #'   \code{\link[stats]{quantile}} function to construct the Q-Q line.
+#' @param inherit.aes If FALSE, overrides the default aesthetics, rather than
+#'	 combining with them. This is most useful for helper functions that define
+#'	 both data and aesthetics and shouldn't inherit behaviour from the default
+#'	 plot specification
 #'
 #' @references
 #' \itemize{
