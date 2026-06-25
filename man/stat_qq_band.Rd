@@ -230,49 +230,41 @@ gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
 gg + labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 
 # Normal Q-Q plot of Normal data with equal local levels (ell) bands
-bt <- "ell"
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
- stat_qq_band(bandType = bt) +
+ stat_qq_band(bandType = "ell") +
  stat_qq_line() +
  stat_qq_point() +
  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 gg
 
 # Exponential Q-Q plot of mean ozone levels (airquality dataset)
-di <- "exp"
-dp <- list(rate = 1)
 gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
- stat_qq_band(distribution = di, dparams = dp) +
- stat_qq_line(distribution = di, dparams = dp) +
- stat_qq_point(distribution = di, dparams = dp) +
+ stat_qq_band(distribution = "exp", dparams = list(rate = 1)) +
+ stat_qq_line(distribution = "exp", dparams = list(rate = 1)) +
+ stat_qq_point(distribution = "exp", dparams = list(rate = 1)) +
  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 gg
 
 # Detrended Exponential Q-Q plot of mean ozone levels
-di <- "exp"
-dp <- list(rate = 1)
-de <- TRUE
 gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
- stat_qq_band(distribution = di, detrend = de) +
- stat_qq_line(distribution = di, detrend = de) +
- stat_qq_point(distribution = di, detrend = de) +
+ stat_qq_band(distribution = "exp", detrend = TRUE) +
+ stat_qq_line(distribution = "exp", detrend = TRUE) +
+ stat_qq_point(distribution = "exp", detrend = TRUE) +
  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 gg
 
 \dontrun{
 # Normal Q-Q plot of Normal data with bootstrap confidence bands
-bt <- "boot"
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
- stat_qq_band(bandType = bt) +
+ stat_qq_band(bandType = "boot") +
  stat_qq_line() +
  stat_qq_point() +
  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 gg
 
 # Normal Q-Q plot of Normal data with tail-sensitive confidence bands
-bt <- "ts"
 gg <- ggplot(data = smp, mapping = aes(sample = norm)) +
- stat_qq_band(bandType = bt) +
+ stat_qq_band(bandType = "ts") +
  stat_qq_line() +
  stat_qq_point() +
  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")

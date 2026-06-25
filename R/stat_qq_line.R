@@ -59,21 +59,16 @@
 #' gg
 #'
 #' # Exponential Q-Q plot of mean ozone levels (airquality dataset)
-#' di <- "exp"
-#' dp <- list(rate = 1)
 #' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
-#'  stat_qq_line(distribution = di, dparams = dp) +
-#'  stat_qq_point(distribution = di, dparams = dp) +
+#'  stat_qq_line(distribution = "exp", dparams = list(rate = 1)) +
+#'  stat_qq_point(distribution = "exp", dparams = list(rate = 1)) +
 #'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #' gg
 #'
 #' # Detrended Exponential Q-Q plot of mean ozone levels
-#' di <- "exp"
-#' dp <- list(rate = 1)
-#' de <- TRUE
 #' gg <- ggplot(data = airquality, mapping = aes(sample = Ozone)) +
-#'  stat_qq_line(distribution = di, detrend = de) +
-#'  stat_qq_point(distribution = di, detrend = de) +
+#'  stat_qq_line(distribution = "exp", detrend = TRUE) +
+#'  stat_qq_point(distribution = "exp", detrend = TRUE) +
 #'  labs(x = "Theoretical Quantiles", y = "Sample Quantiles")
 #' gg
 #'
