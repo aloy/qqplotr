@@ -71,82 +71,93 @@
 #'
 #' @export
 stat_qq_point <- function(
-	mapping = NULL,
-	data = NULL,
-	geom = "point",
-	position = "identity",
-	na.rm = TRUE,
-	show.legend = NA,
-	inherit.aes = TRUE,
-	distribution = "norm",
-	dparams = list(),
-	detrend = FALSE,
-	identity = FALSE,
-	qtype = 7,
-	qprobs = c(.25, .75),
-	down.sample = NULL,
-	...
+  mapping = NULL,
+  data = NULL,
+  geom = "point",
+  position = "identity",
+  na.rm = TRUE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  distribution = "norm",
+  dparams = list(),
+  detrend = FALSE,
+  identity = FALSE,
+  qtype = 7,
+  qprobs = c(.25, .75),
+  down.sample = NULL,
+  ...
 ) {
-	# error handling
-	if (!(distribution %in% c(
-		"beta",
-		"cauchy",
-		"chisq",
-		"exp",
-		"f",
-		"gamma",
-		"geom",
-		"lnorm",
-		"logis",
-		"norm",
-		"nbinom",
-		"pois",
-		"t",
-		"weibull")) &
-		length(dparams) == 0 &
-		table(sapply(formals(eval(parse(text = paste0("q", distribution)))), typeof))["symbol"] > 1) {
-		stop(
-			"MLE is currently not supported for custom distributions.\n",
-			"Please provide all the custom distribution parameters to 'dparams'.",
-			call. = FALSE
-		)
-	}
+  # error handling
+  if (
+    !(distribution %in%
+      c(
+        "beta",
+        "cauchy",
+        "chisq",
+        "exp",
+        "f",
+        "gamma",
+        "geom",
+        "lnorm",
+        "logis",
+        "norm",
+        "nbinom",
+        "pois",
+        "t",
+        "weibull"
+      )) &
+      length(dparams) == 0 &
+      table(sapply(
+        formals(get(paste0("q", distribution), mode = "function")),
+        typeof
+      ))["symbol"] >
+        1
+  ) {
+    stop(
+      "MLE is currently not supported for custom distributions.\n",
+      "Please provide all the custom distribution parameters to 'dparams'.",
+      call. = FALSE
+    )
+  }
 
-	# error handling
-	if (qtype < 1 | qtype > 9) {
-		stop("Please provide a valid quantile type: ",
-				 "'qtype' must be between 1 and 9.",
-				 call. = FALSE)
-	}
-	if (length(qprobs) != 2) {
-		stop("'qprobs' must have length two.",
-				 call = FALSE)
-	}
-	if (sum(qprobs > 1) + sum(qprobs < 0)) {
-		stop("'qprobs' cannot have any elements outside the probability domain [0,1].",
-				 call = FALSE)
-	}
+  # error handling
+  if (qtype < 1 | qtype > 9) {
+    stop(
+      "Please provide a valid quantile type: ",
+      "'qtype' must be between 1 and 9.",
+      call. = FALSE
+    )
+  }
+  if (length(qprobs) != 2) {
+    stop("'qprobs' must have length two.", call = FALSE)
+  }
+  if (sum(qprobs > 1) + sum(qprobs < 0)) {
+    stop(
+      "'qprobs' cannot have any elements outside the probability domain [0,1].",
+      call = FALSE
+    )
+  }
 
-	ggplot2::layer(
-		data = data,
-		mapping = mapping,
-		stat = StatQqPoint,
-		geom = geom,
-		position = position,
-		show.legend = show.legend,
-		inherit.aes = inherit.aes,
-		params = list(
-			na.rm = na.rm,
-			distribution = distribution,
-			dparams = dparams,
-			detrend = detrend,
-			identity = identity,
-			qtype = qtype,
-			qprobs = qprobs,
-			down.sample = down.sample,
-			...
-		)
-	)
+  ggplot2::layer(
+    data = data,
+    mapping = mapping,
+    stat = StatQqPoint,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      distribution = distribution,
+      dparams = dparams,
+      detrend = detrend,
+      identity = identity,
+      qtype = qtype,
+      qprobs = qprobs,
+      down.sample = down.sample,
+      ...
+    )
+  )
 }
 
 #' StatQqPoint
@@ -155,120 +166,137 @@ stat_qq_point <- function(
 #' @usage NULL
 #' @export
 StatQqPoint <- ggplot2::ggproto(
-	`_class` = "StatQqPoint",
-	`_inherit` = ggplot2::Stat,
+  `_class` = "StatQqPoint",
+  `_inherit` = ggplot2::Stat,
 
-	default_aes = ggplot2::aes(
-		x = ..theoretical..,
-		y = ..sample..
-	),
+  default_aes = ggplot2::aes(
+    x = ..theoretical..,
+    y = ..sample..
+  ),
 
-	required_aes = c("sample"),
+  required_aes = c("sample"),
 
-	optional_aes = c("label"),
+  optional_aes = c("label"),
 
-	compute_group = function(data,
-													 self,
-													 scales,
-													 distribution = "norm",
-													 dparams = list(),
-													 detrend = FALSE,
-													 identity = FALSE,
-													 qtype = 7,
-													 qprobs = c(.25),
-													 down.sample = NULL) {
-		# distributional function
-		qFunc <- eval(parse(text = paste0("q", distribution)))
+  compute_group = function(
+    data,
+    self,
+    scales,
+    distribution = "norm",
+    dparams = list(),
+    detrend = FALSE,
+    identity = FALSE,
+    qtype = 7,
+    qprobs = c(.25),
+    down.sample = NULL
+  ) {
+    # distributional function
+    qFunc <- get(paste0("q", distribution), mode = "function")
 
-		samp <- data$sample
-		if(!is.null(down.sample)) {
-			ds <- opdisDownsampling::opdisDownsampling(samp, Size = down.sample,
-																								nTrials = 500, MaxCores = 1)
-			samp <- ds$ReducedData$Data
-		}
+    samp <- data$sample
+    if (!is.null(down.sample)) {
+      ds <- opdisDownsampling::opdisDownsampling(
+        samp,
+        Size = down.sample,
+        nTrials = 500,
+        MaxCores = 1
+      )
+      samp <- ds$ReducedData$Data
+    }
 
-		oidx <- order(samp)
-		smp <- samp[oidx]
-		n <- length(smp)
-		quantiles <- ppoints(n)
+    oidx <- order(samp)
+    smp <- samp[oidx]
+    n <- length(smp)
+    quantiles <- ppoints(n)
 
-		# automatically estimate parameters with MLE, only if no parameters are
-		# provided with dparams and there are at least one distributional parameter
-		# without a default value
-		if(length(dparams) == 0) {
-			# equivalence between base R and MASS::fitdistr distribution names
-			corresp <- function(distName) {
-				switch(
-					distName,
-					beta = "beta",
-					cauchy = "cauchy",
-					chisq = "chi-squared",
-					exp = "exponential",
-					f = "f",
-					gamma = "gamma",
-					geom = "geometric",
-					lnorm = "log-normal",
-					logis = "logistic",
-					norm = "normal",
-					nbinom = "negative binomial",
-					pois = "poisson",
-					t = dt,
-					weibull = "weibull",
-					NULL
-				)
-			}
+    # automatically estimate parameters with MLE, only if no parameters are
+    # provided with dparams and there are at least one distributional parameter
+    # without a default value
+    if (length(dparams) == 0) {
+      # equivalence between base R and MASS::fitdistr distribution names
+      corresp <- function(distName) {
+        switch(
+          distName,
+          beta = "beta",
+          cauchy = "cauchy",
+          chisq = "chi-squared",
+          exp = "exponential",
+          f = "f",
+          gamma = "gamma",
+          geom = "geometric",
+          lnorm = "log-normal",
+          logis = "logistic",
+          norm = "normal",
+          nbinom = "negative binomial",
+          pois = "poisson",
+          t = dt,
+          weibull = "weibull",
+          NULL
+        )
+      }
 
-			# initial value for some distributions
-			initVal <- function(distName) {
-				switch(
-					distName,
-					beta = list(shape1 = 1, shape2 = 1),
-					chisq = list(df = 1),
-					f = list(df1 = 1, df2 = 2),
-					t = list(df = 1),
-					NULL
-				)
-			}
+      # initial value for some distributions
+      initVal <- function(distName) {
+        switch(
+          distName,
+          beta = list(shape1 = 1, shape2 = 1),
+          chisq = list(df = 1),
+          f = list(df1 = 1, df2 = 2),
+          t = list(df = 1),
+          NULL
+        )
+      }
 
-			suppressWarnings({
-				if(!is.null(corresp(distribution))) {
-					if(is.null(initVal(distribution))) {
-						dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution))$estimate
-					} else {
-						dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution), start = initVal(distribution))$estimate
-					}
-				}
-			})
-		}
+      suppressWarnings({
+        if (!is.null(corresp(distribution))) {
+          if (is.null(initVal(distribution))) {
+            dparams <- MASS::fitdistr(
+              x = smp,
+              densfun = corresp(distribution)
+            )$estimate
+          } else {
+            dparams <- MASS::fitdistr(
+              x = smp,
+              densfun = corresp(distribution),
+              start = initVal(distribution)
+            )$estimate
+          }
+        }
+      })
+    }
 
-		theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
+    theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
 
-		if (detrend) {
-			if (identity) {
-				slope <- 1
-				intercept <- 0
-			} else {
-				xCoords <- do.call(qFunc, c(list(p = qprobs), dparams))
-				yCoords <- do.call(quantile, list(x = smp, probs = qprobs, type = qtype))
+    if (detrend) {
+      if (identity) {
+        slope <- 1
+        intercept <- 0
+      } else {
+        xCoords <- do.call(qFunc, c(list(p = qprobs), dparams))
+        yCoords <- do.call(
+          quantile,
+          list(x = smp, probs = qprobs, type = qtype)
+        )
 
-				slope <- diff(yCoords) / diff(xCoords)
-				intercept <- yCoords[1] - slope * xCoords[1]
-			}
+        slope <- diff(yCoords) / diff(xCoords)
+        intercept <- yCoords[1] - slope * xCoords[1]
+      }
 
-			# calculate new ys for the detrended sample
-			dSmp <- NULL
-			for (i in 1:n) {
-				lSmp <- slope * theoretical[i] + intercept
-				dSmp[i] <- smp[i] - lSmp
-			}
+      # calculate new ys for the detrended sample
+      dSmp <- NULL
+      for (i in 1:n) {
+        lSmp <- slope * theoretical[i] + intercept
+        dSmp[i] <- smp[i] - lSmp
+      }
 
-			out <- data.frame(sample = dSmp, theoretical = theoretical)
-		} else {
-			out <- data.frame(sample = smp, theoretical = theoretical)
-		}
+      out <- data.frame(sample = dSmp, theoretical = theoretical)
+    } else {
+      out <- data.frame(sample = smp, theoretical = theoretical)
+    }
 
-		if (!is.null(data$label)) out$label <- data$label[oidx]
-		out
-	}
+    if (!is.null(data$label)) {
+      out$label <- data$label[oidx]
+    }
+    out
+  }
 )
-

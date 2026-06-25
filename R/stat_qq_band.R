@@ -3,8 +3,6 @@
 #' Draws quantile-quantile confidence bands, with an additional detrend option.
 #'
 #' @import ggplot2
-#' @importFrom dplyr summarize
-#' @importFrom dplyr group_by
 #' @importFrom MASS fitdistr
 #' @importFrom robustbase s_Qn
 #' @importFrom robustbase Qn
@@ -153,96 +151,109 @@
 #'
 #' @export
 stat_qq_band <- function(
-	mapping = NULL,
-	data = NULL,
-	geom = "qq_band",
-	position = "identity",
-	na.rm = TRUE,
-	show.legend = NA,
-	inherit.aes = TRUE,
-	distribution = "norm",
-	dparams = list(),
-	detrend = FALSE,
-	identity = FALSE,
-	qtype = 7,
-	qprobs = c(.25, .75),
-	bandType = "pointwise",
-	B = 1000,
-	conf = .95,
-	mu = NULL,
-	sigma = NULL,
-	...
+  mapping = NULL,
+  data = NULL,
+  geom = "qq_band",
+  position = "identity",
+  na.rm = TRUE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  distribution = "norm",
+  dparams = list(),
+  detrend = FALSE,
+  identity = FALSE,
+  qtype = 7,
+  qprobs = c(.25, .75),
+  bandType = "pointwise",
+  B = 1000,
+  conf = .95,
+  mu = NULL,
+  sigma = NULL,
+  ...
 ) {
-	# error handling
-	if (!(distribution %in% c(
-		"beta",
-		"cauchy",
-		"chisq",
-		"exp",
-		"f",
-		"gamma",
-		"geom",
-		"lnorm",
-		"logis",
-		"norm",
-		"nbinom",
-		"pois",
-		"t",
-		"weibull")) &
-		length(dparams) == 0 &
-		table(sapply(formals(eval(parse(text = paste0("q", distribution)))), typeof))["symbol"] > 1) {
-		stop(
-			"MLE is currently not supported for custom distributions.\n",
-			"Please provide all the custom distribution parameters to 'dparams'.",
-			call. = FALSE
-		)
-	}
-	if (qtype < 1 | qtype > 9) {
-		stop("Please provide a valid quantile type: ",
-				 "'qtype' must be between 1 and 9.",
-				 call. = FALSE)
-	}
-	if (conf < 0 | conf > 1) {
-		stop("Please provide a valid confidence level for the bands: ",
-				 "'conf' must be between 0 and 1.",
-				 call. = FALSE)
-	}
-	if (B < 0) {
-		stop("Please provide a positive value for B.",
-				 call. = FALSE)
-	}
-	bandType <- match.arg(bandType, c("pointwise", "boot", "ts", "ks", "ell"))
+  # error handling
+  if (
+    !(distribution %in%
+      c(
+        "beta",
+        "cauchy",
+        "chisq",
+        "exp",
+        "f",
+        "gamma",
+        "geom",
+        "lnorm",
+        "logis",
+        "norm",
+        "nbinom",
+        "pois",
+        "t",
+        "weibull"
+      )) &
+      length(dparams) == 0 &
+      table(sapply(
+        formals(get(paste0("q", distribution), mode = "function")),
+        typeof
+      ))["symbol"] >
+        1
+  ) {
+    stop(
+      "MLE is currently not supported for custom distributions.\n",
+      "Please provide all the custom distribution parameters to 'dparams'.",
+      call. = FALSE
+    )
+  }
+  if (qtype < 1 | qtype > 9) {
+    stop(
+      "Please provide a valid quantile type: ",
+      "'qtype' must be between 1 and 9.",
+      call. = FALSE
+    )
+  }
+  if (conf < 0 | conf > 1) {
+    stop(
+      "Please provide a valid confidence level for the bands: ",
+      "'conf' must be between 0 and 1.",
+      call. = FALSE
+    )
+  }
+  if (B < 0) {
+    stop("Please provide a positive value for B.", call. = FALSE)
+  }
+  bandType <- match.arg(bandType, c("pointwise", "boot", "ts", "ks", "ell"))
 
-	# vector with common discrete distributions
-	discreteDist <- c("binom", "geom", "nbinom", "pois")
+  # vector with common discrete distributions
+  discreteDist <- c("binom", "geom", "nbinom", "pois")
 
-	if (distribution %in% discreteDist) geom <- "errorbar"
+  if (distribution %in% discreteDist) {
+    geom <- "errorbar"
+  }
 
-	ggplot2::layer(
-		data = data,
-		mapping = mapping,
-		stat = StatQqBand,
-		geom = geom,
-		position = position,
-		show.legend = show.legend,
-		inherit.aes = inherit.aes,
-		params = list(
-			na.rm = na.rm,
-			distribution = distribution,
-			dparams = dparams,
-			detrend = detrend,
-			identity = identity,
-			qtype = qtype,
-			qprobs = qprobs,
-			bandType = bandType,
-			B = round(B),
-			conf = conf,
-			mu = mu,
-			sigma = sigma,
-			discrete = distribution %in% discreteDist,
-			...
-		)
-	)
+  ggplot2::layer(
+    data = data,
+    mapping = mapping,
+    stat = StatQqBand,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      distribution = distribution,
+      dparams = dparams,
+      detrend = detrend,
+      identity = identity,
+      qtype = qtype,
+      qprobs = qprobs,
+      bandType = bandType,
+      B = round(B),
+      conf = conf,
+      mu = mu,
+      sigma = sigma,
+      discrete = distribution %in% discreteDist,
+      ...
+    )
+  )
 }
 
 #' StatQqBand
@@ -252,242 +263,272 @@ stat_qq_band <- function(
 #' @export
 #' @importFrom qqconf get_qq_band
 StatQqBand <- ggplot2::ggproto(
-	`_class` = "StatQqBand",
-	`_inherit` = StatQqLine,
+  `_class` = "StatQqBand",
+  `_inherit` = StatQqLine,
 
-	default_aes = ggplot2::aes(
-		x = ..x..,
-		ymin = ..lower..,
-		ymax = ..upper..
-	),
+  default_aes = ggplot2::aes(
+    x = ..x..,
+    ymin = ..lower..,
+    ymax = ..upper..
+  ),
 
-	required_aes = c("sample"),
+  required_aes = c("sample"),
 
-	dropped_aes = c("sample"),
+  dropped_aes = c("sample"),
 
-	compute_group = {
-		function(data,
-						 self,
-						 scales,
-						 distribution,
-						 dparams,
-						 detrend,
-						 identity,
-						 qtype,
-						 qprobs,
-						 bandType,
-						 B,
-						 conf,
-						 mu,
-						 sigma,
-						 discrete) {
-			# distributional functions
-			dFunc <- eval(parse(text = paste0("d", distribution)))
-			qFunc <- eval(parse(text = paste0("q", distribution)))
-			rFunc <- eval(parse(text = paste0("r", distribution)))
+  compute_group = {
+    function(
+      data,
+      self,
+      scales,
+      distribution,
+      dparams,
+      detrend,
+      identity,
+      qtype,
+      qprobs,
+      bandType,
+      B,
+      conf,
+      mu,
+      sigma,
+      discrete
+    ) {
+      # distributional functions
+      dFunc <- get(paste0("d", distribution), mode = "function")
+      qFunc <- get(paste0("q", distribution), mode = "function")
+      rFunc <- get(paste0("r", distribution), mode = "function")
 
-			smp <- sort(data$sample)
-			n <- length(smp)
-			quantiles <- ppoints(n)
+      smp <- sort(data$sample)
+      n <- length(smp)
+      quantiles <- ppoints(n)
 
-			# automatically estimate parameters with MLE, only if no parameters are
-			# provided with dparams and there are at least one distributional parameter
-			# without a default value
-			if(length(dparams) == 0) {
-				# equivalence between base R and MASS::fitdistr distribution names
-				corresp <- function(distName) {
-					switch(
-						distName,
-						beta = "beta",
-						cauchy = "cauchy",
-						chisq = "chi-squared",
-						exp = "exponential",
-						f = "f",
-						gamma = "gamma",
-						geom = "geometric",
-						lnorm = "log-normal",
-						logis = "logistic",
-						norm = "normal",
-						nbinom = "negative binomial",
-						pois = "poisson",
-						t = "t",
-						weibull = "weibull",
-						NULL
-					)
-				}
+      # automatically estimate parameters with MLE, only if no parameters are
+      # provided with dparams and there are at least one distributional parameter
+      # without a default value
+      if (length(dparams) == 0) {
+        # equivalence between base R and MASS::fitdistr distribution names
+        corresp <- function(distName) {
+          switch(
+            distName,
+            beta = "beta",
+            cauchy = "cauchy",
+            chisq = "chi-squared",
+            exp = "exponential",
+            f = "f",
+            gamma = "gamma",
+            geom = "geometric",
+            lnorm = "log-normal",
+            logis = "logistic",
+            norm = "normal",
+            nbinom = "negative binomial",
+            pois = "poisson",
+            t = "t",
+            weibull = "weibull",
+            NULL
+          )
+        }
 
-				# initial value for some distributions
-				initVal <- function(distName) {
-					switch(
-						distName,
-						beta = list(shape1 = 1, shape2 = 1),
-						chisq = list(df = 1),
-						f = list(df1 = 1, df2 = 2),
-						t = list(df = 1),
-						NULL
-					)
-				}
+        # initial value for some distributions
+        initVal <- function(distName) {
+          switch(
+            distName,
+            beta = list(shape1 = 1, shape2 = 1),
+            chisq = list(df = 1),
+            f = list(df1 = 1, df2 = 2),
+            t = list(df = 1),
+            NULL
+          )
+        }
 
-				suppressWarnings({
-					if(!is.null(corresp(distribution))) {
-						if(is.null(initVal(distribution))) {
-							dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution))$estimate
-						} else {
-							dparams <- MASS::fitdistr(x = smp, densfun = corresp(distribution), start = initVal(distribution))$estimate
-						}
-					}
-				})
-			}
+        suppressWarnings({
+          if (!is.null(corresp(distribution))) {
+            if (is.null(initVal(distribution))) {
+              dparams <- MASS::fitdistr(
+                x = smp,
+                densfun = corresp(distribution)
+              )$estimate
+            } else {
+              dparams <- MASS::fitdistr(
+                x = smp,
+                densfun = corresp(distribution),
+                start = initVal(distribution)
+              )$estimate
+            }
+          }
+        })
+      }
 
-			theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
+      theoretical <- do.call(qFunc, c(list(p = quantiles), dparams))
 
-			# inherit from StatQqLine
-			xline <- self$super()$compute_group(data = data,
-																					distribution = distribution,
-																					dparams = dparams,
-																					qtype = qtype,
-																					qprobs = qprobs,
-																					identity = identity,
-																					detrend = FALSE)$xline
-			yline <- self$super()$compute_group(data = data,
-																					distribution = distribution,
-																					dparams = dparams,
-																					qtype = qtype,
-																					qprobs = qprobs,
-																					identity = identity,
-																					detrend = FALSE)$yline
+      # inherit from StatQqLine
+      xline <- self$super()$compute_group(
+        data = data,
+        distribution = distribution,
+        dparams = dparams,
+        qtype = qtype,
+        qprobs = qprobs,
+        identity = identity,
+        detrend = FALSE
+      )$xline
+      yline <- self$super()$compute_group(
+        data = data,
+        distribution = distribution,
+        dparams = dparams,
+        qtype = qtype,
+        qprobs = qprobs,
+        identity = identity,
+        detrend = FALSE
+      )$yline
 
-			slope <- diff(yline) / diff(xline)
-			intercept <- yline[1L] - slope * xline[1L]
+      slope <- diff(yline) / diff(xline)
+      intercept <- yline[1L] - slope * xline[1L]
 
-			fittedValues <- (slope * theoretical) + intercept
+      fittedValues <- (slope * theoretical) + intercept
 
-			# pointwise confidence bands based on normal confidence intervals
-			if (bandType == "pointwise") {
-				probs <- ppoints(n)
-				stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) * sqrt(probs * (1 - probs) / n)
-				zCrit <- qnorm(p = (1 - (1 - conf) / 2))
+      # pointwise confidence bands based on normal confidence intervals
+      if (bandType == "pointwise") {
+        probs <- ppoints(n)
+        stdErr <- (slope / do.call(dFunc, c(list(x = theoretical), dparams))) *
+          sqrt(probs * (1 - probs) / n)
+        zCrit <- qnorm(p = (1 - (1 - conf) / 2))
 
-				upper <- fittedValues + (stdErr * zCrit)
-				lower <- fittedValues - (stdErr * zCrit)
-			}
+        upper <- fittedValues + (stdErr * zCrit)
+        lower <- fittedValues - (stdErr * zCrit)
+      }
 
-			# parametric bootstrap pointwise confidence intervals
-			if (bandType == "boot") {
-				bs <- apply(
-					X = matrix(do.call(rFunc, c(list(n = n * B), as.list(dparams))), n, B),
-					MARGIN = 2,
-					FUN = sort
-				)
+      # parametric bootstrap pointwise confidence intervals
+      if (bandType == "boot") {
+        bs <- apply(
+          X = matrix(
+            do.call(rFunc, c(list(n = n * B), as.list(dparams))),
+            n,
+            B
+          ),
+          MARGIN = 2,
+          FUN = sort
+        )
 
-				upper <- apply(X = bs, MARGIN = 1, FUN = quantile, probs = (1 + conf) / 2)
-				lower <- apply(X = bs, MARGIN = 1, FUN = quantile, probs = (1 - conf) / 2)
-			}
+        upper <- apply(
+          X = bs,
+          MARGIN = 1,
+          FUN = quantile,
+          probs = (1 + conf) / 2
+        )
+        lower <- apply(
+          X = bs,
+          MARGIN = 1,
+          FUN = quantile,
+          probs = (1 - conf) / 2
+        )
+      }
 
-			# using the DKW inequality for simultaneous bands
-			if (bandType == "ks") {
-				probs <- ppoints(n)
-				epsilon <- sqrt((1 / (2 * n)) * log(2/(1-conf)))
-				lp <- pmax(probs - epsilon, rep(0, n))
-				up <- pmin(probs + epsilon, rep(1, n))
-				lower <- intercept + slope * do.call(qFunc, c(list(p = lp), dparams))
-				upper <- intercept + slope * do.call(qFunc, c(list(p = up), dparams))
-			}
+      # using the DKW inequality for simultaneous bands
+      if (bandType == "ks") {
+        probs <- ppoints(n)
+        epsilon <- sqrt((1 / (2 * n)) * log(2 / (1 - conf)))
+        lp <- pmax(probs - epsilon, rep(0, n))
+        up <- pmin(probs + epsilon, rep(1, n))
+        lower <- intercept + slope * do.call(qFunc, c(list(p = lp), dparams))
+        upper <- intercept + slope * do.call(qFunc, c(list(p = up), dparams))
+      }
 
-			# tail-sensitive confidence bands
-			if (bandType == "ts") {
-				if (distribution != "norm") {
-					warning("Be aware that tail-sensitive confidence bands are _only_ implemented for Normal Q-Q plots.",
-									call. = F)
-				}
+      # tail-sensitive confidence bands
+      if (bandType == "ts") {
+        if (distribution != "norm") {
+          warning(
+            "Be aware that tail-sensitive confidence bands are _only_ implemented for Normal Q-Q plots.",
+            call. = F
+          )
+        }
 
-				centerFunc <- function(x) robustbase::s_Qn(x, mu.too = TRUE)[[1]]
-				scaleFunc <- function(x) robustbase::Qn(x, finite.corr = FALSE)
+        centerFunc <- \(x) robustbase::s_Qn(x, mu.too = TRUE)[[1]]
+        scaleFunc <- \(x) robustbase::Qn(x, finite.corr = FALSE)
 
-				upperCi <- rep(NA, n)
-				lowerCi <- rep(NA, n)
-				pValue <- matrix(NA, nrow = n, ncol = B)
+        upperCi <- rep(NA, n)
+        lowerCi <- rep(NA, n)
+        pValue <- matrix(NA, nrow = n, ncol = B)
 
-				# simulate data
-				sim <- NULL
-				if (is.null(mu) | is.null(sigma)) {
-					for (i in 1:B) sim <- cbind(sim, sort(rnorm(n)))
+        # simulate data
+        sim <- NULL
+        if (is.null(mu) | is.null(sigma)) {
+          for (i in 1:B) {
+            sim <- cbind(sim, sort(rnorm(n)))
+          }
 
-					# center and scale simulated data
-					center <- apply(sim, 2, centerFunc)
-					scale <- apply(sim, 2, scaleFunc)
-					sim <- sweep(sweep(sim, 2, center, FUN = "-"), 2, scale, FUN = "/")
+          # center and scale simulated data
+          center <- apply(sim, 2, centerFunc)
+          scale <- apply(sim, 2, scaleFunc)
+          sim <- sweep(sweep(sim, 2, center, FUN = "-"), 2, scale, FUN = "/")
 
-					# convert simulated values to probabilities
-					sim <- t(apply(sim, 1, pnorm))
-				} else {
-					for (i in 1:B) sim <- cbind(sim, sort(runif(n)))
-				}
+          # convert simulated values to probabilities
+          sim <- t(apply(sim, 1, pnorm))
+        } else {
+          for (i in 1:B) {
+            sim <- cbind(sim, sort(runif(n)))
+          }
+        }
 
-				# widen the CIs to get simultanoues (100 * conf)% CIs
-				for (i in 1:n) {
-					tmp <- pbeta(sim[i, ], shape1 = i, shape2 = n + 1 - i)
-					pValue[i, ] <- apply(cbind(tmp, 1 - tmp), 1, min)
-				}
+        # widen the CIs to get simultanoues (100 * conf)% CIs
+        for (i in 1:n) {
+          tmp <- pbeta(sim[i, ], shape1 = i, shape2 = n + 1 - i)
+          pValue[i, ] <- apply(cbind(tmp, 1 - tmp), 1, min)
+        }
 
-				critical <- apply(pValue, 2, min)
-				criticalC <- quantile(critical, prob = 1 - conf)
+        critical <- apply(pValue, 2, min)
+        criticalC <- quantile(critical, prob = 1 - conf)
 
-				upperCi <- qbeta(1 - criticalC, shape1 = 1:n, shape2 = n + 1 - (1:n))
-				lowerCi <- qbeta(criticalC, shape1 = 1:n, shape2 = n + 1 - (1:n))
+        upperCi <- qbeta(1 - criticalC, shape1 = 1:n, shape2 = n + 1 - (1:n))
+        lowerCi <- qbeta(criticalC, shape1 = 1:n, shape2 = n + 1 - (1:n))
 
-				# translate back to sample quantiles
-				if (is.null(mu) | is.null(sigma)) {
-					upper <- qnorm(upperCi) * scaleFunc(smp) + centerFunc(smp)
-					lower <- qnorm(lowerCi) * scaleFunc(smp) + centerFunc(smp)
-				} else {
-					upper <- qnorm(upperCi) * sigma + mu
-					lower <- qnorm(lowerCi) * sigma + mu
-				}
-			}
+        # translate back to sample quantiles
+        if (is.null(mu) | is.null(sigma)) {
+          upper <- qnorm(upperCi) * scaleFunc(smp) + centerFunc(smp)
+          lower <- qnorm(lowerCi) * scaleFunc(smp) + centerFunc(smp)
+        } else {
+          upper <- qnorm(upperCi) * sigma + mu
+          lower <- qnorm(lowerCi) * sigma + mu
+        }
+      }
 
-			if (bandType == "ell") {
+      if (bandType == "ell") {
+        band <- qqconf::get_qq_band(
+          n = n,
+          alpha = 1 - conf,
+          distribution = qFunc,
+          dparams = dparams,
+          prob_pts_method = "normal"
+        )
 
-				band <- qqconf::get_qq_band(
-					n = n,
-					alpha = 1 - conf,
-					distribution = qFunc,
-					dparams = dparams,
-					prob_pts_method = "normal"
-				)
+        probs <- band$expected_value
+        upper <- band$upper_bound
+        lower <- band$lower_bound
+      }
 
-				probs <- band$expected_value
-				upper <- band$upper_bound
-				lower <- band$lower_bound
+      out <- data.frame(
+        x = theoretical,
+        upper = upper,
+        lower = lower,
+        fill = if (is.null(data$fill)) rgb(.6, .6, .6, .5) else data$fill
+      )
 
-			}
+      if (discrete) {
+        out$colour <- rgb(.5, .5, .5)
+        # create a data.frame with unique rows
+        out <- out |>
+          dplyr::group_by(x, fill, colour) |>
+          dplyr::summarize(upper = max(upper), lower = min(lower))
+        out <- as.data.frame(out)
+      }
 
-			out <- data.frame(
-				x = theoretical,
-				upper = upper,
-				lower = lower,
-				fill = if (is.null(data$fill)) rgb(.6, .6, .6, .5) else data$fill
-			)
+      # detrend the confidence bands by keeping the same distance from the
+      # stat_qq_line, which now is a line centered on y = 0
+      if (detrend) {
+        out$upper <- out$upper - fittedValues
+        out$lower <- out$lower - fittedValues
+      }
 
-			if (discrete) {
-				out$colour <- rgb(.5, .5, .5)
-				# create a data.frame with unique rows
-				out <- dplyr::summarize(
-								dplyr::group_by(out, x, fill, colour),
-								upper = max(upper),
-								lower = min(lower)
-							 )
-				out <- as.data.frame(out)
-			}
-
-			# detrend the confidence bands by keeping the same distance from the
-			# stat_qq_line, which now is a line centered on y = 0
-			if (detrend) {
-				out$upper <- out$upper - fittedValues
-				out$lower <- out$lower - fittedValues
-			}
-
-			out
-		}
-	}
+      out
+    }
+  }
 )

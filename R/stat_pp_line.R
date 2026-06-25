@@ -50,32 +50,32 @@
 #'
 #' @export
 stat_pp_line <- function(
-	mapping = NULL,
-	data = NULL,
-	geom = "path",
-	position = "identity",
-	na.rm = TRUE,
-	show.legend = NA,
-	inherit.aes = TRUE,
-	ab = c(0, 1),
-	detrend = FALSE,
-	...
+  mapping = NULL,
+  data = NULL,
+  geom = "path",
+  position = "identity",
+  na.rm = TRUE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  ab = c(0, 1),
+  detrend = FALSE,
+  ...
 ) {
-	ggplot2::layer(
-		data = data,
-		mapping = mapping,
-		stat = StatPpLine,
-		geom = geom,
-		position = position,
-		show.legend = show.legend,
-		inherit.aes = inherit.aes,
-		params = list(
-			na.rm = na.rm,
-			ab = ab,
-			detrend = detrend,
-			...
-		)
-	)
+  ggplot2::layer(
+    data = data,
+    mapping = mapping,
+    stat = StatPpLine,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      ab = ab,
+      detrend = detrend,
+      ...
+    )
+  )
 }
 
 #' StatPpLine
@@ -84,41 +84,37 @@ stat_pp_line <- function(
 #' @usage NULL
 #' @export
 StatPpLine <- ggplot2::ggproto(
-	`_class` = "StatPpLine",
-	`_inherit` = ggplot2::Stat,
+  `_class` = "StatPpLine",
+  `_inherit` = ggplot2::Stat,
 
-	default_aes = ggplot2::aes(x = ..xline.., y = ..yline..),
+  default_aes = ggplot2::aes(x = ..xline.., y = ..yline..),
 
-	required_aes = c("sample"),
+  required_aes = c("sample"),
 
-	dropped_aes = c("sample"),
+  dropped_aes = c("sample"),
 
-	compute_group = {
-		function(data,
-						 self,
-						 scales,
-						 ab,
-						 detrend) {
-			if (detrend) {
-				intercept <- 0
-				slope <- 0
-			} else {
-				intercept <- ab[1]
-				slope <- ab[2]
-			}
+  compute_group = {
+    function(data, self, scales, ab, detrend) {
+      if (detrend) {
+        intercept <- 0
+        slope <- 0
+      } else {
+        intercept <- ab[1]
+        slope <- ab[2]
+      }
 
-			out <- data.frame(xline = c(0, 1))
-			out$yline <- slope * out$xline + intercept
-			out$size <- .8
-			out$colour <- rgb(.3, .3, .3)
+      out <- data.frame(xline = c(0, 1))
+      out$yline <- slope * out$xline + intercept
+      out$size <- .8
+      out$colour <- rgb(.3, .3, .3)
 
-			# fix the line if it's drawn outside the unit square
-			out$xline[which(out$xline < 0)] <- 0
-			out$yline[which(out$yline < 0)] <- 0
-			out$xline[which(out$xline > 1)] <- 1
-			out$yline[which(out$yline > 1)] <- 1
+      # fix the line if it's drawn outside the unit square
+      out$xline[which(out$xline < 0)] <- 0
+      out$yline[which(out$yline < 0)] <- 0
+      out$xline[which(out$xline > 1)] <- 1
+      out$yline[which(out$yline > 1)] <- 1
 
-			out
-		}
-	}
+      out
+    }
+  }
 )

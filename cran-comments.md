@@ -1,14 +1,8 @@
-## Note to CRAN
-
-This update is for compatibility with ggplot2 4.0.0, which is not yet released on CRAN. 
-Please release this to CRAN when the new ggplot2 is released.
-
 ## Test envs
 
-Since this update is to address compatibility with the new version of ggplot2, only
-local checks were performed.
-
-* macOS Sequoia 15.5 M4 (local install), R 4.2.2
+* win-builder, R-devel, R-release
+* Ubuntu (on GitHub), R-devel, R-release
+* macOS Sequoia 15.6.1 M4 (local install), R 4.5.1
 
 ## R CMD check results
 
