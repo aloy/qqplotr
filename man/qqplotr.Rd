@@ -33,6 +33,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Adam Loy \email{loyad01@gmail.com}
   \item Alexandre Almeida \email{almeida.xan@gmail.com}
   \item Heike Hofmann
 }

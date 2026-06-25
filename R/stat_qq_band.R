@@ -262,6 +262,8 @@ stat_qq_band <- function(
 #' @usage NULL
 #' @export
 #' @importFrom qqconf get_qq_band
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarize
 StatQqBand <- ggplot2::ggproto(
   `_class` = "StatQqBand",
   `_inherit` = StatQqLine,
