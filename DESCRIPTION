@@ -24,7 +24,7 @@ Collate:
     'stat_qq_point.R'
 VignetteBuilder: knitr
 Depends: R (>= 4.1),
-		ggplot2 (>= 2.2)
+		ggplot2 (>= 3.4.0)
 Imports: dplyr,
     robustbase,
     MASS,
